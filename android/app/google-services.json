@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "623829185504",
+    "firebase_url": "https://samadhaan-d7092.firebaseio.com",
+    "project_id": "samadhaan-d7092",
+    "storage_bucket": "samadhaan-d7092.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623829185504:android:2a4e28f3f753a5c0633185",
+        "android_client_info": {
+          "package_name": "com.example.faridabad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "623829185504-2ak0rjjm2m1pcvspmeo711dmg1ih7rd9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.faridabad",
+            "certificate_hash": "6b2fc4a15b139296096c11da7f185a30fbd33c05"
+          }
+        },
+        {
+          "client_id": "623829185504-oleu56k9c76sl58uboqsga18iiru2brm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5kz93OtFjnxG3vui6TJPwHbaCUwz-cd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "623829185504-oleu56k9c76sl58uboqsga18iiru2brm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

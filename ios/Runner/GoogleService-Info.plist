@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>623829185504-vf06dpsa9tdfpm6q4cmt5to9hesfhs89.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.623829185504-vf06dpsa9tdfpm6q4cmt5to9hesfhs89</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>623829185504-2ak0rjjm2m1pcvspmeo711dmg1ih7rd9.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB39zqVY0Eeo01u33bfVC-kelrAihoiKpc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>623829185504</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.faridabad</string>
+	<key>PROJECT_ID</key>
+	<string>samadhaan-d7092</string>
+	<key>STORAGE_BUCKET</key>
+	<string>samadhaan-d7092.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:623829185504:ios:beddb7e632a7dede633185</string>
+	<key>DATABASE_URL</key>
+	<string>https://samadhaan-d7092.firebaseio.com</string>
+</dict>
+</plist>
