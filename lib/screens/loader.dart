@@ -16,38 +16,20 @@ class _LoaderState extends State<Loader> {
   void movetoHome() async {
     await Future.delayed(Duration(milliseconds: 2000));
     final result = await Auth().autoLogin();
-    print(result);
+    print('result $result');
     if (result) {
       final check = await Auth().checkuserInfo();
-      print(check);
+      print('check $check');
       if (check) {
         Navigator.of(context).pushReplacementNamed(ExampleScreen.routeName);
       } else {
-        Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+        Navigator.of(context).pushReplacementNamed(UserInfoScreen.routeName);
       }
     }
     else
     {
       Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     }
-
-    // // final result = await Auth().autoLogin();
-    // // if(result == true)
-    // // {
-    // //   Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-    // // }
-    // // else
-    // // {
-    // //   final signInResult = await Auth().signInWithGoogle();
-    // //   if(signInResult)
-    // //   {
-    // //     Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-    // //   }
-    // //   else
-    // //   {
-    // //     print('error');
-    // //   }
-    // }
   }
 
   @override

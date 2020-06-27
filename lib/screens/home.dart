@@ -1,5 +1,6 @@
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/screens/example.dart';
+import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -45,8 +46,15 @@ class HomeScreen extends StatelessWidget {
                         onTap: () async {
                           final result = await Auth().signInWithGoogle();
                           if (result) {
-                            Navigator.of(context)
-                                .pushReplacementNamed(ExampleScreen.routeName);
+                            final check = await Auth().checkuserInfo();
+                            print('check $check');
+                            if (check) {
+                              Navigator.of(context).pushReplacementNamed(
+                                  ExampleScreen.routeName);
+                            } else {
+                              Navigator.of(context).pushReplacementNamed(
+                                  UserInfoScreen.routeName);
+                            }
                           }
                         },
                         child: Container(

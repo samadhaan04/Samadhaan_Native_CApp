@@ -267,7 +267,5 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  // Widget formTextField(String hintText) {
-  //   return;
-  // }
+
 }

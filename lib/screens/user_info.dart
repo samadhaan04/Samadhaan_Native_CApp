@@ -29,7 +29,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
   TextEditingController _genderController = new TextEditingController();
 
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  PersistentBottomSheetController _controller;
+  // PersistentBottomSheetController _controller;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   String _wardNumber;
   String _village;
@@ -337,7 +337,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.grey[600]),
                                   elevation: 2,
-                                  hint: Text('Ward Number                  ',
+                                  hint: Text('Ward Number ',
                                       style: TextStyle(
                                           color: Colors
                                               .grey)), // Not necessary for Option 1
@@ -354,7 +354,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                   },
                                   items: getWardsList().map((value) {
                                     return DropdownMenuItem(
-                                      child: new Text(value.toString()),
+                                      child: Text(value),
                                       value: value,
                                     );
                                   }).toList(),
@@ -539,7 +539,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                             textColor: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            child: Text(
+                            child: loading ? Center(child: CircularProgressIndicator(backgroundColor: Colors.white,),) : Text(
                               "SUBMIT",
                               style: TextStyle(fontSize: 18),
                             ),
@@ -640,8 +640,12 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                         ],
                                       ));
                                 } else {
-                                  await sendData();
-                                  setState(() {
+                                  
+                                    final userinforesult = await sendData();
+                                    print(userinforesult);
+                                    if(userinforesult)
+                                    {
+                                      setState(() {
                                     _nameController.clear();
                                     _phoneController.clear();
                                     _houseController.clear();
@@ -652,6 +656,14 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                     _wardNumber = null;
                                   });
                                   Navigator.of(context).pushReplacementNamed(ExampleScreen.routeName);
+                                    }
+                                  else
+                                  {
+                                    print('not done');
+                                  }  
+                                  
+                                  
+                                  
                                 }
                                 setState(() {
                                   loading = false;
@@ -659,13 +671,13 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                               }
                             },
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          loading ? CircularProgressIndicator() : Container(),
-                          SizedBox(
-                            height: 10,
-                          ),
+                          // SizedBox(
+                          //   height: 10,
+                          // ),
+                          // loading ? CircularProgressIndicator() : Container(),
+                          // SizedBox(
+                          //   height: 10,
+                          // ),
                         ],
                       ),
                     ),
@@ -700,6 +712,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
   Future<bool> sendData() async {
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
+      
       await databaseReference
           .collection("Haryana/1/Palwal/Users/userid")
           .document(uid)
@@ -707,21 +720,21 @@ class _UserInfoScreenState extends State<UserInfoScreen>
 //        'consumerId': _consumerController.text,
         'name': _nameController.text,
         'phone': _phoneController.text,
-        'Age': _ageController.text,
+        'Age': int.parse(_ageController.text),
         'Gender': _gender,
         'house no': _houseController.text,
         'colony': _colonyController.text,
-        'ward no': _wardNumber,
-        'village': _village,
+        'ward no': _wardNumber == null ? null :  int.parse(_wardNumber) ,
+        'village': _village == null ? null : _village,
       }).then((value) {
         print("Success");
         return true;
       });
+      return true;
     } catch (e) {
       print(e);
       print('please try again');
       return false;
     }
-    return false;
   }
 }

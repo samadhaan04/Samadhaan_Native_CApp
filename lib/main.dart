@@ -1,9 +1,12 @@
+import 'package:faridabad/filecomplaint.dart';
 import 'package:faridabad/screens/authScreen.dart';
 import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/loader.dart';
+import 'package:faridabad/screens/showcomplaint.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -25,6 +28,8 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName : (ctx) => HomeScreen(),
         UserInfoScreen.routeName : (ctx) => UserInfoScreen(),
         ExampleScreen.routeName : (ctx) => ExampleScreen(),
+        ShowComplaint.routeName : (ctx) => ShowComplaint(),
+        FileComplaint.routeName : (ctx) => FileComplaint(),
       },
     );
   }

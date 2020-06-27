@@ -44,7 +44,7 @@ class Auth {
       final displayname =await  _auth.currentUser().then((value) => value.displayName);
       print('$displayname Signed out');
       await googleSignIn.signOut();
-      _auth.signOut();
+      await _auth.signOut();
       return true;
     } catch (e) {
       print(e);
@@ -54,6 +54,8 @@ class Auth {
 
   Future<bool> autoLogin() async {
     if ( await _auth.currentUser() != null) {
+      // print(googleSignIn.currentUser.displayName);
+      _auth.currentUser().then((value) => print(value.displayName));
       return true;
     } else {
       return false;
