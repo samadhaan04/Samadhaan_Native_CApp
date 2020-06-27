@@ -1,4 +1,5 @@
 import 'package:faridabad/providers/auth.dart';
+import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                             print('check $check');
                             if (check) {
                               Navigator.of(context).pushReplacementNamed(
-                                  ExampleScreen.routeName);
+                                  Base.routeName);
                             } else {
                               Navigator.of(context).pushReplacementNamed(
                                   UserInfoScreen.routeName);

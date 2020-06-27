@@ -42,16 +42,6 @@ class FileComplaint extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //     begin: Alignment.topLeft,
-        //     end: Alignment.bottomRight,
-        //     colors: [
-        //       Color(0xFF10EEEE),
-        //       Color(0xFF02EE97),
-        //     ],
-        //   ),
-        // ),
         child: ListView(
           children: <Widget>[
             Container(
@@ -59,11 +49,6 @@ class FileComplaint extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {},
-                    alignment: Alignment.topLeft,
-                  ),
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

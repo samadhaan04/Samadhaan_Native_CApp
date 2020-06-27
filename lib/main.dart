@@ -1,5 +1,6 @@
 import 'package:faridabad/filecomplaint.dart';
 import 'package:faridabad/screens/authScreen.dart';
+import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/loader.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ExampleScreen.routeName : (ctx) => ExampleScreen(),
         ShowComplaint.routeName : (ctx) => ShowComplaint(),
         FileComplaint.routeName : (ctx) => FileComplaint(),
+        Base.routeName : (ctx) => Base(),
       },
     );
   }

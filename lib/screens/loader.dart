@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/providers/auth.dart';
+import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/user_info.dart';
@@ -21,7 +22,7 @@ class _LoaderState extends State<Loader> {
       final check = await Auth().checkuserInfo();
       print('check $check');
       if (check) {
-        Navigator.of(context).pushReplacementNamed(ExampleScreen.routeName);
+        Navigator.of(context).pushReplacementNamed(Base.routeName);
       } else {
         Navigator.of(context).pushReplacementNamed(UserInfoScreen.routeName);
       }

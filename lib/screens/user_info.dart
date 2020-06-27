@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/data/constants.dart';
-import 'package:faridabad/screens/example.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/widgets/bottomsheet.dart';
+import 'package:faridabad/screens/base.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'dart:io';
 
 class UserInfoScreen extends StatefulWidget {
   static const routeName = '/user-info';
+
   @override
   _UserInfoScreenState createState() => _UserInfoScreenState();
 }
@@ -19,6 +17,8 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     with SingleTickerProviderStateMixin {
   final databaseReference = Firestore.instance;
   final _auth = FirebaseAuth.instance;
+  bool isupdate = false;
+
   AnimationController _animationController;
   Animation<double> _animation;
   TextEditingController _nameController = new TextEditingController();
@@ -68,6 +68,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
 
   @override
   Widget build(BuildContext context) {
+    isupdate = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.white,
@@ -539,10 +540,16 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                             textColor: Colors.white,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            child: loading ? Center(child: CircularProgressIndicator(backgroundColor: Colors.white,),) : Text(
-                              "SUBMIT",
-                              style: TextStyle(fontSize: 18),
-                            ),
+                            child: loading
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  )
+                                : Text(
+                                    "SUBMIT",
+                                    style: TextStyle(fontSize: 18),
+                                  ),
                             onPressed: () async {
                               if ((_wardNumber == null && _village == null)) {
                                 showDialog(
@@ -640,30 +647,25 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                         ],
                                       ));
                                 } else {
-                                  
-                                    final userinforesult = await sendData();
-                                    print(userinforesult);
-                                    if(userinforesult)
-                                    {
-                                      setState(() {
-                                    _nameController.clear();
-                                    _phoneController.clear();
-                                    _houseController.clear();
-                                    _ageController.clear();
-                                    _colonyController.clear();
-                                    _village = null;
-                                    _gender = null;
-                                    _wardNumber = null;
-                                  });
-                                  Navigator.of(context).pushReplacementNamed(ExampleScreen.routeName);
-                                    }
-                                  else
-                                  {
+                                  final userinforesult =
+                                      await sendData(isupdate);
+                                  print(userinforesult);
+                                  if (userinforesult) {
+                                    setState(() {
+                                      _nameController.clear();
+                                      _phoneController.clear();
+                                      _houseController.clear();
+                                      _ageController.clear();
+                                      _colonyController.clear();
+                                      _village = null;
+                                      _gender = null;
+                                      _wardNumber = null;
+                                    });
+                                    Navigator.of(context)
+                                        .pushReplacementNamed(Base.routeName);
+                                  } else {
                                     print('not done');
-                                  }  
-                                  
-                                  
-                                  
+                                  }
                                 }
                                 setState(() {
                                   loading = false;
@@ -709,27 +711,47 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     return false;
   }
 
-  Future<bool> sendData() async {
+  Future<bool> sendData(bool isupdate) async {
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
-      
-      await databaseReference
-          .collection("Haryana/1/Palwal/Users/userid")
-          .document(uid)
-          .setData({
+      if (isupdate) {
+        await databaseReference
+            .collection("Haryana/1/Palwal/Users/userid")
+            .document(uid)
+            .updateData({
 //        'consumerId': _consumerController.text,
-        'name': _nameController.text,
-        'phone': _phoneController.text,
-        'Age': int.parse(_ageController.text),
-        'Gender': _gender,
-        'house no': _houseController.text,
-        'colony': _colonyController.text,
-        'ward no': _wardNumber == null ? null :  int.parse(_wardNumber) ,
-        'village': _village == null ? null : _village,
-      }).then((value) {
-        print("Success");
-        return true;
-      });
+          'name': _nameController.text,
+          'phone': _phoneController.text,
+          'Age': int.parse(_ageController.text),
+          'Gender': _gender,
+          'house no': _houseController.text,
+          'colony': _colonyController.text,
+          'ward no': _wardNumber == null ? null : int.parse(_wardNumber),
+          'village': _village == null ? null : _village,
+        }).then((value) {
+          print("Success");
+          return true;
+        });
+      } else {
+        await databaseReference
+            .collection("Haryana/1/Palwal/Users/userid")
+            .document(uid)
+            .setData({
+//        'consumerId': _consumerController.text,
+          'name': _nameController.text,
+          'phone': _phoneController.text,
+          'Age': int.parse(_ageController.text),
+          'Gender': _gender,
+          'house no': _houseController.text,
+          'colony': _colonyController.text,
+          'ward no': _wardNumber == null ? null : int.parse(_wardNumber),
+          'village': _village == null ? null : _village,
+        }).then((value) {
+          print("Success");
+          return true;
+        });
+      }
+
       return true;
     } catch (e) {
       print(e);
