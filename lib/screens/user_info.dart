@@ -68,7 +68,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
 
   @override
   Widget build(BuildContext context) {
-    isupdate = ModalRoute.of(context).settings.arguments;
+    isupdate = ModalRoute.of(context).settings.arguments?? false;
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.white,
@@ -719,7 +719,6 @@ class _UserInfoScreenState extends State<UserInfoScreen>
             .collection("Haryana/1/Palwal/Users/userid")
             .document(uid)
             .updateData({
-//        'consumerId': _consumerController.text,
           'name': _nameController.text,
           'phone': _phoneController.text,
           'Age': int.parse(_ageController.text),
@@ -732,12 +731,12 @@ class _UserInfoScreenState extends State<UserInfoScreen>
           print("Success");
           return true;
         });
+        return true;
       } else {
         await databaseReference
             .collection("Haryana/1/Palwal/Users/userid")
             .document(uid)
             .setData({
-//        'consumerId': _consumerController.text,
           'name': _nameController.text,
           'phone': _phoneController.text,
           'Age': int.parse(_ageController.text),
@@ -750,9 +749,8 @@ class _UserInfoScreenState extends State<UserInfoScreen>
           print("Success");
           return true;
         });
+        return true;
       }
-
-      return true;
     } catch (e) {
       print(e);
       print('please try again');
