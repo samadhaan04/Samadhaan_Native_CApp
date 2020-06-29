@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/data/constants.dart';
-import 'package:faridabad/filecomplaint.dart';
+import 'file:///C:/Users/Siddharth%20Agarwal/Documents/github/Samadhaan_Native_CApp/lib/screens/filecomplaint.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
@@ -37,27 +37,21 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     _animation.addListener(() => this.setState(() {}));
     _animationController.forward();
     fetchName();
-    
   }
-
-  
-
-
 
   String dropdownValue = '';
   var _items = ['userprofile', 'logout'];
 
-
   void fetchName() async {
-    final dname  = await FirebaseAuth.instance.currentUser().then((value) => value.displayName);
-   print('name $dname');
+    final dname = await FirebaseAuth.instance
+        .currentUser()
+        .then((value) => value.displayName);
+    print('name $dname');
     username = dname;
   }
 
-
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -72,32 +66,29 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                   Text('Hello $username'),
                   DropdownButton(
                     underline: Container(),
-                    onChanged: (value)  async {
-                      setState((){
+                    onChanged: (value) async {
+                      setState(() {
                         dropdownValue = value;
                       });
-                        if(dropdownValue == 'logout')
-                        {
-                          final signoutResult = await Auth().signOut();
-                          if(signoutResult)
-                          {
-                             Navigator.of(context)
-                      .pushReplacementNamed(HomeScreen.routeName);
-                          }
+                      if (dropdownValue == 'logout') {
+                        final signoutResult = await Auth().signOut();
+                        if (signoutResult) {
+                          Navigator.of(context)
+                              .pushReplacementNamed(HomeScreen.routeName);
                         }
-                        if(dropdownValue == 'userprofile')
-                        {
-                            Navigator.of(context).pushReplacementNamed(UserInfoScreen.routeName,arguments: true);
-                        }
-                      
+                      }
+                      if (dropdownValue == 'userprofile') {
+                        Navigator.of(context).pushReplacementNamed(
+                            UserInfoScreen.routeName,
+                            arguments: true);
+                      }
                     },
                     icon: Image.asset(
                       'assets/images/samadhaan.png',
                       fit: BoxFit.contain,
                       height: 50,
                     ),
-                    items:
-                        _items.map((e) {
+                    items: _items.map((e) {
                       return DropdownMenuItem(
                         child: Text(e),
                         value: e,
@@ -206,6 +197,4 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       ),
     );
   }
-
-  
 }
