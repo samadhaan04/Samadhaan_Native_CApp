@@ -29,7 +29,6 @@ List<String> getWardsList() {
   for (int i = 1; i <= 31; i++) {
     wards.add(i.toString());
   }
-
   return wards;
 }
 
