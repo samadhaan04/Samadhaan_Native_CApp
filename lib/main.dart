@@ -1,7 +1,8 @@
-import 'file:///C:/Users/Siddharth%20Agarwal/Documents/github/Samadhaan_Native_CApp/lib/screens/filecomplaint.dart';
+
 import 'package:faridabad/screens/authScreen.dart';
 import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
+import 'package:faridabad/screens/filecomplaint.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/loader.dart';
 import 'package:faridabad/screens/showcomplaint.dart';

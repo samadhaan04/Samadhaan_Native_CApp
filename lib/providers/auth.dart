@@ -66,7 +66,7 @@ class Auth {
     
       final uid = await FirebaseAuth.instance.currentUser().then((value) => value.uid);
       final result = await databaseReference
-          .collection('Haryana/1/Palwal/Users/userid')
+          .collection('Users')
           .document(uid)
           .get()
           .then((doc) 

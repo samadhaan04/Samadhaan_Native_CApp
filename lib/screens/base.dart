@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/data/constants.dart';
-import 'file:///C:/Users/Siddharth%20Agarwal/Documents/github/Samadhaan_Native_CApp/lib/screens/filecomplaint.dart';
 import 'package:faridabad/providers/auth.dart';
+import 'package:faridabad/screens/filecomplaint.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
 import 'package:faridabad/screens/user_info.dart';
@@ -78,7 +78,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                         }
                       }
                       if (dropdownValue == 'userprofile') {
-                        Navigator.of(context).pushReplacementNamed(
+                        Navigator.of(context).pushNamed(
                             UserInfoScreen.routeName,
                             arguments: true);
                       }
