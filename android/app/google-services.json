@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "623829185504-6me2t3h15b8vcd2drd9mdkn3u3uf46p0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.faridabad",
+            "certificate_hash": "bfbf4ac4da191f757906d46517e2393986f8eb02"
+          }
+        },
+        {
           "client_id": "623829185504-2ak0rjjm2m1pcvspmeo711dmg1ih7rd9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -38,6 +46,13 @@
             {
               "client_id": "623829185504-oleu56k9c76sl58uboqsga18iiru2brm.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "623829185504-vf06dpsa9tdfpm6q4cmt5to9hesfhs89.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.faridabad"
+              }
             }
           ]
         }
