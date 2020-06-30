@@ -395,10 +395,22 @@ class _FileComplaintState extends State<FileComplaint>
       final url = await ref2.getDownloadURL();
       DocumentReference ref =
           await databaseReference.collection("Complaints").add({
-        'department': _department,
-        'Author': uid,
-        'Complaint': _detailsController.text,
-        'image': url,
+        'author': Firestore.instance.collection('Users').document(uid),
+        'complaintText': _detailsController.text,
+        'imageURL': url,
+        'state': "Haryana",
+        'status': 0,
+        'city': "Palwal",
+      });
+      await databaseReference
+          .collection("States/Haryana/Palwal/$_department/Complaints")
+          .document(ref.documentID)
+          .setData({
+        'ref':
+            Firestore.instance.collection('Complaints').document(ref.documentID)
+      }).then((value) {
+        print("Success");
+        return true;
       });
       print(ref.documentID);
     } catch (e) {
