@@ -204,3 +204,21 @@ var villages = [
   "Yadupur",
   "Zhuppa",
 ];
+
+Widget PlatformAlertDialog(BuildContext context, String title, var message,
+    Function onPressed, String btnTitle) {
+  return AlertDialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    title: Text(title),
+    content: message,
+    actions: <Widget>[
+      FlatButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        color: Colors.black,
+        textColor: Colors.white,
+        onPressed: onPressed,
+        child: Text(btnTitle),
+      )
+    ],
+  );
+}

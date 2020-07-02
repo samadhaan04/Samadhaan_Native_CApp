@@ -5,6 +5,7 @@ import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/screens/filecomplaint.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/loader.dart';
+import 'package:faridabad/screens/previouscomplaints.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ShowComplaint.routeName: (ctx) => ShowComplaint(),
         FileComplaint.routeName: (ctx) => FileComplaint(),
         Base.routeName: (ctx) => Base(),
+        PreviousComplanints.routeName : (ctx) => PreviousComplanints(),
       },
     );
   }

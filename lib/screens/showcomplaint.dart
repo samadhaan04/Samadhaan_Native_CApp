@@ -3,14 +3,19 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ShowComplaint extends StatefulWidget {
   static const routeName = '/show-complaint';
+
   @override
   _ShowComplaintState createState() => _ShowComplaintState();
 }
 
+
+
 class _ShowComplaintState extends State<ShowComplaint> {
+
   var rating = 3.0;
   @override
   Widget build(BuildContext context) {
+    final complaintId = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(25.0),

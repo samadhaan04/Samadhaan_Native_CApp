@@ -294,7 +294,7 @@ class _FileComplaintState extends State<FileComplaint>
                     margin: EdgeInsets.fromLTRB(100, 10, 100, 10),
                     child: RaisedButton(
                       padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                      child: Text(
+                      child:loading ? CircularProgressIndicator() : Text(
                         'Submit',
                         style: TextStyle(
                             color: Colors.white,
@@ -341,7 +341,11 @@ class _FileComplaintState extends State<FileComplaint>
                                   ],
                                 ));
                           } else {
-                            await sendData();
+                            final result = await sendData();
+                            if(result==true)
+                            {
+                              Navigator.of(context).pop();
+                            }
                           }
                           setState(() {
                             loading = false;
@@ -384,7 +388,7 @@ class _FileComplaintState extends State<FileComplaint>
     return false;
   }
 
-  Future<void> sendData() async {
+  Future<bool> sendData() async {
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
       final ref2 = FirebaseStorage.instance
@@ -395,12 +399,13 @@ class _FileComplaintState extends State<FileComplaint>
       final url = await ref2.getDownloadURL();
       DocumentReference ref =
           await databaseReference.collection("Complaints").add({
-        'author': Firestore.instance.collection('Users').document(uid),
+        'author': uid,
         'complaintText': _detailsController.text,
         'imageURL': url,
         'state': "Haryana",
         'status': 0,
         'city': "Palwal",
+        'department' : _department,
       });
       await databaseReference
           .collection("States/Haryana/Palwal/$_department/Complaints")
@@ -413,9 +418,11 @@ class _FileComplaintState extends State<FileComplaint>
         return true;
       });
       print(ref.documentID);
+      return true;
     } catch (e) {
       print(e);
       print('please try again');
+      return false;
     }
   }
 }
