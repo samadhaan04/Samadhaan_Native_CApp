@@ -294,13 +294,15 @@ class _FileComplaintState extends State<FileComplaint>
                     margin: EdgeInsets.fromLTRB(100, 10, 100, 10),
                     child: RaisedButton(
                       padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                      child:loading ? CircularProgressIndicator() : Text(
-                        'Submit',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold),
-                      ),
+                      child: loading
+                          ? CircularProgressIndicator()
+                          : Text(
+                              'Submit',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold),
+                            ),
                       onPressed: () async {
                         {
                           setState(() {
@@ -342,8 +344,7 @@ class _FileComplaintState extends State<FileComplaint>
                                 ));
                           } else {
                             final result = await sendData();
-                            if(result==true)
-                            {
+                            if (result == true) {
                               Navigator.of(context).pop();
                             }
                           }
@@ -405,7 +406,11 @@ class _FileComplaintState extends State<FileComplaint>
         'state': "Haryana",
         'status': 0,
         'city': "Palwal",
-        'department' : _department,
+        'department': _department,
+        'deptfeedback': null,
+        'userfeedback': null,
+        'deptfeedbackimg': null,
+        'star': null,
       });
       await databaseReference
           .collection("States/Haryana/Palwal/$_department/Complaints")
