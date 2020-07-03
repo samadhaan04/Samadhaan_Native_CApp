@@ -42,30 +42,14 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
     }
   }
 
-  void handleClick(String value) {
-    setState(() {
-      switch (value) {
-        case 'All':
-          sort = 0;
-          break;
-        case 'Completed':
-          sort = 1;
-          break;
-        case 'Processing':
-          sort = 2;
-          break;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.grey[300],
-        elevation: 0,
+        backgroundColor: Colors.white,
+        elevation: 4,
         title: FittedBox(
           fit: BoxFit.contain,
           child: RichText(
@@ -87,32 +71,9 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
                 ]),
           ),
         ),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            icon: CircleAvatar(
-              backgroundColor: Colors.blueGrey,
-              radius: 30,
-              child: Icon(
-                Icons.menu,
-                color: Colors.white,
-                size: 30,
-              ),
-            ),
-            onSelected: handleClick,
-            itemBuilder: (BuildContext context) {
-              return {'All', 'Completed', 'Processing'}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          ),
-        ],
       ),
       body: SafeArea(
         child: Container(
-          
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,26 +106,24 @@ class MessagesStream extends StatelessWidget {
         print('messages $messages');
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
-
-          if(message.data['author'] == loggedInUser.uid)
-          {
+          if (message.data['author'] == loggedInUser.uid) {
             final status = message.data['status'];
-          final complainttext = message.data['complaintText'];
-          final imageUrl = message.data['imageURL'];
-          final department = message.data['department'];
-          final complaintId = message.documentID;
-          print('id $complaintId');
-          // print(imageUrl);
-          final currentUser = loggedInUser.email;
-          print('user = $currentUser');
-          final messageBubble = MessageBubble(
-            complaint: complainttext,
-            status : status.toString(),
-            imageUrl : imageUrl,
-            department : department,
-            complaintId: complaintId,
-          );
-          messageBubbles.add(messageBubble);
+            final complainttext = message.data['complaintText'];
+            final imageUrl = message.data['imageURL'];
+            final department = message.data['department'];
+            final complaintId = message.documentID;
+            print('id $complaintId');
+            // print(imageUrl);
+            final currentUser = loggedInUser.email;
+            print('user = $currentUser');
+            final messageBubble = MessageBubble(
+              complaint: complainttext,
+              status: status.toString(),
+              imageUrl: imageUrl,
+              department: department,
+              complaintId: complaintId,
+            );
+            messageBubbles.add(messageBubble);
           }
         }
 
@@ -178,7 +137,6 @@ class MessagesStream extends StatelessWidget {
       },
     );
   }
-
 }
 
 class MessageBubble extends StatefulWidget {
@@ -215,7 +173,8 @@ class _MessageBubbleState extends State<MessageBubble> {
           GestureDetector(
             onTap: () {
               print("tap");
-                Navigator.of(context).pushNamed(ShowComplaint.routeName,arguments: widget.complaintId);
+              Navigator.of(context).pushNamed(ShowComplaint.routeName,
+                  arguments: widget.complaintId);
             },
             child: Card(
               elevation: 10,
@@ -224,8 +183,12 @@ class _MessageBubbleState extends State<MessageBubble> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Container(
-                    color: Colors.grey[300],
-                    child: Image.network(widget.imageUrl,fit: BoxFit.contain,height: 250,)),
+                      color: Colors.grey[300],
+                      child: Image.network(
+                        widget.imageUrl,
+                        fit: BoxFit.contain,
+                        height: 250,
+                      )),
                   // Container(
                   //   child: Padding(
                   //     padding: EdgeInsets.all(15),
@@ -238,193 +201,194 @@ class _MessageBubbleState extends State<MessageBubble> {
                   //     ),
                   //   ),
                   // ),
-                  Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          // Row(
-                          //   children: <Widget>[
-                          //     Text(
-                          //       'Name:',
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         fontWeight: FontWeight.bold,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //     Text(
-                          //       // ' ${widget.name}',
-                          //       "empty",
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   children: <Widget>[
-                          //     Text(
-                          //       'Phone Number:',
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         fontWeight: FontWeight.bold,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //     Text(
-                          //       // ' ${widget.phone}',
-                          //       "empty",
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   crossAxisAlignment: CrossAxisAlignment.baseline,
-                          //   textBaseline: TextBaseline.alphabetic,
-                          //   children: <Widget>[
-                          //     Text(
-                          //       'Address: ',
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         fontWeight: FontWeight.bold,
-                          //         color: Colors.black87,
-                          //       ),
-                          //       maxLines: 20,
-                          //     ),
-                          //     Container(
-                          //       child: Expanded(
-                          //         child: Text(
-                          //           // '${widget.address}',
-                          //           "empty",
-                          //           style: TextStyle(
-                          //             fontSize: 18.0,
-                          //             color: Colors.black87,
-                          //           ),
-                          //           maxLines: 20,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   children: <Widget>[
-                          //     Text(
-                          //       'Date:',
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         fontWeight: FontWeight.bold,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //     Text(
-                          //       // ' ${widget.date}',
-                          //       "empty",
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: <Widget>[
-                              Text(
-                                'Department:',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  ' ${widget.department}',
+                  Container(
+                    color: Colors.blueGrey,
+                    child: Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            // Row(
+                            //   children: <Widget>[
+                            //     Text(
+                            //       'Name:',
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       // ' ${widget.name}',
+                            //       "empty",
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   children: <Widget>[
+                            //     Text(
+                            //       'Phone Number:',
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       // ' ${widget.phone}',
+                            //       "empty",
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.baseline,
+                            //   textBaseline: TextBaseline.alphabetic,
+                            //   children: <Widget>[
+                            //     Text(
+                            //       'Address: ',
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: Colors.black87,
+                            //       ),
+                            //       maxLines: 20,
+                            //     ),
+                            //     Container(
+                            //       child: Expanded(
+                            //         child: Text(
+                            //           // '${widget.address}',
+                            //           "empty",
+                            //           style: TextStyle(
+                            //             fontSize: 18.0,
+                            //             color: Colors.black87,
+                            //           ),
+                            //           maxLines: 20,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   children: <Widget>[
+                            //     Text(
+                            //       'Date:',
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       // ' ${widget.date}',
+                            //       "empty",
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: <Widget>[
+                                Text(
+                                  'Department: ',
                                   style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: Colors.black87,
+                                    fontSize: 21.0,
+                                    color: Colors.white,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: <Widget>[
-                              Text(
-                                'Complaint:',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  ' ${widget.complaint}',
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: Colors.black87,
+                                Expanded(
+                                  child: Text(
+                                    ' ${widget.department}',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          // Row(
-                          //   crossAxisAlignment: CrossAxisAlignment.baseline,
-                          //   textBaseline: TextBaseline.alphabetic,
-                          //   children: <Widget>[
-                          //     Text(
-                          //       'Admin Remark:',
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         fontWeight: FontWeight.bold,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //     Expanded(
-                          //       child: Text(
-                          //         // ' ${widget.adminremark}',
-                          //         "empty",
-                          //         style: TextStyle(
-                          //           fontSize: 18.0,
-                          //           color: Colors.black87,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          // Row(
-                          //   children: <Widget>[
-                          //     Text(
-                          //       'Dept Remark:',
-                          //       style: TextStyle(
-                          //         fontSize: 18.0,
-                          //         fontWeight: FontWeight.bold,
-                          //         color: Colors.black87,
-                          //       ),
-                          //     ),
-                          //     Expanded(
-                          //       child: Text(
-                          //         // ' ${widget.deptremark}',
-                          //         "empty",
-                          //         style: TextStyle(
-                          //           fontSize: 18.0,
-                          //           color: Colors.black87,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                        ],
+                              ],
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: <Widget>[
+                                Text(
+                                  'Complaint: ',
+                                  style: TextStyle(
+                                    fontSize: 21.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    ' ${widget.complaint}',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.baseline,
+                            //   textBaseline: TextBaseline.alphabetic,
+                            //   children: <Widget>[
+                            //     Text(
+                            //       'Admin Remark:',
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //     Expanded(
+                            //       child: Text(
+                            //         // ' ${widget.adminremark}',
+                            //         "empty",
+                            //         style: TextStyle(
+                            //           fontSize: 18.0,
+                            //           color: Colors.black87,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   children: <Widget>[
+                            //     Text(
+                            //       'Dept Remark:',
+                            //       style: TextStyle(
+                            //         fontSize: 18.0,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: Colors.black87,
+                            //       ),
+                            //     ),
+                            //     Expanded(
+                            //       child: Text(
+                            //         // ' ${widget.deptremark}',
+                            //         "empty",
+                            //         style: TextStyle(
+                            //           fontSize: 18.0,
+                            //           color: Colors.black87,
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

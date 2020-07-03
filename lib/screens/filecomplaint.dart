@@ -141,31 +141,34 @@ class _FileComplaintState extends State<FileComplaint>
                         SizedBox(
                           width: 18,
                         ),
-                        DropdownButton(
-                          iconEnabledColor: Colors.white,
-                          underline: Container(
-                            color: Colors.transparent,
+                        Padding(
+                          padding: EdgeInsets.only(top: 15, bottom: 15),
+                          child: DropdownButton(
+                            iconEnabledColor: Colors.white,
+                            underline: Container(
+                              color: Colors.transparent,
+                            ),
+                            focusColor: Colors.black,
+                            style: TextStyle(
+                                fontSize: 25, color: Colors.grey[600]),
+                            elevation: 2,
+                            hint: Text(
+                              'Department ',
+                              style: TextStyle(color: Colors.grey),
+                            ), // Not necessary for Option 1
+                            value: _department,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _department = newValue;
+                              });
+                            },
+                            items: depts.map((location) {
+                              return DropdownMenuItem(
+                                child: new Text(location),
+                                value: location,
+                              );
+                            }).toList(),
                           ),
-                          focusColor: Colors.black,
-                          style:
-                              TextStyle(fontSize: 15, color: Colors.grey[600]),
-                          elevation: 2,
-                          hint: Text(
-                            'Department ',
-                            style: TextStyle(color: Colors.grey),
-                          ), // Not necessary for Option 1
-                          value: _department,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _department = newValue;
-                            });
-                          },
-                          items: depts.map((location) {
-                            return DropdownMenuItem(
-                              child: new Text(location),
-                              value: location,
-                            );
-                          }).toList(),
                         ),
                       ],
                     ),
@@ -175,7 +178,7 @@ class _FileComplaintState extends State<FileComplaint>
                   ),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(20)),
@@ -197,9 +200,10 @@ class _FileComplaintState extends State<FileComplaint>
                             color: Colors.black,
                           ),
                           enabledBorder: InputBorder.none,
-                          labelText: 'Details of the Issue',
+                          labelText: 'Complaint',
                           hintText: "Enter all the details about the issue",
                           labelStyle: TextStyle(
+                              fontSize: 25,
                               decorationStyle: TextDecorationStyle.solid)),
                     ),
                   ),
@@ -265,17 +269,27 @@ class _FileComplaintState extends State<FileComplaint>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(
-                              'Image',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                            Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.image,
+                                  size: 40,
+                                  color: Colors.blueGrey[800],
+                                ),
+                                Text(
+                                  '   Image',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                ),
+                              ],
                             ),
                             CircleAvatar(
                               radius: 30,
                               backgroundImage:
                                   _image != null ? FileImage(_image) : null,
+                              backgroundColor:
+                                  _image == null ? Colors.transparent : null,
                             )
                           ],
                         ),
