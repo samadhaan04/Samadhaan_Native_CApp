@@ -175,9 +175,9 @@ class _MessageBubbleState extends State<MessageBubble> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(colors:[
-                  widget.status == '0' ?  Colors.red[300] : Colors.green[300],
-                  widget.status == '0' ?  Colors.red[200] : Colors.green[200],
-                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                  widget.status == '0' ?  Colors.blue[300] : Colors.green[300],
+                  widget.status == '0' ?  Colors.blue[200] : Colors.green[200],
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: BorderRadius.circular(25),
               ),
               child: Container(
