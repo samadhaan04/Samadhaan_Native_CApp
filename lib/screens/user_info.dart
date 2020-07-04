@@ -24,10 +24,10 @@ class _UserInfoScreenState extends State<UserInfoScreen>
   TextEditingController _nameController = new TextEditingController();
   TextEditingController _phoneController = new TextEditingController();
   TextEditingController _houseController = new TextEditingController();
-  TextEditingController _colonyController = new TextEditingController();
+  TextEditingController _streetController = new TextEditingController();
   TextEditingController _ageController = new TextEditingController();
-  String _wardNumber;
-  String _village;
+  String _state;
+  String _constituency;
   String _gender;
   bool _init = true;
   var uid;
@@ -40,7 +40,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     _nameController.dispose();
     _phoneController.dispose();
     _houseController.dispose();
-    _colonyController.dispose();
+    _streetController.dispose();
     _ageController.dispose();
     _animationController.dispose();
     super.dispose();
@@ -79,7 +79,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
       final result = await fetchData();
       if(result)
       {
-        print('gender hai -> $_village');
+
       }
       
     }
@@ -93,7 +93,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
 
   @override
   Widget build(BuildContext context) {
-    print('gender -> $_village');
+
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.white,
@@ -314,7 +314,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                             child: TextFormField(
                               keyboardType: TextInputType.text,
                               autocorrect: false,
-                              controller: _colonyController,
+                              controller: _streetController,
                               maxLines: 1,
                               decoration: InputDecoration(
                                   icon: Icon(
@@ -323,8 +323,8 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                     color: Colors.black,
                                   ),
                                   enabledBorder: InputBorder.none,
-                                  labelText: 'Colony',
-                                  hintText: "Enter your Colony",
+                                  labelText: 'Street',
+                                  hintText: "Enter your Street",
                                   labelStyle: TextStyle(
                                       decorationStyle:
                                           TextDecorationStyle.solid)),
@@ -360,21 +360,21 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                       fontSize: 15, color: Colors.grey[600]),
                                   elevation: 2,
                                   hint: Text(
-                                    'Ward No',
+                                    'State',
                                     style: TextStyle(color: Colors.grey),
                                   ),
-                                  value: _wardNumber,
+                                  value: _state,
                                   onChanged: (newValue) {
                                     setState(() {
                                       if (newValue == "None") {
-                                        _wardNumber = null;
+                                        _state = null;
                                       } else {
-                                        _wardNumber = newValue;
-                                        _village = null;
+                                        _state = newValue;
+
                                       }
                                     });
                                   },
-                                  items: getWardsList().map((value) {
+                                  items: getStateList().map((value) {
                                     print(value);
                                     return DropdownMenuItem(
                                       child: Text(value),
@@ -415,21 +415,20 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                       fontSize: 15, color: Colors.grey[600]),
                                   elevation: 2,
                                   hint: Text(
-                                    'Village',
+                                    'city',
                                     style: TextStyle(color: Colors.grey),
                                   ), // Not necessary for Option 1
-                                  value: _village,
+                                  value: _constituency,
                                   onChanged: (newValue) {
                                     setState(() {
                                       if (newValue == "None") {
-                                        _village = null;
+                                        _constituency = null;
                                       } else {
-                                        _village = newValue;
-                                        _wardNumber = null;
+                                        _constituency = newValue;
                                       }
                                     });
                                   },
-                                  items: villages.map((location) {
+                                  items: constituencies.map((location) {
                                     return DropdownMenuItem(
                                       child: new Text(location),
                                       value: location,
@@ -460,7 +459,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                     style: TextStyle(fontSize: 18),
                                   ),
                             onPressed: () async {
-                              if ((_wardNumber == null && _village == null)) {
+                              if ((_state == null || _constituency == null)) {
                                 showDialog(
                                     context: context,
                                     child: AlertDialog(
@@ -474,7 +473,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                             fontWeight: FontWeight.bold),
                                       ),
                                       content: Text(
-                                          "Either Ward Number or Village is mandatory"),
+                                          "State and city is mandatory"),
                                       actions: <Widget>[
                                         MaterialButton(
                                           child: Text(
@@ -565,10 +564,10 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                       _phoneController.clear();
                                       _houseController.clear();
                                       _ageController.clear();
-                                      _colonyController.clear();
-                                      _village = null;
+                                      _streetController.clear();
+                                      _constituency = null;
                                       _gender = null;
-                                      _wardNumber = null;
+                                      _state = null;
                                     });
                                     Navigator.of(context)
                                         .pushReplacementNamed(Base.routeName);
@@ -617,15 +616,15 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     final uid = await _auth.currentUser().then((value) => value.uid);
     final data = Firestore.instance.collection('Users').document(uid);
     final result = await data.get();
-    _wardNumber = result['ward no'] == null ? null : result['ward no'].toString();
+    _state = result['state'] == null ? null : result['state'];
     _nameController.text = result['name'];
     _ageController.text = (result['Age']).toString();
-    _colonyController.text = result['colony'];
+    _streetController.text = result['street'];
     _houseController.text = result['house no'];
     _gender = result['Gender'];
     _phoneController.text = (result['phone']);
-    _village = result['village'];
-    print(_village);
+    _constituency = result['constituency'];
+    print(_constituency);
     return true;
   }
 
@@ -639,9 +638,9 @@ class _UserInfoScreenState extends State<UserInfoScreen>
           'Age': int.parse(_ageController.text),
           'Gender': _gender,
           'house no': _houseController.text,
-          'colony': _colonyController.text,
-          'ward no': _wardNumber == null ? null : int.parse(_wardNumber),
-          'village': _village == null ? null : _village,
+          'street': _streetController.text,
+          'state': _state == null ? null : _state,
+          'constituency': _constituency == null ? null : _constituency,
         }).then((value) {
           print("Success");
           return true;
@@ -654,9 +653,9 @@ class _UserInfoScreenState extends State<UserInfoScreen>
           'Age': int.parse(_ageController.text),
           'Gender': _gender,
           'house no': _houseController.text,
-          'colony': _colonyController.text,
-          'ward no': _wardNumber == null ? null : int.parse(_wardNumber),
-          'village': _village == null ? null : _village,
+          'street': _streetController.text,
+          'state': _state == null ? null : _state,
+          'constituency': _constituency == null ? null : _constituency,
         }).then((value) {
           print("Success");
           return true;

@@ -7,6 +7,7 @@ import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/loader.dart';
 import 'package:faridabad/screens/previouscomplaints.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
+import 'package:faridabad/screens/splash_screen.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Loader(),
+      home: SplashScreen(),
       routes: {
         AuthScreen.routeName: (ctx) => AuthScreen(),
         HomeScreen.routeName: (ctx) => HomeScreen(),
