@@ -136,14 +136,13 @@ class _FileComplaintState extends State<FileComplaint>
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    city,
+                    "city",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 40,
                       letterSpacing: 1,
                       color: Colors.blue[300],
-                      
                     ),
                   ),
                   // Text(
@@ -472,17 +471,19 @@ class _FileComplaintState extends State<FileComplaint>
       }
       DocumentReference ref =
           await databaseReference.collection("Complaints").add({
-        'author': uid,
+        'author': Firestore.instance.collection('Users').document(uid),
         'complaintText': _detailsController.text,
         'imageURL': _image == null ? null : url,
         'state': "Haryana",
         'status': 0,
         'city': "Palwal",
         'department': _department,
-        'deptfeedback': null,
-        'userfeedback': null,
-        'deptfeedbackimg': null,
+        'deptFeedback': null,
+        'userFeedback': null,
+        'deptFeedbackImg': null,
+        'adminRemark': null,
         'star': null,
+        'date': DateTime.now().toIso8601String(),
       });
       await databaseReference
           .collection("States/Haryana/Palwal/$_department/Complaints")

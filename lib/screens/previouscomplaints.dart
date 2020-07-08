@@ -106,8 +106,10 @@ class MessagesStream extends StatelessWidget {
         print('messages $messages');
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
-          if (message.data['author'] == loggedInUser.uid) {
+          if (true) {
             final status = message.data['status'];
+            final author = message.data['author'];
+            print(author);
             final complainttext = message.data['complaintText'];
             final department = message.data['department'];
             final complaintId = message.documentID;
@@ -174,9 +176,9 @@ class _MessageBubbleState extends State<MessageBubble> {
             },
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(colors:[
-                  widget.status == '0' ?  Colors.blue[300] : Colors.green[300],
-                  widget.status == '0' ?  Colors.blue[200] : Colors.green[200],
+                gradient: LinearGradient(colors: [
+                  widget.status == '0' ? Colors.blue[300] : Colors.green[300],
+                  widget.status == '0' ? Colors.blue[200] : Colors.green[200],
                 ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: BorderRadius.circular(25),
               ),
@@ -201,13 +203,14 @@ class _MessageBubbleState extends State<MessageBubble> {
                           child: Text(
                             ' ${widget.department}',
                             style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold
-                            ),
+                                fontSize: 20.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Icon(widget.status == '0' ?  Icons.watch_later : Icons.done),
+                        Icon(widget.status == '0'
+                            ? Icons.watch_later
+                            : Icons.done),
                       ],
                     ),
                     SizedBox(

@@ -58,187 +58,139 @@ class _ShowComplaintState extends State<ShowComplaint>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Container(
-                        color: Colors.blueGrey,
-                        child: Container(
-                          color: Colors.blueGrey,
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Complaint',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 30),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Colors.green[300],
+                                Colors.green[200],
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter),
+                          borderRadius: BorderRadius.circular(25),
                         ),
-                      ),
-                      Container(
-                        child: Container(
-                          color: Colors.lightBlueAccent,
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                userDocument["complaintText"],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: GestureDetector(
-                          onTap: () {
-                            return _showBottomSheet(
-                                context, userDocument["imageURL"]);
-                          },
-                          child: Container(
-                            color: Colors.pinkAccent,
-                            child: Column(
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                SizedBox(
-                                  height: 15,
+                                Padding(
+                                  padding: EdgeInsets.only(left: 30),
+                                  child: Text(
+                                    'Complaint',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 30),
+                                  ),
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20),
-                                      child: Text(
-                                        'Attached Image',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      return _showBottomSheet(
+                                          context,
+                                          userDocument["imageURL"] != null
+                                              ? userDocument["imageURL"]
+                                              : "");
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 20),
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 30,
+                                      color: Colors.black,
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 20),
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 30,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 15,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40),
+                                  child: Text(
+                                    userDocument["complaintText"],
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
+                            SizedBox(height: 20),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        height: 30,
-                      ),
+                      SizedBox(height: 40),
                       Container(
-                        color: Colors.blueGrey,
-                        child: Container(
-                          color: Colors.blueGrey,
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                "Department Feedback",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 30),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Colors.green[300],
+                                Colors.green[200],
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter),
+                          borderRadius: BorderRadius.circular(25),
                         ),
-                      ),
-                      Container(
-                        child: Container(
-                          color: Colors.lightBlueAccent,
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                userDocument["deptfeedback"] != null
-                                    ? userDocument["deptfeedback"]
-                                    : "None",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              return _showBottomSheet(
-                                  context,
-                                  userDocument["deptfeedbackimg"] != null
-                                      ? userDocument["deptfeedbackimg"]
-                                      : "");
-                            });
-                          },
-                          child: Container(
-                            color: Colors.pinkAccent,
-                            child: Column(
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                SizedBox(
-                                  height: 15,
+                                Padding(
+                                  padding: EdgeInsets.only(left: 30),
+                                  child: Text(
+                                    'Department Feedback',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 25),
+                                  ),
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20),
-                                      child: Text(
-                                        'Attached Image',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      return _showBottomSheet(
+                                          context,
+                                          userDocument["deptfeedbackimg"] !=
+                                                  null
+                                              ? userDocument["deptfeedbackimg"]
+                                              : "");
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 20),
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 30,
+                                      color: Colors.black,
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.only(right: 20),
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 30,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 15,
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40),
+                                  child: Text(
+                                    userDocument["deptfeedback"] != null
+                                        ? userDocument["deptfeedback"]
+                                        : "None",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
+                            SizedBox(height: 20),
+                          ],
                         ),
                       ),
                       Padding(

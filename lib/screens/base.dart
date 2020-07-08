@@ -34,8 +34,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _animationController =  AnimationController(
-        vsync: this, duration: Duration(milliseconds: 600));
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
     _animation =
         CurvedAnimation(parent: _animationController, curve: Curves.easeInCirc);
     _animation.addListener(() => this.setState(() {}));
@@ -55,13 +55,13 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     city = pref.getString('city');
     username = dname;
   }
-  
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
-          builder: (context) =>  AlertDialog(
+          builder: (context) => AlertDialog(
             title: Text('Are you sure?'),
-            content:  Text('Do you want to exit the App'),
+            content: Text('Do you want to exit the App'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -79,10 +79,9 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return WillPopScope(
       onWillPop: _onWillPop,
-          child: Scaffold(
+      child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
           child: Padding(
@@ -146,7 +145,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                           //   height: 5,
                           // ),
                           Text(
-                            city,
+                            "city",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 38,
@@ -167,7 +166,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 child: Container(
                                   padding: EdgeInsets.all(0),
                                   width: MediaQuery.of(context).size.width * .4,
-                                  height: MediaQuery.of(context).size.width * .4,
+                                  height:
+                                      MediaQuery.of(context).size.width * .4,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
@@ -201,7 +201,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 child: Container(
                                   padding: EdgeInsets.all(0),
                                   width: MediaQuery.of(context).size.width * .4,
-                                  height: MediaQuery.of(context).size.width * .4,
+                                  height:
+                                      MediaQuery.of(context).size.width * .4,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
