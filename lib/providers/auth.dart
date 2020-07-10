@@ -73,8 +73,9 @@ class Auth {
           .then((doc) 
           {
               if (doc.exists) {
-                var city = doc['constituency'];
+                var city = doc['city'];
                 pref.setString("city", city);
+                print('city set $city');
                 return true;
             } else {
 

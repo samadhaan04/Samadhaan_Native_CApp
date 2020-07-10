@@ -136,7 +136,7 @@ class _FileComplaintState extends State<FileComplaint>
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    "city",
+                    city ?? "empty",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,

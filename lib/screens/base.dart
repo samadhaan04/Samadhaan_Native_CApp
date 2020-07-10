@@ -53,6 +53,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
         .then((value) => value.displayName);
     print('name $dname');
     city = pref.getString('city');
+    print('city $city');
     username = dname;
   }
 
@@ -145,7 +146,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                           //   height: 5,
                           // ),
                           Text(
-                            "city",
+                            city ?? "empty",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 38,

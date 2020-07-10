@@ -76,6 +76,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
       isupdate = ModalRoute.of(context).settings.arguments ?? false;
       if (isupdate) {
         final result = await fetchData();
+        print('fetched data');
         if (result) {}
       }
       setState(() {
@@ -625,12 +626,12 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     final result = await data.get();
     _state = result['state'] == null ? null : result['state'];
     _nameController.text = result['name'];
-    _ageController.text = (result['Age']).toString();
+    _ageController.text = (result['age']).toString();
     _streetController.text = result['street'];
-    _houseController.text = result['house no'];
-    _gender = result['Gender'];
-    _phoneController.text = (result['phone']);
-    _constituency = result['constituency'];
+    _houseController.text = result['houseNumber'];
+    _gender = result['gender'];
+    _phoneController.text = (result['phoneNumber']);
+    _constituency = result['city'];
     print(_constituency);
     return true;
   }
