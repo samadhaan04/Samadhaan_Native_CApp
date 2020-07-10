@@ -7,6 +7,7 @@ import 'package:faridabad/screens/previouscomplaints.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,6 +42,25 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     _animation.addListener(() => this.setState(() {}));
     _animationController.forward();
     fetchNameAndCity();
+    final fbm = FirebaseMessaging();
+    fbm.requestNotificationPermissions();
+    fbm.configure(
+      onLaunch: (message) {
+        print('onLaunch');
+        print(message);
+        return;
+      },
+      onMessage: (message) {
+        print('onMessage');
+        print(message);
+        return;
+      },
+      onResume: (message) {
+        print('onBackgroundMessage');
+        print(message);
+        return;
+      },
+    );
   }
 
   String dropdownValue = '';
