@@ -186,13 +186,14 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(0),
-                                  width: MediaQuery.of(context).size.width * .4,
+                                  width: MediaQuery.of(context).size.width * .3,
                                   height:
-                                      MediaQuery.of(context).size.width * .4,
+                                      MediaQuery.of(context).size.width * .3,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                          color: Colors.black, width: 1)),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                        color: Colors.black, width: 1.5),
+                                  ),
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
@@ -203,6 +204,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                         size: 50,
                                       ),
                                       Text("FILE COMPLAINT",
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                               letterSpacing: 1,
                                               color: Colors.black,
@@ -221,9 +223,9 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(0),
-                                  width: MediaQuery.of(context).size.width * .4,
+                                  width: MediaQuery.of(context).size.width * .3,
                                   height:
-                                      MediaQuery.of(context).size.width * .4,
+                                      MediaQuery.of(context).size.width * .3,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
