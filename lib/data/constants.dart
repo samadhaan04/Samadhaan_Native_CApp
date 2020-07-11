@@ -23,12 +23,11 @@ List<String> depts = [
   "Tehsil"
 ];
 
-List<String> getWardsList() {
+List<String> getStateList() {
   List<String> wards = [];
   wards.add("None");
-  for (int i = 1; i <= 31; i++) {
-    wards.add(i.toString());
-  }
+  wards.add("Haryana");
+  wards.add("Delhi");
   return wards;
 }
 
@@ -110,99 +109,13 @@ var trackText = RichText(
 var gender = [
   'male',
   'female',
-  'prefer not to say',
+  'other',
 ];
 
-var villages = [
+var constituencies = [
   "None",
-  "Aatar Chahta",
-  "Aatva",
-  "Aaya Nagar",
-  "Acheja",
-  "Ajijabad",
-  "Akbarpur Dakor",
-  "Allika",
-  "Amroli",
-  "Asaavta",
-  "Atoha",
-  "Baadka",
-  "Baata",
-  "Badoli",
-  "Bagpur Kala",
-  "Balayi",
-  "Bamariyaka",
-  "Bambu Nagla",
-  "Behrampur",
-  "Bela",
-  "Bharatgadh",
-  "Bhavana",
-  "Bholdha",
-  "Bhued",
-  "Bilochpur",
-  "Chajju Nagar",
-  "Chandhut",
-  "Chavvan Ka Nangla",
-  "Chirwadi",
-  "Dhatir",
-  "Dostpur",
-  "Farizanpur Khelda",
-  "Fatsko Nagar",
-  "Ghodi",
-  "Ghughera",
-  "Gundvas",
-  "Gurwadi",
-  "Hafzabad (Surjan Nagla)",
-  "Hidayatpur",
-  "Hoshangabad",
-  "Hunsapur",
-  "Jevabad Khedli",
-  "Kakrali",
-  "Kamravali",
-  "Karimpur",
-  "Karna",
-  "Kashipur",
-  "Kulena",
-  "Kusak",
-  "Ladiyaka",
-  "Lalghad",
-  "Lalpur Kadim",
-  "Lalwa",
-  "Lulwadi",
-  "Maksudpur",
-  "Mala Singh Farm",
-  "Milak Ganniki",
-  "Misa",
-  "Munirgadi",
-  "Mustafabad",
-  "Nagal Bhraman",
-  "Nagliya Khurd",
-  "Nai Nagla",
-  "Nandawal",
-  "Patli Khurd",
-  "Peer Gadi",
-  "Pehruka",
-  "Pelak",
-  "Prhaladpur",
-  "Rahimpur",
-  "Rajolka",
-  "Rampur Khor",
-  "Rasulpur",
-  "Raydaska",
-  "Rundhi",
-  "Sehdev Nangla",
-  "Shekpur",
-  "Sheru ka Nagla",
-  "Sihaul",
-  "Soldha",
-  "Sujwadi",
-  "Sultanpur",
-  "Sunheri ka Nagla",
-  "Tappa",
-  "Taraka",
-  "Tekri Gujjar",
-  "Thantari",
-  "Yadupur",
-  "Zhuppa",
+  "Faridabad",
+  "Gurgaon",
 ];
 
 Widget PlatformAlertDialog(BuildContext context, String title, var message,

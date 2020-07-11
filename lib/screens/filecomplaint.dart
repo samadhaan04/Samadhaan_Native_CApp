@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FileComplaint extends StatefulWidget {
   static const routeName = 'file-complaint';
@@ -67,8 +68,30 @@ class _FileComplaintState extends State<FileComplaint>
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchCity();
+  }
+
+  @override
+  void didChangeDependencies() {
+    fetchCity();
+    super.didChangeDependencies();
+  }
+
+  var city;
+  void fetchCity() async {
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      city = pref.getString('city');
+    });
+  }
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
         child: ListView(
           children: <Widget>[
@@ -113,14 +136,24 @@ class _FileComplaintState extends State<FileComplaint>
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    'Faridabad',
+                    city ?? "empty",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 50,
-                      color: Colors.teal[200],
+                      fontSize: 40,
+                      letterSpacing: 1,
+                      color: Colors.blue[300],
                     ),
-                    textAlign: TextAlign.center,
                   ),
+                  // Text(
+                  //   'Palwal',
+                  //   style: TextStyle(
+                  //     fontWeight: FontWeight.bold,
+                  //     fontSize: 50,
+                  //     color: Colors.teal[200],
+                  //   ),
+                  //   textAlign: TextAlign.center,
+                  // ),
                   SizedBox(
                     height: 50,
                   ),
@@ -141,31 +174,34 @@ class _FileComplaintState extends State<FileComplaint>
                         SizedBox(
                           width: 18,
                         ),
-                        DropdownButton(
-                          iconEnabledColor: Colors.white,
-                          underline: Container(
-                            color: Colors.transparent,
+                        Padding(
+                          padding: EdgeInsets.only(top: 15, bottom: 15),
+                          child: DropdownButton(
+                            iconEnabledColor: Colors.white,
+                            underline: Container(
+                              color: Colors.transparent,
+                            ),
+                            focusColor: Colors.black,
+                            style: TextStyle(
+                                fontSize: 25, color: Colors.grey[600]),
+                            elevation: 2,
+                            hint: Text(
+                              'Department ',
+                              style: TextStyle(color: Colors.grey),
+                            ), // Not necessary for Option 1
+                            value: _department,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _department = newValue;
+                              });
+                            },
+                            items: depts.map((location) {
+                              return DropdownMenuItem(
+                                child: new Text(location),
+                                value: location,
+                              );
+                            }).toList(),
                           ),
-                          focusColor: Colors.black,
-                          style:
-                              TextStyle(fontSize: 15, color: Colors.grey[600]),
-                          elevation: 2,
-                          hint: Text(
-                            'Department ',
-                            style: TextStyle(color: Colors.grey),
-                          ), // Not necessary for Option 1
-                          value: _department,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _department = newValue;
-                            });
-                          },
-                          items: depts.map((location) {
-                            return DropdownMenuItem(
-                              child: new Text(location),
-                              value: location,
-                            );
-                          }).toList(),
                         ),
                       ],
                     ),
@@ -175,7 +211,7 @@ class _FileComplaintState extends State<FileComplaint>
                   ),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(20)),
@@ -197,9 +233,10 @@ class _FileComplaintState extends State<FileComplaint>
                             color: Colors.black,
                           ),
                           enabledBorder: InputBorder.none,
-                          labelText: 'Details of the Issue',
+                          labelText: 'Complaint',
                           hintText: "Enter all the details about the issue",
                           labelStyle: TextStyle(
+                              fontSize: 25,
                               decorationStyle: TextDecorationStyle.solid)),
                     ),
                   ),
@@ -265,17 +302,30 @@ class _FileComplaintState extends State<FileComplaint>
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(
-                              'Image',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
+                            Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.image,
+                                  size: 40,
+                                  color: Colors.blueGrey[800],
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  'Image',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                ),
+                              ],
                             ),
                             CircleAvatar(
                               radius: 30,
                               backgroundImage:
                                   _image != null ? FileImage(_image) : null,
+                              backgroundColor:
+                                  _image == null ? Colors.transparent : null,
                             )
                           ],
                         ),
@@ -308,51 +358,69 @@ class _FileComplaintState extends State<FileComplaint>
                           setState(() {
                             loading = true;
                           });
-                          // responeTimer();
-                          bool result = await checkInternet();
-                          if (!result) {
-                            print('result checked $result');
+
+                          if (_department == null ||
+                              _detailsController.text == null) {
                             setState(() {
                               loading = false;
                             });
-
-                            showDialog(
-                                context: context,
-                                child: AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  title: Text(
-                                    "TRY AGAIN",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  content: Text(
-                                      "Please Check Your Internet Connection"),
-                                  actions: <Widget>[
-                                    MaterialButton(
-                                      child: Text(
-                                        "RETRY",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    )
-                                  ],
-                                ));
+                            print('not filled');
+                            _scaffoldKey.currentState.showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  'Please Enter Your Department and Complaint',
+                                ),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
                           } else {
-                            final result = await sendData();
-                            if (result == true) {
-                              Navigator.of(context).pop();
+                            // responeTimer();
+                            bool result = await checkInternet();
+                            if (!result) {
+                              print('result checked $result');
+                              setState(() {
+                                loading = false;
+                              });
+                              showDialog(
+                                  context: context,
+                                  child: AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    title: Text(
+                                      "TRY AGAIN",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    content: Text(
+                                        "Please Check Your Internet Connection"),
+                                    actions: <Widget>[
+                                      MaterialButton(
+                                        child: Text(
+                                          "RETRY",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  ));
+                            } else {
+                              final result = await sendData();
+                              if (result == true) {
+                                Navigator.of(context).pop();
+                              }
                             }
+                            setState(() {
+                              loading = false;
+                            });
+                            showModalSheet(context);
                           }
-                          setState(() {
-                            loading = false;
-                          });
                         }
-                        showModalSheet(context);
                       },
                       color: Colors.black,
                       shape: RoundedRectangleBorder(
@@ -390,27 +458,32 @@ class _FileComplaintState extends State<FileComplaint>
   }
 
   Future<bool> sendData() async {
+    var url;
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
-      final ref2 = FirebaseStorage.instance
-          .ref()
-          .child('complaintImages')
-          .child(uid + DateTime.now().toIso8601String() + '.jpg');
-      await ref2.putFile(_image).onComplete;
-      final url = await ref2.getDownloadURL();
+      if (_image != null) {
+        final ref2 = FirebaseStorage.instance
+            .ref()
+            .child('complaintImages')
+            .child(uid + DateTime.now().toIso8601String() + '.jpg');
+        await ref2.putFile(_image).onComplete;
+        url = await ref2.getDownloadURL();
+      }
       DocumentReference ref =
           await databaseReference.collection("Complaints").add({
-        'author': uid,
+        'author': Firestore.instance.collection('Users').document(uid),
         'complaintText': _detailsController.text,
-        'imageURL': url,
+        'imageURL': _image == null ? null : url,
         'state': "Haryana",
         'status': 0,
         'city': "Palwal",
         'department': _department,
-        'deptfeedback': null,
-        'userfeedback': null,
-        'deptfeedbackimg': null,
+        'deptFeedback': null,
+        'userFeedback': null,
+        'deptFeedbackImg': null,
+        'adminRemark': null,
         'star': null,
+        'date': DateTime.now().toIso8601String(),
       });
       await databaseReference
           .collection("States/Haryana/Palwal/$_department/Complaints")

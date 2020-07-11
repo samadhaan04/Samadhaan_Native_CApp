@@ -1,6 +1,7 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faridabad/screens/base.dart';
+import 'package:faridabad/screens/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,109 +52,272 @@ class _ShowComplaintState extends State<ShowComplaint>
           print(userDocument["city"]);
           return new Scaffold(
             body: Padding(
-              padding: EdgeInsets.all(25.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.amber,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(userDocument["complaintText"]),
-                          Container(
-                            alignment: Alignment(1, 1),
-                            child: RaisedButton(
-                              textColor: Colors.white,
-                              child: Text(
-                                'Attached Image',
-                                style: TextStyle(fontSize: 20.0),
-                              ),
-                              color: Colors.black,
-                              elevation: 10.0,
-                              onPressed: () {
-                                return _showBottomSheet(
-                                    context, userDocument["imageURL"]);
-                              },
+                padding: EdgeInsets.only(top: 50, left: 15, right: 15),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Colors.green[300],
+                                Colors.green[200],
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(left: 30),
+                                  child: Text(
+                                    'Complaint',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 30),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      return _showBottomSheet(
+                                          context,
+                                          userDocument["imageURL"] != null
+                                              ? userDocument["imageURL"]
+                                              : "");
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 20),
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 30,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.amber,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(userDocument["deptfeedback"] != null
-                              ? userDocument["deptfeedback"]
-                              : "None"),
-                          Container(
-                            alignment: Alignment(1, 1),
-                            child: RaisedButton(
-                              textColor: Colors.white,
-                              child: Text(
-                                'Attached Image',
-                                style: TextStyle(fontSize: 20.0),
-                              ),
-                              color: Colors.black,
-                              elevation: 10.0,
-                              onPressed: () {
-                                setState(() {
-                                  return _showBottomSheet(
-                                      context,
-                                      userDocument["deptfeedbackimg"] != null
-                                          ? userDocument["deptfeedbackimg"]
-                                          : "");
-                                });
-                              },
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40),
+                                  child: Text(
+                                    userDocument["complaintText"],
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 20),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        RaisedButton(
+                      SizedBox(height: 40),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Colors.green[300],
+                                Colors.green[200],
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter),
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(left: 30),
+                                  child: Text(
+                                    'Department Feedback',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 25),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      return _showBottomSheet(
+                                          context,
+                                          userDocument["deptfeedbackimg"] !=
+                                                  null
+                                              ? userDocument["deptfeedbackimg"]
+                                              : "");
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 20),
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 30,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40),
+                                  child: Text(
+                                    userDocument["deptfeedback"] != null
+                                        ? userDocument["deptfeedback"]
+                                        : "None",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(30),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
                           textColor: Colors.white,
-                          child: Text(
-                            'FEEDBACK',
-                            style: TextStyle(fontSize: 20.0),
+                          child: Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Text(
+                              'FEEDBACK',
+                              style: TextStyle(fontSize: 20.0),
+                            ),
                           ),
-                          color: Colors.pink,
-                          elevation: 10.0,
+                          color: Colors.blueGrey[900],
                           onPressed: () {
                             return _showBottomSheet1(context);
                           },
                         ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+                      )
+                    ],
+                  ),
+                )
+//             Column(
+//                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                crossAxisAlignment: CrossAxisAlignment.stretch,
+//                children: <Widget>[
+//                  Expanded(
+//                    child: Container(
+//                      decoration: BoxDecoration(
+//                        borderRadius: BorderRadius.circular(10.0),
+//                        color: Colors.amber,
+//                      ),
+//                      child: Column(
+//                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                        children: [
+//                          Text(userDocument["complaintText"]),
+//                          Container(
+//                            alignment: Alignment(1, 1),
+//                            child: RaisedButton(
+//                              textColor: Colors.white,
+//                              child: Text(
+//                                'Attached Image',
+//                                style: TextStyle(fontSize: 20.0),
+//                              ),
+//                              color: Colors.black,
+//                              elevation: 10.0,
+//                              onPressed: () {
+//                                return _showBottomSheet(
+//                                    context, userDocument["imageURL"]);
+//                              },
+//                            ),
+//                          ),
+//                        ],
+//                      ),
+//                    ),
+//                  ),
+//                  SizedBox(
+//                    height: 10.0,
+//                  ),
+//                  Expanded(
+//                    child: Container(
+//                      decoration: BoxDecoration(
+//                        borderRadius: BorderRadius.circular(10.0),
+//                        color: Colors.amber,
+//                      ),
+//                      child: Column(
+//                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                        children: [
+//                          Text(userDocument["deptfeedback"] != null
+//                              ? userDocument["deptfeedback"]
+//                              : "None"),
+//                          Container(
+//                            alignment: Alignment(1, 1),
+//                            child: RaisedButton(
+//                              textColor: Colors.white,
+//                              child: Text(
+//                                'Attached Image',
+//                                style: TextStyle(fontSize: 20.0),
+//                              ),
+//                              color: Colors.black,
+//                              elevation: 10.0,
+//                              onPressed: () {
+//                                setState(() {
+//                                  return _showBottomSheet(
+//                                      context,
+//                                      userDocument["deptfeedbackimg"] != null
+//                                          ? userDocument["deptfeedbackimg"]
+//                                          : "");
+//                                });
+//                              },
+//                            ),
+//                          ),
+//                        ],
+//                      ),
+//                    ),
+//                  ),
+//                  SizedBox(
+//                    height: 20.0,
+//                  ),
+//                  Expanded(
+//                    child: Column(
+//                      crossAxisAlignment: CrossAxisAlignment.stretch,
+//                      children: [
+//                        RaisedButton(
+//                          textColor: Colors.white,
+//                          child: Text(
+//                            'FEEDBACK',
+//                            style: TextStyle(fontSize: 20.0),
+//                          ),
+//                          color: Colors.pink,
+//                          elevation: 10.0,
+//                          onPressed: () {
+//                            return _showBottomSheet1(context);
+//                          },
+//                        ),
+//                        SizedBox(
+//                          height: 20.0,
+//                        ),
+//                      ],
+//                    ),
+//                  )
+//                ],
+//              ),
+                ),
           );
         });
   }
@@ -161,20 +325,45 @@ class _ShowComplaintState extends State<ShowComplaint>
 //  final Widget image ;
   void _showBottomSheet(BuildContext cotx, String imageUrl) {
     int x = 1;
-    showModalBottomSheet(
-        isScrollControlled: true,
-        backgroundColor: Colors.transparent,
-        context: cotx,
-        builder: (bctx) {
-          return Container(
-              child: imageUrl == ""
-                  ? Text("No Attached Image")
-                  : Image.network(
-                      imageUrl,
-                      fit: BoxFit.contain,
-                      height: 250,
-                    ));
-        });
+    if (imageUrl == "") {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.white,
+          context: cotx,
+          builder: (bctx) {
+            return Container(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  'No Image Found',
+                  style: TextStyle(
+                    fontSize: 30,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+              ],
+            ));
+          });
+    } else {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          backgroundColor: Colors.white,
+          context: cotx,
+          builder: (bctx) {
+            return Container(
+                child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              height: 250,
+            ));
+          });
+    }
   }
 
   void _showBottomSheet1(BuildContext cotx) {
@@ -245,7 +434,7 @@ class _ShowComplaintState extends State<ShowComplaint>
                       spacing: 3.0),
                 ),
                 SizedBox(
-                  height: 100.0,
+                  height: 30.0,
                 ),
                 RaisedButton(
                   textColor: Colors.white,
@@ -270,7 +459,8 @@ class _ShowComplaintState extends State<ShowComplaint>
                       } else {
                         final result = await sendData();
                         if (result == true) {
-                          Navigator.of(context).pop();
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => Base()));
                         }
                       }
                       setState(() {
@@ -280,7 +470,7 @@ class _ShowComplaintState extends State<ShowComplaint>
                   },
                 ),
                 SizedBox(
-                  height: 100.0,
+                  height: 30.0,
                 ),
               ],
             ),

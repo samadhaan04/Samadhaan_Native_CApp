@@ -1,21 +1,9 @@
 import 'dart:async';
+import 'package:faridabad/providers/auth.dart';
+import 'package:faridabad/screens/base.dart';
+import 'package:faridabad/screens/home.dart';
+import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
-      routes: {'home': (context) => HomeScreen()},
-    );
-  }
-}
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -23,19 +11,31 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  void startTimer() {
-    Timer(
-        Duration(
-          seconds: 10,
-        ), () {
-      Navigator.of(context).pushReplacementNamed('home');
-    });
+  
+
+  void movetoHome() async {
+    await Future.delayed(Duration(milliseconds: 2000));
+    final result = await Auth().autoLogin();
+    print('result $result');
+    if (result) {
+      final check = await Auth().checkuserInfo();
+      print('check $check');
+      if (check) {
+        Navigator.of(context).pushReplacementNamed(Base.routeName);
+      } else {
+        Navigator.of(context).pushReplacementNamed(UserInfoScreen.routeName);
+      }
+    }
+    else
+    {
+      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    }
   }
 
   @override
   void initState() {
+    movetoHome();
     super.initState();
-    startTimer();
   }
 
   @override
@@ -46,9 +46,11 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(
-            child: Image.asset('assets/samadhaan.png',
-                width: MediaQuery.of(context).size.width * .5),
-          ),
+              child: Image.asset('assets/images/samadhaan.png',
+
+                  width: MediaQuery.of(context).size.width * .5,
+              ),
+            ),
           Text(
             'Samadhaan',
             textAlign: TextAlign.center,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth {
   final _auth = FirebaseAuth.instance;
@@ -63,7 +64,7 @@ class Auth {
   }
 
   Future<bool> checkuserInfo() async{
-    
+  final pref = await SharedPreferences.getInstance();
       final uid = await FirebaseAuth.instance.currentUser().then((value) => value.uid);
       final result = await databaseReference
           .collection('Users')
@@ -71,9 +72,10 @@ class Auth {
           .get()
           .then((doc) 
           {
-
               if (doc.exists) {
-
+                var city = doc['city'];
+                pref.setString("city", city);
+                print('city set $city');
                 return true;
             } else {
 
