@@ -1,4 +1,3 @@
-
 import 'package:faridabad/screens/authScreen.dart';
 import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
@@ -21,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Samadhaan',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         ShowComplaint.routeName: (ctx) => ShowComplaint(),
         FileComplaint.routeName: (ctx) => FileComplaint(),
         Base.routeName: (ctx) => Base(),
-        PreviousComplanints.routeName : (ctx) => PreviousComplanints(),
+        PreviousComplanints.routeName: (ctx) => PreviousComplanints(),
       },
     );
   }

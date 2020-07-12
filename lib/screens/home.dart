@@ -1,3 +1,4 @@
+import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
@@ -12,34 +13,34 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
               child: Container(
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black,
-
-                      Colors.white,
-                      // Colors.brown,
-                      Colors.black,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+                height: 30.0,
                 child: Container(
                   padding: EdgeInsets.all(20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Hero(
                         tag: 'logo',
-                        child: Image.asset('assets/images/logo.png'),
+                        child: Container(
+                          height: 350.0,
+                          width: 350.0,
+                          child: Image.asset(
+                            'assets/images/samadhaan.png',
+                          ),
+                        ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
+                      ),
+                      brandText,
+                      SizedBox(
+                        height: 40,
                       ),
                       InkWell(
                         borderRadius: BorderRadius.circular(20),
@@ -50,8 +51,8 @@ class HomeScreen extends StatelessWidget {
                             final check = await Auth().checkuserInfo();
                             print('check $check');
                             if (check) {
-                              Navigator.of(context).pushReplacementNamed(
-                                  Base.routeName);
+                              Navigator.of(context)
+                                  .pushReplacementNamed(Base.routeName);
                             } else {
                               Navigator.of(context).pushReplacementNamed(
                                   UserInfoScreen.routeName);

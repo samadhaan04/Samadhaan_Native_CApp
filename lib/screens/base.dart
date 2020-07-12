@@ -113,7 +113,9 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Hello $username'),
+                    Text('$username',
+                        style:
+                            TextStyle(fontSize: 23.0, fontFamily: 'Lobster')),
                     DropdownButton(
                       underline: Container(),
                       onChanged: (value) async {
@@ -135,8 +137,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                       },
                       icon: Image.asset(
                         'assets/images/samadhaan.png',
-                        fit: BoxFit.contain,
-                        height: 35,
+                        height: 45,
                       ),
                       items: _items.map((e) {
                         return DropdownMenuItem(
