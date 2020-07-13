@@ -100,22 +100,22 @@ class MessagesStream extends StatelessWidget {
             ),
           );
         }
-        print("snapshot $snapshot");
+
         final messages = snapshot.data.documents;
-        print('messages $messages');
+
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
           if (true) {
             final status = message.data['status'];
             final author = message.data['author'];
-            print(author);
+
             final complainttext = message.data['complaintText'];
             final department = message.data['department'];
             final complaintId = message.documentID;
-            print('status $status');
-            // print(imageUrl);
+
+
             final currentUser = loggedInUser.email;
-            print('user = $currentUser');
+
             final messageBubble = MessageBubble(
               complaint: complainttext,
               status: status.toString(),
@@ -169,7 +169,6 @@ class _MessageBubbleState extends State<MessageBubble> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              print("tap");
               Navigator.of(context).pushNamed(ShowComplaint.routeName,
                   arguments: widget.complaintId);
             },

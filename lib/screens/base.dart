@@ -59,6 +59,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       onResume: (message) {
         print('onBackgroundMessage');
         print(message);
+        Navigator.of(context).pushNamed(ShowComplaint.routeName,arguments:message['data']['id']);
         return;
       },
     );

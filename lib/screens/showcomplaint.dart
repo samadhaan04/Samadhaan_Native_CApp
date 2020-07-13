@@ -33,11 +33,17 @@ class _ShowComplaintState extends State<ShowComplaint>
     super.dispose();
   }
 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    complaintId = ModalRoute.of(context).settings.arguments;
+  }
+
   TextEditingController _detailsController = new TextEditingController();
   var rating = 3.0;
   @override
   Widget build(BuildContext context) {
-    complaintId = ModalRoute.of(context).settings.arguments;
 
     return StreamBuilder(
         stream: Firestore.instance
@@ -133,7 +139,7 @@ class _ShowComplaintState extends State<ShowComplaint>
                               ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter),
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: Column(
                           children: <Widget>[
@@ -179,8 +185,8 @@ class _ShowComplaintState extends State<ShowComplaint>
                                 Padding(
                                   padding: const EdgeInsets.only(left: 40),
                                   child: Text(
-                                    userDocument["deptfeedback"] != null
-                                        ? userDocument["deptfeedback"]
+                                    userDocument["deptFeedback"] != null
+                                        ? userDocument["deptFeedback"]
                                         : "None",
                                     textAlign: TextAlign.left,
                                     style: TextStyle(

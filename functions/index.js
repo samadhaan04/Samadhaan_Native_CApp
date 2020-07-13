@@ -3,16 +3,17 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-
+var complaint;
 exports.myFunction = functions.firestore
-    .document('Complaints/{complaint}')
+    .document(`Complaints/{complaint}`)
     .onUpdate((change, context) => {
         // var feed = snapshot.data().deptFeedback;
+        console.log(context.params.complaint)
         var feed = change.after.data();
-        const newValue = change.after.data();
-        const token = newValue.token;
-        console.log(token);
-        if (feed.deptFeedback !== null) {
+        var prevfeed = change.before.data();
+        const token = feed.token;
+        // console.log(token);
+        if (feed.deptFeedback !== null && feed.deptFeedback!==prevfeed.deptFeedback) {
             return admin.messaging().sendToDevice(
                 token,
                 {
@@ -20,9 +21,11 @@ exports.myFunction = functions.firestore
                         title: "FeedBack Received From Department!",
                         body: feed.deptFeedback,
                         clickAction: 'FLUTTER_NOTIFICATION_CLICK',
-                        icon: 'assets/images/samadhaan.png',
-                        priority : "high",
                     },
+                    data : {
+                        "id" : context.params.complaint,
+                    }
+                    
                 },
             );
         }
