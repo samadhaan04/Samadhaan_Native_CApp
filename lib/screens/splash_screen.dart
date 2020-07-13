@@ -11,8 +11,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  
-
   void movetoHome() async {
     await Future.delayed(Duration(milliseconds: 2000));
     final result = await Auth().autoLogin();
@@ -25,9 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Navigator.of(context).pushReplacementNamed(UserInfoScreen.routeName);
       }
-    }
-    else
-    {
+    } else {
       Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     }
   }
@@ -46,11 +42,11 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(
-              child: Image.asset('assets/images/samadhaan.png',
-
-                  width: MediaQuery.of(context).size.width * .5,
-              ),
+            child: Image.asset(
+              'assets/images/samadhaan.png',
+              width: MediaQuery.of(context).size.width * .5,
             ),
+          ),
           Text(
             'Samadhaan',
             textAlign: TextAlign.center,
