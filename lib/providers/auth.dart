@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,11 +42,13 @@ class Auth {
   }
 
   Future<bool> signOut() async {
+     final pref = await SharedPreferences.getInstance();
     try {
       final displayname =await  _auth.currentUser().then((value) => value.displayName);
       print('$displayname Signed out');
       await googleSignIn.signOut();
       await _auth.signOut();
+      pref.clear();
       return true;
     } catch (e) {
       print(e);
@@ -63,8 +66,11 @@ class Auth {
     }
   }
 
+
   Future<bool> checkuserInfo() async{
   final pref = await SharedPreferences.getInstance();
+  final fbm = FirebaseMessaging();
+  var token = await fbm.getToken();
       final uid = await FirebaseAuth.instance.currentUser().then((value) => value.uid);
       final result = await databaseReference
           .collection('Users')
@@ -75,6 +81,8 @@ class Auth {
               if (doc.exists) {
                 var city = doc['city'];
                 pref.setString("city", city);
+                pref.setString("token", token);
+                print('token $token');
                 print('city set $city');
                 return true;
             } else {

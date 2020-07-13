@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class UserInfoScreen extends StatefulWidget {
   static const routeName = '/user-info';
 
@@ -637,6 +639,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
   }
 
   Future<bool> sendData(bool isupdate) async {
+     final pref = await SharedPreferences.getInstance();
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
       if (isupdate) {
@@ -650,6 +653,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
           'state': _state == null ? null : _state,
           'city': _constituency == null ? null : _constituency,
         }).then((value) {
+          pref.setString('city', _constituency);
           print("Success");
           return true;
         });
@@ -665,6 +669,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
           'state': _state == null ? null : _state,
           'city': _constituency == null ? null : _constituency,
         }).then((value) {
+          pref.setString('city', _constituency);
           print("Success");
           return true;
         });

@@ -180,7 +180,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                   widget.status == '0' ? Colors.blue[300] : Colors.green[300],
                   widget.status == '0' ? Colors.blue[200] : Colors.green[200],
                 ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(15),
               ),
               child: Container(
                 padding: EdgeInsets.all(30),

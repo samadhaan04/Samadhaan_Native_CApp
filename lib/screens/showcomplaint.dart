@@ -66,7 +66,7 @@ class _ShowComplaintState extends State<ShowComplaint>
                               ],
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter),
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: Column(
                           children: <Widget>[

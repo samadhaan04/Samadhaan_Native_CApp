@@ -21,6 +21,7 @@ class _FileComplaintState extends State<FileComplaint>
   final _auth = FirebaseAuth.instance;
   bool isupdate = false;
   bool loading = false;
+  SharedPreferences pref;
   callback(bool value) {
     setState(() {
       loading = value;
@@ -81,11 +82,12 @@ class _FileComplaintState extends State<FileComplaint>
 
   var city;
   void fetchCity() async {
-    final pref = await SharedPreferences.getInstance();
+     pref = await SharedPreferences.getInstance();
     setState(() {
       city = pref.getString('city');
     });
   }
+  
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -484,13 +486,14 @@ class _FileComplaintState extends State<FileComplaint>
         'adminRemark': null,
         'star': null,
         'date': DateTime.now().toIso8601String(),
+        'token' : pref.getString('token'),
       });
       await databaseReference
           .collection("States/Haryana/Palwal/$_department/Complaints")
           .document(ref.documentID)
           .setData({
-        'ref':
-            Firestore.instance.collection('Complaints').document(ref.documentID)
+        'ref': 
+            Firestore.instance.collection('Complaints').document(ref.documentID),
       }).then((value) {
         print("Success");
         return true;
