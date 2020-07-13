@@ -108,30 +108,36 @@ class MessagesStream extends StatelessWidget {
           if (true) {
             final status = message.data['status'];
             final author = message.data['author'];
-
             final complainttext = message.data['complaintText'];
             final department = message.data['department'];
             final complaintId = message.documentID;
-
-
-            final currentUser = loggedInUser.email;
-
-            final messageBubble = MessageBubble(
-              complaint: complainttext,
-              status: status.toString(),
-              department: department,
-              complaintId: complaintId,
-            );
-            messageBubbles.add(messageBubble);
+            final currentUser = loggedInUser.uid;
+            if (currentUser == author) {
+              final messageBubble = MessageBubble(
+                complaint: complainttext,
+                status: status.toString(),
+                department: department,
+                complaintId: complaintId,
+              );
+              messageBubbles.add(messageBubble);
+            }
           }
         }
 
         return Expanded(
           flex: 1,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-            children: messageBubbles,
-          ),
+          child: messageBubbles.isEmpty
+              ? Center(
+                  child: Text(
+                    "No Complaints Yet !!!",
+                    style: TextStyle(fontSize: 21),
+                  ),
+                )
+              : ListView(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                  children: messageBubbles,
+                ),
         );
       },
     );

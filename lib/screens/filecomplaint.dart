@@ -473,7 +473,7 @@ class _FileComplaintState extends State<FileComplaint>
       }
       DocumentReference ref =
           await databaseReference.collection("Complaints").add({
-        'author': Firestore.instance.collection('Users').document(uid),
+        'author': uid,
         'complaintText': _detailsController.text,
         'imageURL': _image == null ? null : url,
         'state': "Haryana",
