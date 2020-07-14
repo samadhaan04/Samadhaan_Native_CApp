@@ -1,6 +1,7 @@
 import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,13 +12,13 @@ FirebaseUser loggedInUser;
 String email;
 int sort = 0;
 
-class PreviousComplanints extends StatefulWidget {
-  static const routeName = '/previous-complaints';
+class PreviousComplanintst extends StatefulWidget {
+  static const routeName = '/previous-complaintst';
   @override
-  PreviousComplanintsState createState() => (PreviousComplanintsState());
+  PreviousComplanintstState createState() => (PreviousComplanintstState());
 }
 
-class PreviousComplanintsState extends State<PreviousComplanints> {
+class PreviousComplanintstState extends State<PreviousComplanintst> {
   // final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
@@ -100,44 +101,44 @@ class MessagesStream extends StatelessWidget {
             ),
           );
         }
-
+        print("snapshot $snapshot");
         final messages = snapshot.data.documents;
-
+        print('messages $messages');
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
           if (true) {
             final status = message.data['status'];
             final author = message.data['author'];
+            print(author);
             final complainttext = message.data['complaintText'];
             final department = message.data['department'];
             final complaintId = message.documentID;
-            final currentUser = loggedInUser.uid;
-            if (currentUser == author) {
-              final messageBubble = MessageBubble(
-                complaint: complainttext,
-                status: status.toString(),
-                department: department,
-                complaintId: complaintId,
-              );
-              messageBubbles.add(messageBubble);
-            }
+            print('status $status');
+            // print(imageUrl);
+            final currentUser = loggedInUser.email;
+            print('user = $currentUser');
+            final messageBubble = MessageBubble(
+              complaint: complainttext,
+              status: status.toString(),
+              department: department,
+              complaintId: complaintId,
+            );
+            messageBubbles.add(messageBubble);
           }
         }
 
-        return Expanded(
-          flex: 1,
-          child: messageBubbles.isEmpty
-              ? Center(
-                  child: Text(
-                    "No Complaints Yet !!!",
-                    style: TextStyle(fontSize: 21),
-                  ),
-                )
-              : ListView(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                  children: messageBubbles,
-                ),
+        return Center(
+          heightFactor: 3,
+          child: Container(
+            alignment: Alignment.center,
+            height: 300,
+            width: 500,
+            child: ListView(
+                scrollDirection: Axis.horizontal,
+                // padding: EdgeInsets.symmetric(horizontal: 100.0, vertical: 30.0),
+                children: messageBubbles,
+              ),
+          ),
         );
       },
     );
@@ -165,29 +166,28 @@ class _MessageBubbleState extends State<MessageBubble> {
   TextEditingController _controller = new TextEditingController();
   String _selectedDepartment;
   Color _color = Colors.red;
-  double width = 200;
+  // double width = 200;
   String _status;
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
+      margin: EdgeInsets.all(20),
+      child: 
           GestureDetector(
             onTap: () {
+              print("tap");
               Navigator.of(context).pushNamed(ShowComplaint.routeName,
                   arguments: widget.complaintId);
             },
             child: Container(
+              alignment: Alignment.center,
+              // height: 100,
+              width: 300,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    widget.status == '0' ? Colors.blue[300] : Colors.green[300],
-                    widget.status == '0' ? Colors.blue[200] : Colors.green[200],
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+                gradient: LinearGradient(colors: [
+                  widget.status == '0' ? Colors.blue[300] : Colors.green[300],
+                  widget.status == '0' ? Colors.blue[200] : Colors.green[200],
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Container(
@@ -236,11 +236,6 @@ class _MessageBubbleState extends State<MessageBubble> {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
-        ],
-      ),
     );
   }
 }

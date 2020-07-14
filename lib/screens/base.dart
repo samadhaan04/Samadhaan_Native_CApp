@@ -4,6 +4,7 @@ import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/screens/filecomplaint.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/previouscomplaints.dart';
+import 'package:faridabad/screens/prevtest.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -58,6 +59,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       onResume: (message) {
         print('onBackgroundMessage');
         print(message);
+        Navigator.of(context).pushNamed(ShowComplaint.routeName,arguments:message['data']['id']);
         return;
       },
     );
@@ -113,7 +115,10 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Hello $username'),
+                    Text(
+                      '$username',
+                      style: TextStyle(fontSize: 23.0, fontFamily: 'Lobster'),
+                    ),
                     DropdownButton(
                       underline: Container(),
                       onChanged: (value) async {
@@ -136,7 +141,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                       icon: Image.asset(
                         'assets/images/samadhaan.png',
                         fit: BoxFit.contain,
-                        height: 35,
+                        height: 45,
                       ),
                       items: _items.map((e) {
                         return DropdownMenuItem(
@@ -186,13 +191,13 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(0),
-                                  width: MediaQuery.of(context).size.width * .4,
+                                  width: MediaQuery.of(context).size.width * .37,
                                   height:
-                                      MediaQuery.of(context).size.width * .4,
+                                      MediaQuery.of(context).size.width * .37,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
-                                          color: Colors.black, width: 1)),
+                                          color: Colors.black, width: 1.5)),
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
@@ -203,6 +208,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                         size: 50,
                                       ),
                                       Text("FILE COMPLAINT",
+                                      textAlign: TextAlign.center,
                                           style: TextStyle(
                                               letterSpacing: 1,
                                               color: Colors.black,
@@ -221,13 +227,13 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(0),
-                                  width: MediaQuery.of(context).size.width * .4,
+                                  width: MediaQuery.of(context).size.width * .37,
                                   height:
-                                      MediaQuery.of(context).size.width * .4,
+                                      MediaQuery.of(context).size.width * .37,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(
-                                          color: Colors.black, width: 1)),
+                                          color: Colors.black, width: 1.5)),
                                   child: Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
