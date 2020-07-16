@@ -9,6 +9,7 @@ import 'package:faridabad/screens/showcomplaint.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
+    
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 600));
     _animation =
@@ -66,9 +68,17 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   }
 
   String dropdownValue = '';
-  var _items = ['userprofile', 'logout'];
+  var _items = ['User Profile', 'Logout'];
+
+  var image;
 
   void fetchNameAndCity() async {
+    // final storage = FirebaseStorage.instance;
+    //  image = await storage.ref().child('family.jpg').getDownloadURL();
+    //  print(image);
+    //  setState(() {
+        
+    //  });
     final pref = await SharedPreferences.getInstance();
     final dname = await FirebaseAuth.instance
         .currentUser()
@@ -77,6 +87,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     city = pref.getString('city');
     print('city $city');
     username = dname;
+    
   }
 
   Future<bool> _onWillPop() async {
@@ -138,11 +149,10 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                               arguments: true);
                         }
                       },
-                      icon: Image.asset(
-                        'assets/images/samadhaan.png',
-                        fit: BoxFit.contain,
-                        height: 45,
-                      ),
+                      icon: Icon(Icons.menu,size: 35,),
+                        // fit: BoxFit.contain,
+                        // height: 45,
+                      // ),
                       items: _items.map((e) {
                         return DropdownMenuItem(
                           child: Text(e),
@@ -163,7 +173,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Image.asset(
-                            "assets/images/family.jpg",
+                            'assets/images/family.jpg',
                             width: _animation.value * 500,
                           ),
                           brandText,
