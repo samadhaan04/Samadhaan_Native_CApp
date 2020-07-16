@@ -37,7 +37,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    
+
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 600));
     _animation =
@@ -61,7 +61,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       onResume: (message) {
         print('onBackgroundMessage');
         print(message);
-        Navigator.of(context).pushNamed(ShowComplaint.routeName,arguments:message['data']['id']);
+        Navigator.of(context).pushNamed(ShowComplaint.routeName,
+            arguments: message['data']['id']);
         return;
       },
     );
@@ -70,15 +71,16 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   String dropdownValue = '';
   var _items = ['User Profile', 'Logout'];
 
-  var image;
+  var image,loading;
 
   void fetchNameAndCity() async {
-    // final storage = FirebaseStorage.instance;
-    //  image = await storage.ref().child('family.jpg').getDownloadURL();
-    //  print(image);
-    //  setState(() {
-        
-    //  });
+    final storage = FirebaseStorage.instance;
+    
+    image = await storage.ref().child('family.jpg').getDownloadURL();
+    print(image);
+    setState(() {
+      
+    });
     final pref = await SharedPreferences.getInstance();
     final dname = await FirebaseAuth.instance
         .currentUser()
@@ -87,7 +89,6 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     city = pref.getString('city');
     print('city $city');
     username = dname;
-    
   }
 
   Future<bool> _onWillPop() async {
@@ -149,9 +150,12 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                               arguments: true);
                         }
                       },
-                      icon: Icon(Icons.menu,size: 35,),
-                        // fit: BoxFit.contain,
-                        // height: 45,
+                      icon: Icon(
+                        Icons.menu,
+                        size: 35,
+                      ),
+                      // fit: BoxFit.contain,
+                      // height: 45,
                       // ),
                       items: _items.map((e) {
                         return DropdownMenuItem(
@@ -172,8 +176,12 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Image.asset(
-                            'assets/images/family.jpg',
+                          // Image.asset(
+                          //   'assets/images/family.jpg',
+                          //   width: _animation.value * 500,
+                          // ),
+                          Image.network(
+                            image,
                             width: _animation.value * 500,
                           ),
                           brandText,
@@ -201,7 +209,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(0),
-                                  width: MediaQuery.of(context).size.width * .37,
+                                  width:
+                                      MediaQuery.of(context).size.width * .37,
                                   height:
                                       MediaQuery.of(context).size.width * .37,
                                   decoration: BoxDecoration(
@@ -218,7 +227,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                         size: 50,
                                       ),
                                       Text("FILE COMPLAINT",
-                                      textAlign: TextAlign.center,
+                                          textAlign: TextAlign.center,
                                           style: TextStyle(
                                               letterSpacing: 1,
                                               color: Colors.black,
@@ -237,7 +246,8 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(0),
-                                  width: MediaQuery.of(context).size.width * .37,
+                                  width:
+                                      MediaQuery.of(context).size.width * .37,
                                   height:
                                       MediaQuery.of(context).size.width * .37,
                                   decoration: BoxDecoration(
