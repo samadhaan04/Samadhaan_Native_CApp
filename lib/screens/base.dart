@@ -75,16 +75,12 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
 
   void fetchNameAndCity() async {
     final storage = FirebaseStorage.instance;
-    
     image = await storage.ref().child('family.jpg').getDownloadURL();
     print(image);
     setState(() {
-      
     });
     final pref = await SharedPreferences.getInstance();
-    final dname = await FirebaseAuth.instance
-        .currentUser()
-        .then((value) => value.displayName);
+    final dname = pref.getString('name');
     print('name $dname');
     city = pref.getString('city');
     print('city $city');
@@ -137,14 +133,15 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                         setState(() {
                           dropdownValue = value;
                         });
-                        if (dropdownValue == 'logout') {
+                        if (dropdownValue == 'Logout') {
                           final signoutResult = await Auth().signOut();
+                          // print('sign out');
                           if (signoutResult) {
                             Navigator.of(context)
                                 .pushReplacementNamed(HomeScreen.routeName);
                           }
                         }
-                        if (dropdownValue == 'userprofile') {
+                        if (dropdownValue == 'User Profile') {
                           Navigator.of(context).pushNamed(
                               UserInfoScreen.routeName,
                               arguments: true);

@@ -1,4 +1,5 @@
 import 'package:faridabad/providers/auth.dart';
+import 'package:faridabad/screens/adminScreen.dart';
 import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/data/constants.dart';
@@ -8,6 +9,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home';
+  String email;
+  String password;
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,20 +29,124 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Hero(
-                        tag: 'logo',
-                        child: Container(
-                          height: 350.0,
-                          width: 350.0,
-                          child: Image.asset(
-                            'assets/images/samadhaan.png',
-                          ),
-                        ),
-                      ),
+                      // Hero(
+                      //   tag: 'logo',
+                      //   child: Container(
+                      //     height: 250.0,
+                      //     width: 250.0,
+                      //     child: Image.asset(
+                      //       'assets/images/samadhaan.png',
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
+                      brandText,
                       SizedBox(
                         height: 20,
                       ),
-                      brandText,
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 40),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black,
+                                      spreadRadius: 1,
+                                      blurRadius: 10)
+                                ],
+                                borderRadius: BorderRadius.circular(35),
+                              ),
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value.contains('@')) {
+                                    print('email id fine');
+                                    email = value;
+                                    print(email);
+                                    return null;
+                                  } else {
+                                    print('not fine');
+                                    return value;
+                                  }
+                                },
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                                decoration: InputDecoration(
+                                  border: null,
+                                  enabledBorder: InputBorder.none,
+                                  hintText: 'Email',
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 40),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black,
+                                      spreadRadius: 1,
+                                      blurRadius: 10)
+                                ],
+                                borderRadius: BorderRadius.circular(35),
+                              ),
+                              child: TextFormField(
+                                obscureText: true,
+                                validator: (value) {
+                                  password = value;
+                                  return null;
+                                },
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                                decoration: InputDecoration(
+                                  enabledBorder: InputBorder.none,
+                                  hintText: 'Password',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        color: Colors.redAccent,
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            print('$email $password');
+                            final result = await Auth().signIn(email, password);
+                            if (result) {
+                              Navigator.of(context)
+                                  .pushNamed(AdminScreen.routename);
+                            }
+                          }
+                        },
+                        child: Text('Login'),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Text("OR"),
                       SizedBox(
                         height: 40,
                       ),

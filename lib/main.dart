@@ -1,4 +1,5 @@
 
+import 'package:faridabad/screens/adminScreen.dart';
 import 'package:faridabad/screens/authScreen.dart';
 import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         Base.routeName: (ctx) => Base(),
         PreviousComplanints.routeName : (ctx) => PreviousComplanints(),
         PreviousComplanintst.routeName : (ctx) => PreviousComplanintst(),
+        AdminScreen.routename : (ctx) => AdminScreen(),
       },
     );
   }

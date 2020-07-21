@@ -41,6 +41,23 @@ class Auth {
     }
   }
 
+  Future<bool> signIn(String email,String password) async {
+    try {
+        AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+        print('result $result');
+        if (result.user == null) {
+          return false;
+        } else {
+          user = result.user;
+          print('user ${user.uid}');
+          return true;
+        }
+    } catch (e) {
+      print('error logging in!! $e');
+      return false;
+    }
+  }
+
   Future<bool> signOut() async {
      final pref = await SharedPreferences.getInstance();
     try {
@@ -82,6 +99,7 @@ class Auth {
                 var city = doc['city'];
                 pref.setString("city", city);
                 pref.setString("token", token);
+                pref.setString("name", doc['name']);
                 print('token $token');
                 print('city set $city');
                 return true;
