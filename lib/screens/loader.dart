@@ -15,6 +15,7 @@ class Loader extends StatefulWidget {
 
 class _LoaderState extends State<Loader> {
   void movetoHome() async {
+    print('hello');
     await Future.delayed(Duration(milliseconds: 2000));
     final result = await Auth().autoLogin();
     print('result $result');

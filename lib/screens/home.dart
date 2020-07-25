@@ -7,201 +7,276 @@ import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   String email;
+
   String password;
+
+  var height = 0.0;
+  var width = 0.0;
+
+
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+      Future.delayed(Duration(milliseconds: 100)).then((value) => setState(() {
+      height = MediaQuery.of(context).size.height;
+      width = MediaQuery.of(context).size.width;
+    }));
+  }
+
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+
+    // setState(() {
+    //   height = MediaQuery.of(context).size.height;
+    //   width = MediaQuery.of(context).size.width;
+    // });
+
     return Scaffold(
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+      // backgroundColor: ,
+      body: Container(
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     colors: [Colors.black12, Colors.white],
+        //      begin: Alignment.topCenter,
+        //      end: Alignment.bottomCenter
+        //   ),
+        // ),
+        child: Stack(
           children: <Widget>[
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                height: 30.0,
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      // Hero(
-                      //   tag: 'logo',
-                      //   child: Container(
-                      //     height: 250.0,
-                      //     width: 250.0,
-                      //     child: Image.asset(
-                      //       'assets/images/samadhaan.png',
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 20,
-                      // ),
-                      brandText,
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Form(
-                        key: _formKey,
+            Center(
+                child: AnimatedContainer(
+                duration: Duration(seconds: 3),
+                curve: Curves.easeInOut,
+                // decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/samadhaan.png',),fit: BoxFit.cover)),
+                height: height,
+                width: width,
+                child: Hero(
+                  tag: 'logo',
+                  child: Image.asset('assets/images/samadhaan.png',
+                      fit: BoxFit.cover),
+                ),
+              ),
+            ),
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      height: 30.0,
+                      child: Container(
+                        padding: EdgeInsets.all(20),
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 40),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black,
-                                      spreadRadius: 1,
-                                      blurRadius: 10)
+                            // SizedBox(
+                            //   height: 20,
+                            // ),
+                            brandText,
+                            SizedBox(
+                              height: 60,
+                            ),
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 40),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 12),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black38, width: 2),
+                                      color: Colors.white,
+                                      // boxShadow: [
+                                      //   BoxShadow(
+                                      //       color: Colors.black38,
+                                      //       spreadRadius: 1,
+                                      //       blurRadius: 1)
+                                      // ],
+                                      borderRadius: BorderRadius.circular(35),
+                                    ),
+                                    child: TextFormField(
+                                      validator: (value) {
+                                        if (value.contains('@')) {
+                                          print('email id fine');
+                                          email = value;
+                                          print(email);
+                                          return null;
+                                        } else {
+                                          print('not fine');
+                                          return value;
+                                        }
+                                      },
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                      decoration: InputDecoration(
+                                        border: null,
+                                        enabledBorder: InputBorder.none,
+                                        hintText: 'Email',
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 40),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      // boxShadow: [
+                                      //   BoxShadow(
+                                      //       color: Colors.black,
+                                      //       spreadRadius: 1,
+                                      //       blurRadius: 10)
+                                      // ],
+                                      border: Border.all(
+                                          color: Colors.black38, width: 2),
+                                      borderRadius: BorderRadius.circular(35),
+                                    ),
+                                    child: TextFormField(
+                                      obscureText: true,
+                                      validator: (value) {
+                                        password = value;
+                                        return null;
+                                      },
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                      decoration: InputDecoration(
+                                        enabledBorder: InputBorder.none,
+                                        hintText: 'Password',
+                                      ),
+                                    ),
+                                  ),
                                 ],
-                                borderRadius: BorderRadius.circular(35),
-                              ),
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value.contains('@')) {
-                                    print('email id fine');
-                                    email = value;
-                                    print(email);
-                                    return null;
-                                  } else {
-                                    print('not fine');
-                                    return value;
-                                  }
-                                },
-                                style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                                decoration: InputDecoration(
-                                  border: null,
-                                  enabledBorder: InputBorder.none,
-                                  hintText: 'Email',
-                                ),
                               ),
                             ),
                             SizedBox(
-                              height: 15,
+                              height: 25,
                             ),
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 40),
+                            RaisedButton(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black,
-                                      spreadRadius: 1,
-                                      blurRadius: 10)
-                                ],
-                                borderRadius: BorderRadius.circular(35),
-                              ),
-                              child: TextFormField(
-                                obscureText: true,
-                                validator: (value) {
-                                  password = value;
-                                  return null;
-                                },
+                                  horizontal: 50, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              color: Colors.grey,
+                              onPressed: () async {
+                                if (_formKey.currentState.validate()) {
+                                  print('$email $password');
+                                  final result =
+                                      await Auth().signIn(email, password);
+                                  if (result) {
+                                    Navigator.of(context)
+                                        .pushNamed(AdminScreen.routename);
+                                  }
+                                }
+                              },
+                              child: Text(
+                                'Login',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                    fontSize: 18, color: Colors.white),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 19,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                    child: Divider(
+                                  thickness: 1,
+                                  color: Colors.black,
+                                )),
+                                Text(
+                                  "  Or Log in With  ",
+                                  style: TextStyle(
+                                      fontSize: 25, color: Colors.black),
                                 ),
-                                decoration: InputDecoration(
-                                  enabledBorder: InputBorder.none,
-                                  hintText: 'Password',
+                                Expanded(
+                                    child: Divider(
+                                  thickness: 1,
+                                  color: Colors.black,
+                                )),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              splashColor: Colors.orange,
+                              onTap: () async {
+                                final result = await Auth().signInWithGoogle();
+                                if (result) {
+                                  final check = await Auth().checkuserInfo();
+                                  print('check $check');
+                                  if (check) {
+                                    Navigator.of(context)
+                                        .pushReplacementNamed(Base.routeName);
+                                  } else {
+                                    Navigator.of(context).pushReplacementNamed(
+                                        UserInfoScreen.routeName);
+                                  }
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 40, vertical: 12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      color: Colors.black38, width: 1),
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    FaIcon(
+                                      FontAwesomeIcons.google,
+                                      color: Colors.blue,
+                                    ),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Text(
+                                      'Sign In With Google',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  ],
+                                ),
+                                // color: Colors.white30,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        color: Colors.redAccent,
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            print('$email $password');
-                            final result = await Auth().signIn(email, password);
-                            if (result) {
-                              Navigator.of(context)
-                                  .pushNamed(AdminScreen.routename);
-                            }
-                          }
-                        },
-                        child: Text('Login'),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text("OR"),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(20),
-                        splashColor: Colors.orange,
-                        onTap: () async {
-                          final result = await Auth().signInWithGoogle();
-                          if (result) {
-                            final check = await Auth().checkuserInfo();
-                            print('check $check');
-                            if (check) {
-                              Navigator.of(context)
-                                  .pushReplacementNamed(Base.routeName);
-                            } else {
-                              Navigator.of(context).pushReplacementNamed(
-                                  UserInfoScreen.routeName);
-                            }
-                          }
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black,
-                                  spreadRadius: 1,
-                                  blurRadius: 10)
-                            ],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              FaIcon(
-                                FontAwesomeIcons.google,
-                                color: Colors.blue,
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Text(
-                                'Sign In With Google',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ],
-                          ),
-                          // color: Colors.white30,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ],

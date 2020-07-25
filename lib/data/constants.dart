@@ -31,6 +31,22 @@ List<String> getStateList() {
   return wards;
 }
 
+List<String> getcities(state) {
+  if (state == "Haryana") {
+    var constituencies = ["None", "Faridabad", "Gurgaon", "Palwal"];
+    return constituencies;
+  }
+  if (state == "Delhi") {
+    var constituencies = ["None","Rkpuram"];
+    return constituencies;
+  }
+  else
+  {
+    var constituencies = ["None",];
+    return constituencies;
+  }
+}
+
 var brandText = RichText(
   text: TextSpan(
       text: "Sama",
@@ -110,12 +126,6 @@ var gender = [
   'male',
   'female',
   'other',
-];
-
-var constituencies = [
-  "None",
-  "Faridabad",
-  "Gurgaon",
 ];
 
 Widget PlatformAlertDialog(BuildContext context, String title, var message,

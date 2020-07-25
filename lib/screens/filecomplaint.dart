@@ -82,12 +82,11 @@ class _FileComplaintState extends State<FileComplaint>
 
   var city;
   void fetchCity() async {
-     pref = await SharedPreferences.getInstance();
+    pref = await SharedPreferences.getInstance();
     setState(() {
       city = pref.getString('city');
     });
   }
-  
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -486,14 +485,18 @@ class _FileComplaintState extends State<FileComplaint>
         'adminRemark': null,
         'star': null,
         'date': DateTime.now().toIso8601String(),
-        'token' : pref.getString('token'),
+        'token': pref.getString('token'),
       });
+      print("start check");
+      await databaseReference.collection("Users/$uid/previousComplaints").add({"ref":ref.path});
+      print("check database");
       await databaseReference
           .collection("States/Haryana/Palwal/$_department/Complaints")
           .document(ref.documentID)
           .setData({
-        'ref': 
-            Firestore.instance.collection('Complaints').document(ref.documentID),
+        'ref': Firestore.instance
+            .collection('Complaints')
+            .document(ref.documentID),
       }).then((value) {
         print("Success");
         return true;

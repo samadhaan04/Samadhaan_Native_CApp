@@ -75,8 +75,8 @@ class Auth {
 
   Future<bool> autoLogin() async {
     if ( await _auth.currentUser() != null) {
-      // print(googleSignIn.currentUser.displayName);
       _auth.currentUser().then((value) => print(value.displayName));
+      
       return true;
     } else {
       return false;
@@ -88,8 +88,9 @@ class Auth {
   final pref = await SharedPreferences.getInstance();
   final fbm = FirebaseMessaging();
   var token = await fbm.getToken();
-      final uid = await FirebaseAuth.instance.currentUser().then((value) => value.uid);
-      final result = await databaseReference
+      final uid = await _auth.currentUser().then((value) => value.uid);
+      try {
+        final result = await databaseReference
           .collection('Users')
           .document(uid)
           .get()
@@ -117,6 +118,13 @@ class Auth {
           {
             return false;
           }
+      }
+      catch(e){
+        print(e);
+        return false;
+      }
+      
+          
           // return false;
   }
 

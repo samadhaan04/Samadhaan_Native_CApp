@@ -22,6 +22,7 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
   final _auth = FirebaseAuth.instance;
 
   String messageText;
+  var m,uid;
 
   @override
   void initState() {
@@ -33,13 +34,16 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
     try {
       final user = await _auth.currentUser();
       if (user != null) {
+        uid = user.uid;
         loggedInUser = user;
         email = loggedInUser.email;
+        m = await _firestore.collection('Complaints').getDocuments();
       }
     } catch (e) {
       print(e);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +82,15 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              MessagesStream(),
+              StreamBuilder<Object>(
+                stream: _firestore.collection('Users/$uid/previousComplaints').snapshots(),
+                builder: (context, snapshot) {
+                  if(snapshot.hasData)
+                  return MessagesStream(snapshot);
+                  else
+                  return Center(child: CircularProgressIndicator(),);
+                }
+              ),
             ],
           ),
         ),
@@ -88,8 +100,11 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
 }
 
 class MessagesStream extends StatelessWidget {
+  final snapshot;
+  MessagesStream(this.snapshot);
   @override
   Widget build(BuildContext context) {
+    print(snapshot.data);
     return StreamBuilder(
       stream: _firestore.collection('Complaints').snapshots(),
       builder: (context, snapshot) {
@@ -104,6 +119,7 @@ class MessagesStream extends StatelessWidget {
         final messages = snapshot.data.documents;
 
         List<MessageBubble> messageBubbles = [];
+        
         for (var message in messages) {
           if (true) {
             final status = message.data['status'];
