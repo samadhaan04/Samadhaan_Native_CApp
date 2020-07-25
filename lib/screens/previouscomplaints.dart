@@ -36,6 +36,9 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
         uid = user.uid;
         loggedInUser = user;
         email = loggedInUser.email;
+        setState(() {
+          
+        });
       }
     } catch (e) {
       print(e);
@@ -102,12 +105,12 @@ List<Widget> getBubbles(list) {
                   child: CircularProgressIndicator(),
                 );
               } else {
-                print(snapshot.data['status']);
+                // print(l.documentID);
                 return MessageBubble(
                   complaint: snapshot.data['complaintText'],
                   department: snapshot.data['department'],
                   status: snapshot.data['status'].toString(),
-                  complaintId: l.documentID.toString(),
+                  complaintId: snapshot.data.documentID,
                 );
               }
             },
@@ -121,62 +124,45 @@ List<Widget> getBubbles(list) {
   }
 }
 
-class MessagesStream extends StatefulWidget {
+class MessagesStream extends StatelessWidget {
   final uid;
   MessagesStream(this.uid);
 
   @override
-  _MessagesStreamState createState() => _MessagesStreamState();
-}
-
-class _MessagesStreamState extends State<MessagesStream> {
-
-@override
-void initState() { 
-  super.initState();
-  Future.delayed(Duration(seconds: 1)).then((e) {
-    setState(() {
-      
-    });
-  });
-}
-
-  @override
   Widget build(BuildContext context) {
+    print('uid $uid');
     return StreamBuilder(
-        stream:
-            _firestore.collection('Users/${widget.uid}/previousComplaints').snapshots(),
+        stream: _firestore
+            .collection('Users/${uid}/previousComplaints')
+            .snapshots(),
         builder: (context, value) {
           if (!value.hasData || value.data.documents.length == 0) {
-
-            return Expanded(
-                          child: Center(
-                child: CircularProgressIndicator(
-                ), 
-              ),
-            );
-          }
-          else {
-          final list = value.data.documents;
-          var messageBubbles = getBubbles(list);
-          print('l ${list.length}');
-          if (messageBubbles.length == 0) {
             return Expanded(
               child: Center(
-                child: Text(
-                  "No Complaints Yet !!!",
-                  style: TextStyle(fontSize: 21),
-                ),
+                child: CircularProgressIndicator(),
               ),
             );
-          }
-          return Expanded(
-            flex: 1,
-            child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-              children: messageBubbles,
-            ),
-          );
+          } else {
+            final list = value.data.documents;
+            var messageBubbles = getBubbles(list);
+            print('l ${list.length}');
+            if (messageBubbles.length == 0) {
+              return Expanded(
+                child: Center(
+                  child: Text(
+                    "No Complaints Yet !!!",
+                    style: TextStyle(fontSize: 21),
+                  ),
+                ),
+              );
+            }
+            return Expanded(
+              flex: 1,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                children: messageBubbles,
+              ),
+            );
           }
         });
   }
