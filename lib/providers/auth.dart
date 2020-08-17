@@ -73,13 +73,24 @@ class Auth {
     }
   }
 
-  Future<bool> autoLogin() async {
-    if ( await _auth.currentUser() != null) {
-      _auth.currentUser().then((value) => print(value.displayName));
-      
-      return true;
+  Future<String> autoLogin() async {
+    if (await _auth.currentUser() != null) {
+      return _auth.currentUser().then((value) async {
+        var i = await _auth.fetchSignInMethodsForEmail(email: value.email);
+        print(i);
+        if(i == ['google.com'])
+        {
+          print('google wala');
+          return 'google';
+        }
+        else
+        {
+          print('admin sahab');
+          return 'admin';
+        }
+      });
     } else {
-      return false;
+      return 'false';
     }
   }
 

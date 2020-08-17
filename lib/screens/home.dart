@@ -1,8 +1,11 @@
+import 'package:faridabad/main2.dart';
+import 'package:faridabad/main3.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/screens/adminScreen.dart';
 import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/data/constants.dart';
+import 'package:faridabad/screens/input_data.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,30 +25,28 @@ class _HomeScreenState extends State<HomeScreen> {
   var height = 0.0;
   var width = 0.0;
 
-
-
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-      Future.delayed(Duration(milliseconds: 100)).then((value) => setState(() {
-      height = MediaQuery.of(context).size.height;
-      width = MediaQuery.of(context).size.width;
-    }));
+    Future.delayed(Duration(milliseconds: 100)).then((value) => setState(() {
+          height = MediaQuery.of(context).size.height;
+          width = MediaQuery.of(context).size.width;
+        }));
   }
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-
     // setState(() {
     //   height = MediaQuery.of(context).size.height;
     //   width = MediaQuery.of(context).size.width;
     // });
-
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       // backgroundColor: ,
+      key: _scaffoldKey,
       body: Container(
         // decoration: BoxDecoration(
         //   gradient: LinearGradient(
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           children: <Widget>[
             Center(
-                child: AnimatedContainer(
+              child: AnimatedContainer(
                 duration: Duration(seconds: 3),
                 curve: Curves.easeInOut,
                 // decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/samadhaan.png',),fit: BoxFit.cover)),
@@ -117,13 +118,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: TextFormField(
                                       validator: (value) {
                                         if (value.contains('@')) {
-                                          print('email id fine');
                                           email = value;
                                           print(email);
                                           return null;
                                         } else {
-                                          print('not fine');
-                                          return value;
+                                          value = null;
+                                          return 'please enter valid email';
                                         }
                                       },
                                       style: TextStyle(
@@ -191,7 +191,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                       await Auth().signIn(email, password);
                                   if (result) {
                                     Navigator.of(context)
-                                        .pushNamed(AdminScreen.routename);
+                                        .pushReplacementNamed(AdminUi.routeName);
+                                  } else {
+                                    _scaffoldKey.currentState.showSnackBar(
+                                      SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content: Text(
+                                          'Please Enter Valid Details',
+                                        ),
+                                        duration: Duration(seconds: 2),
+                                      ),
+                                    );
                                   }
                                 }
                               },

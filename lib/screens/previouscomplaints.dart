@@ -33,11 +33,10 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
     try {
       final user = await _auth.currentUser();
       if (user != null) {
-        uid = user.uid;
-        loggedInUser = user;
-        email = loggedInUser.email;
         setState(() {
-          
+          uid = user.uid;
+        loggedInUser = user;
+        email = loggedInUser.email;  
         });
       }
     } catch (e) {
@@ -133,10 +132,10 @@ class MessagesStream extends StatelessWidget {
     print('uid $uid');
     return StreamBuilder(
         stream: _firestore
-            .collection('Users/${uid}/previousComplaints')
+            .collection('Users/$uid/previousComplaints')
             .snapshots(),
         builder: (context, value) {
-          if (!value.hasData || value.data.documents.length == 0) {
+          if (!value.hasData) {
             return Expanded(
               child: Center(
                 child: CircularProgressIndicator(),

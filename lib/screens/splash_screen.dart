@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:faridabad/main2.dart';
+import 'package:faridabad/main3.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/screens/base.dart';
 import 'package:faridabad/screens/home.dart';
+import 'package:faridabad/screens/input_data.dart';
 import 'package:faridabad/screens/user_info.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     print('hello');
     final result = await Auth().autoLogin();
     print('result $result');
-    if (result) {
+    if (result == 'google') {
       final check = await Auth().checkuserInfo();
       print('check $check');
       if (check) {
@@ -26,7 +29,12 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         Navigator.of(context).pushReplacementNamed(UserInfoScreen.routeName);
       }
-    } else {
+    }
+    else if(result == 'admin') 
+    {
+      Navigator.of(context).pushReplacementNamed(AdminUi.routeName);
+    }
+    else {
       Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
     }
   }

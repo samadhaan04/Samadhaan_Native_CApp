@@ -1,11 +1,13 @@
-
+import 'package:faridabad/main2.dart';
+import 'package:faridabad/main3.dart';
 import 'package:faridabad/screens/adminScreen.dart';
 import 'package:faridabad/screens/authScreen.dart';
 import 'package:faridabad/screens/base.dart';
+import 'package:faridabad/screens/complaint_details.dart';
 import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/screens/filecomplaint.dart';
 import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/loader.dart';
+import 'package:faridabad/screens/input_data.dart';
 import 'package:faridabad/screens/previouscomplaints.dart';
 import 'package:faridabad/screens/prevtest.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
@@ -18,6 +20,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static const routeName  = '/myapp';
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,9 @@ class MyApp extends StatelessWidget {
         PreviousComplanints.routeName : (ctx) => PreviousComplanints(),
         PreviousComplanintst.routeName : (ctx) => PreviousComplanintst(),
         AdminScreen.routename : (ctx) => AdminScreen(),
+        AdminApp.routeName : (ctx) => AdminApp(),
+        ComplaintDetails.routeName : (ctx) => ComplaintDetails(),
+        AdminUi.routeName : (ctx) => AdminUi(),
       },
     );
   }

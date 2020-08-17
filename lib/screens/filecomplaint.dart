@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/widgets/modalSheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,6 +34,7 @@ class _FileComplaintState extends State<FileComplaint>
   }
 
   TextEditingController _detailsController = new TextEditingController();
+  TextEditingController _subjectController = new TextEditingController();
   String _department;
   File _image;
   final List<String> depts = [
@@ -126,7 +126,7 @@ class _FileComplaintState extends State<FileComplaint>
                   ),
                   // TO BE DONE: Render a custom image from backend
                   SizedBox(
-                    height: 200,
+                    height: 100,
                   ),
                   Text(
                     'Samadhaan',
@@ -219,6 +219,42 @@ class _FileComplaintState extends State<FileComplaint>
                     child: TextFormField(
                       keyboardType: TextInputType.text,
                       autocorrect: false,
+                      controller: _subjectController,
+                      maxLines: null,
+                      validator: (value) {
+                        if (value.isEmpty || value.length < 1) {
+                          return 'Please enter Subject';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.label_important,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        enabledBorder: InputBorder.none,
+                        labelText: 'Subject',
+                        hintText: "Enter Subject",
+                        labelStyle: TextStyle(
+                            fontSize: 25,
+                            decorationStyle: TextDecorationStyle.solid),
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(20)),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      autocorrect: false,
                       controller: _detailsController,
                       maxLines: null,
                       validator: (value) {
@@ -228,17 +264,18 @@ class _FileComplaintState extends State<FileComplaint>
                         return null;
                       },
                       decoration: InputDecoration(
-                          icon: Icon(
-                            Icons.edit,
-                            size: 40,
-                            color: Colors.black,
-                          ),
-                          enabledBorder: InputBorder.none,
-                          labelText: 'Complaint',
-                          hintText: "Enter all the details about the issue",
-                          labelStyle: TextStyle(
-                              fontSize: 25,
-                              decorationStyle: TextDecorationStyle.solid)),
+                        icon: Icon(
+                          Icons.edit,
+                          size: 40,
+                          color: Colors.black,
+                        ),
+                        enabledBorder: InputBorder.none,
+                        labelText: 'Complaint',
+                        hintText: "Enter all the details about the issue",
+                        labelStyle: TextStyle(
+                            fontSize: 25,
+                            decorationStyle: TextDecorationStyle.solid),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -248,54 +285,55 @@ class _FileComplaintState extends State<FileComplaint>
                   GestureDetector(
                     onTap: () {
                       showDialog(
-                          context: context,
-                          child: AlertDialog(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            title: Text(
-                              "Choose an Option",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            actions: <Widget>[
-                              MaterialButton(
-                                child: Text(
-                                  "Gallery",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                onPressed: () async {
-                                  final picker = ImagePicker();
-                                  final pickedImage = await picker.getImage(
-                                      source: ImageSource.gallery,
-                                      imageQuality: 60,
-                                      maxWidth: 150);
-                                  setState(() {
-                                    _image = File(pickedImage.path);
-                                  });
-
-                                  Navigator.of(context).pop();
-                                },
+                        context: context,
+                        child: AlertDialog(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          title: Text(
+                            "Choose an Option",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          actions: <Widget>[
+                            MaterialButton(
+                              child: Text(
+                                "Gallery",
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              MaterialButton(
-                                child: Text(
-                                  "Camera",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                onPressed: () async {
-                                  final picker = ImagePicker();
-                                  final pickedImage = await picker.getImage(
-                                      source: ImageSource.camera,
-                                      imageQuality: 60,
-                                      maxWidth: 150);
-                                  setState(() {
-                                    _image = File(pickedImage.path);
-                                  });
+                              onPressed: () async {
+                                final picker = ImagePicker();
+                                final pickedImage = await picker.getImage(
+                                    source: ImageSource.gallery,
+                                    imageQuality: 60,
+                                    maxWidth: 150);
+                                setState(() {
+                                  _image = File(pickedImage.path);
+                                });
 
-                                  Navigator.of(context).pop();
-                                },
-                              )
-                            ],
-                          ));
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            MaterialButton(
+                              child: Text(
+                                "Camera",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () async {
+                                final picker = ImagePicker();
+                                final pickedImage = await picker.getImage(
+                                    source: ImageSource.camera,
+                                    imageQuality: 60,
+                                    maxWidth: 150);
+                                setState(() {
+                                  _image = File(pickedImage.path);
+                                });
+
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ),
+                      );
                     },
                     child: Card(
                       child: Padding(
@@ -361,16 +399,16 @@ class _FileComplaintState extends State<FileComplaint>
                           });
 
                           if (_department == null ||
-                              _detailsController.text == null) {
+                              _detailsController.text == null ||
+                              _subjectController.text == null) {
                             setState(() {
                               loading = false;
                             });
-                            print('not filled');
                             _scaffoldKey.currentState.showSnackBar(
                               SnackBar(
                                 backgroundColor: Colors.red,
                                 content: Text(
-                                  'Please Enter Your Department and Complaint',
+                                  'Please Enter Your Details',
                                 ),
                                 duration: Duration(seconds: 2),
                               ),
@@ -476,7 +514,9 @@ class _FileComplaintState extends State<FileComplaint>
         'complaintText': _detailsController.text,
         'imageURL': _image == null ? null : url,
         'state': "Haryana",
+        'subject': _subjectController.text,
         'status': 0,
+        'name' : pref.getString('name'),
         'city': "Palwal",
         'department': _department,
         'deptFeedback': null,
@@ -488,20 +528,30 @@ class _FileComplaintState extends State<FileComplaint>
         'token': pref.getString('token'),
       });
       print("start check");
-      await databaseReference.collection("Users/$uid/previousComplaints").add({"ref":ref.path});
-      print("check database");
       await databaseReference
-          .collection("States/Haryana/Palwal/$_department/Complaints")
-          .document(ref.documentID)
-          .setData({
-        'ref': Firestore.instance
-            .collection('Complaints')
-            .document(ref.documentID),
+          .collection("Users/$uid/previousComplaints")
+          .add({"ref": ref.path});
+      print(ref.path);
+      await databaseReference
+          .collection("States/Haryana/Palwal")
+          .document(_department)
+          .setData({"p": 'p'});
+      await databaseReference
+          // .collection("States/Haryana/Palwal")
+          .document('States/Haryana/Palwal/$_department')
+          // .document(_department)
+          .collection('Complaints')
+          .add({
+        'ref': ref.path,
+        'subject': _subjectController.text,
+        'status': 0,
+        // .document()
+        // .setData({
+        // 'ref': ref.path,
       }).then((value) {
         print("Success");
         return true;
       });
-      print(ref.documentID);
       return true;
     } catch (e) {
       print(e);
