@@ -84,7 +84,7 @@ class _InputDataState extends State<InputData> {
             icon: Icon(
               Icons.arrow_back,
             ),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).pushReplacementNamed(HomeScreen.routeName),
           ),
           title: Text('Palwal,Haryana'),
         ),
