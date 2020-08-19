@@ -12,10 +12,10 @@ class ComplaintDetails extends StatefulWidget {
 }
 
 class _ComplaintDetailsState extends State<ComplaintDetails> {
-  bool expandedDesc = false;
-  bool expandedImg = false;
-  bool expandedLog = false;
-  bool expandedReq = false;
+  bool expandedDesc = true;
+  bool expandedImg = true;
+  bool expandedLog = true;
+  bool expandedReq = true;
   var ref;
   Firestore _firestore;
 
