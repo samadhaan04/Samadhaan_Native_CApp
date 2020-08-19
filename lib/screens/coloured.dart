@@ -15,7 +15,6 @@ class Coloured extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            flex: 1,
             child: ReusableCardComplaint(
               colour: Color(0xff51B328),
               // colour2: Color(0xff85EB29),
@@ -44,7 +43,6 @@ class Coloured extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
