@@ -57,7 +57,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
               return Container(
                 // color: Colors.green,
                 margin: EdgeInsets.symmetric(
-                  vertical: 1,
+                  vertical: 5,
                   horizontal: 10,
                 ),
                 decoration: BoxDecoration(
@@ -93,7 +93,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               padding: EdgeInsets.symmetric(
-                                  vertical: 50, horizontal: 20),
+                                  vertical: 40, horizontal: 15),
                               child: Text(
                                 // dept[index].department,
                                 listOfDepartments[index],
@@ -104,11 +104,15 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                 ),
                               ),
                             ),
-                            Text(
-                              '1',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 40, horizontal: 30),
+                              Text(
+                                '1',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
                               ),
                             ),
                           ],
