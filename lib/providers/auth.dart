@@ -78,12 +78,12 @@ class Auth {
       return _auth.currentUser().then((value) async {
         var i = await _auth.fetchSignInMethodsForEmail(email: value.email);
         print(i);
-        if(i == ['google.com'])
+        if(i[0] == 'google.com')
         {
           print('google wala');
           return 'google';
         }
-        else
+        else if(i[0]=="password")
         {
           print('admin sahab');
           return 'admin';

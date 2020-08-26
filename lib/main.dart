@@ -7,7 +7,6 @@ import 'package:faridabad/screens/complaint_details.dart';
 import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/screens/filecomplaint.dart';
 import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/input_data.dart';
 import 'package:faridabad/screens/previouscomplaints.dart';
 import 'package:faridabad/screens/prevtest.dart';
 import 'package:faridabad/screens/showcomplaint.dart';

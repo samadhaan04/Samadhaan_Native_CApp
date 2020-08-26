@@ -18,12 +18,9 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void movetoHome() async {
     await Future.delayed(Duration(milliseconds: 2000));
-    print('hello');
     final result = await Auth().autoLogin();
-    print('result $result');
     if (result == 'google') {
       final check = await Auth().checkuserInfo();
-      print('check $check');
       if (check) {
         Navigator.of(context).pushReplacementNamed(Base.routeName);
       } else {

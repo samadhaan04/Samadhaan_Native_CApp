@@ -43,11 +43,6 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       loading = true;
     });
     fetchNameAndCity();
-    // Timer(Duration(seconds: 3), () {
-    //   setState(() {
-    //     loading = false;
-    //   });
-    // });
     print(image);
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 600));

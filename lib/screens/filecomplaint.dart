@@ -532,10 +532,27 @@ class _FileComplaintState extends State<FileComplaint>
           .collection("Users/$uid/previousComplaints")
           .add({"ref": ref.path});
       print(ref.path);
-      await databaseReference
+      int length;
+          try{
+          length = await databaseReference
+          .collection("States/Haryana/Palwal")
+          .document(_department).get().then((value) => value.data['p']);
+          }
+          catch(e){
+            await databaseReference
           .collection("States/Haryana/Palwal")
           .document(_department)
-          .setData({"p": 'p'});
+          .setData({"p": 1});
+          length = 0;
+          }
+          if(length!=0)
+          {
+            await databaseReference
+          .collection("States/Haryana/Palwal")
+          .document(_department)
+          .setData({"p": length+1});
+          }
+      
       await databaseReference
           // .collection("States/Haryana/Palwal")
           .document('States/Haryana/Palwal/$_department')
