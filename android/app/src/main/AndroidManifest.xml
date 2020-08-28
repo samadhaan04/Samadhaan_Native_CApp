@@ -12,7 +12,11 @@
         <meta-data
               android:name="com.google.firebase.messaging.default_notification_icon"
               android:resource="@drawable/samadhaan" 
-              />
+        />
+        <meta-data
+              android:name="com.google.firebase.messaging.default_notification_color"
+              android:resource="@color/colorPrimary" 
+        />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -3,7 +3,6 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-var complaint;
 exports.myFunction = functions.firestore
     .document(`Complaints/{complaint}`)
     .onUpdate((change, context) => {
@@ -29,7 +28,25 @@ exports.myFunction = functions.firestore
                 },
             );
         }
+        if (feed.status !== 0 && feed.status!==prevfeed.status) {
+            return admin.messaging().sendToDevice(
+                token,
+                {
+                    notification: {
+                        title: "Complaint Resolved!",
+                        body: `Your Complaint has been resolved by ${feed.department}. Kindly give feedback`,
+                        clickAction: 'FLUTTER_NOTIFICATION_CLICK',
+                    },
+                    data : {
+                        "id" : context.params.complaint,
+                    }
+                    
+                },
+            );
+        }
 
 
 
-    });
+});
+
+

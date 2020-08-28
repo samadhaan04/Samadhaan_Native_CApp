@@ -54,7 +54,7 @@ class _ShowComplaintState extends State<ShowComplaint>
           if (!snapshot.hasData) {
             return new Text("Loading");
           }
-          var userDocument = snapshot.data;
+          var userDocument = snapshot.data; 
           print(userDocument["city"]);
           return new Scaffold(
             body: Padding(

@@ -41,6 +41,23 @@ class Auth {
     }
   }
 
+  Future<bool> signIn(String email,String password) async {
+    try {
+        AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+        print('result $result');
+        if (result.user == null) {
+          return false;
+        } else {
+          user = result.user;
+          print('user ${user.uid}');
+          return true;
+        }
+    } catch (e) {
+      print('error logging in!! $e');
+      return false;
+    }
+  }
+
   Future<bool> signOut() async {
      final pref = await SharedPreferences.getInstance();
     try {
@@ -56,13 +73,24 @@ class Auth {
     }
   }
 
-  Future<bool> autoLogin() async {
-    if ( await _auth.currentUser() != null) {
-      // print(googleSignIn.currentUser.displayName);
-      _auth.currentUser().then((value) => print(value.displayName));
-      return true;
+  Future<String> autoLogin() async {
+    if (await _auth.currentUser() != null) {
+      return _auth.currentUser().then((value) async {
+        var i = await _auth.fetchSignInMethodsForEmail(email: value.email);
+        print(i);
+        if(i[0] == 'google.com')
+        {
+          print('google wala');
+          return 'google';
+        }
+        else if(i[0]=="password")
+        {
+          print('admin sahab');
+          return 'admin';
+        }
+      });
     } else {
-      return false;
+      return 'false';
     }
   }
 
@@ -71,8 +99,9 @@ class Auth {
   final pref = await SharedPreferences.getInstance();
   final fbm = FirebaseMessaging();
   var token = await fbm.getToken();
-      final uid = await FirebaseAuth.instance.currentUser().then((value) => value.uid);
-      final result = await databaseReference
+      final uid = await _auth.currentUser().then((value) => value.uid);
+      try {
+        final result = await databaseReference
           .collection('Users')
           .document(uid)
           .get()
@@ -82,6 +111,7 @@ class Auth {
                 var city = doc['city'];
                 pref.setString("city", city);
                 pref.setString("token", token);
+                pref.setString("name", doc['name']);
                 print('token $token');
                 print('city set $city');
                 return true;
@@ -99,6 +129,13 @@ class Auth {
           {
             return false;
           }
+      }
+      catch(e){
+        print(e);
+        return false;
+      }
+      
+          
           // return false;
   }
 

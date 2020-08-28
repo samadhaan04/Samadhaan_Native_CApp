@@ -5,16 +5,7 @@ class ModalSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-      //   decoration: BoxDecoration(
-      //   gradient: LinearGradient(
-      //     begin: Alignment.topLeft,
-      //     end: Alignment.bottomRight,
-      //     colors: [
-      //       Color(0xFF10EEEE),
-      //       Color(0xFF02EE97),
-      //     ],
-      //   ),
-      // ),
+        height: MediaQuery.of(context).size.height / 3,
         padding: EdgeInsets.all(5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

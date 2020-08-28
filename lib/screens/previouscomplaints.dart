@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
 
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
@@ -18,23 +19,26 @@ class PreviousComplanints extends StatefulWidget {
 }
 
 class PreviousComplanintsState extends State<PreviousComplanints> {
-  // final messageTextController = TextEditingController();
+// final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
-
   String messageText;
-
+  var uid;
   @override
   void initState() {
     super.initState();
     getCurrentUser();
+    setState(() {});
   }
 
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser();
       if (user != null) {
-        loggedInUser = user;
-        email = loggedInUser.email;
+        setState(() {
+          uid = user.uid;
+          loggedInUser = user;
+          email = loggedInUser.email;
+        });
       }
     } catch (e) {
       print(e);
@@ -78,7 +82,7 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              MessagesStream(),
+              MessagesStream(uid),
             ],
           ),
         ),
@@ -87,60 +91,77 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
   }
 }
 
+List<Widget> getBubbles(list) {
+  List<Widget> messageBubbles = [];
+  if (list != null) {
+    for (var l in list) {
+      messageBubbles.add(Column(
+        children: <Widget>[
+          StreamBuilder(
+            stream: _firestore.document(l['ref']).snapshots(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return Container();
+              } else {
+                // print(l.documentID);
+                return MessageBubble(
+                  complaint: snapshot.data['complaintText'],
+                  department: snapshot.data['department'],
+                  status: snapshot.data['status'].toString(),
+                  complaintId: snapshot.data.documentID,
+                );
+              }
+            },
+          ),
+        ],
+      ));
+    }
+    return messageBubbles;
+  } else {
+    return null;
+  }
+}
+
 class MessagesStream extends StatelessWidget {
+  final uid;
+  MessagesStream(this.uid);
+
   @override
   Widget build(BuildContext context) {
+    print('uid $uid');
     return StreamBuilder(
-      stream: _firestore.collection('Complaints').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
-            ),
-          );
-        }
-
-        final messages = snapshot.data.documents;
-
-        List<MessageBubble> messageBubbles = [];
-        for (var message in messages) {
-          if (true) {
-            final status = message.data['status'];
-            final author = message.data['author'];
-            final complainttext = message.data['complaintText'];
-            final department = message.data['department'];
-            final complaintId = message.documentID;
-            final currentUser = loggedInUser.uid;
-            if (currentUser == author) {
-              final messageBubble = MessageBubble(
-                complaint: complainttext,
-                status: status.toString(),
-                department: department,
-                complaintId: complaintId,
-              );
-              messageBubbles.add(messageBubble);
-            }
-          }
-        }
-
-        return Expanded(
-          flex: 1,
-          child: messageBubbles.isEmpty
-              ? Center(
+        stream:
+            _firestore.collection('Users/$uid/previousComplaints').snapshots(),
+        builder: (context, value) {
+          if (!value.hasData) {
+            return Expanded(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            final list = value.data.documents;
+            var messageBubbles = getBubbles(list);
+            print('l ${list.length}');
+            if (messageBubbles.length == 0) {
+              return Expanded(
+                child: Center(
                   child: Text(
                     "No Complaints Yet !!!",
                     style: TextStyle(fontSize: 21),
                   ),
-                )
-              : ListView(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-                  children: messageBubbles,
                 ),
-        );
-      },
-    );
+              );
+            }
+            return Expanded(
+              flex: 1,
+              child: ListView(
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                children: messageBubbles,
+              ),
+            );
+          }
+        });
   }
 }
 
@@ -151,12 +172,10 @@ class MessageBubble extends StatefulWidget {
     this.complaintId,
     this.department,
   });
-
   final String status;
   final String complaint;
   final String complaintId;
   final String department;
-
   @override
   _MessageBubbleState createState() => _MessageBubbleState();
 }
@@ -197,16 +216,6 @@ class _MessageBubbleState extends State<MessageBubble> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        // Text(
-                        //   'Department: ',
-                        //   style: TextStyle(
-                        //     fontSize: 21.0,
-                        //     color: Colors.black,
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   width: 10,
-                        // ),
                         Expanded(
                           child: Text(
                             ' ${widget.department}',

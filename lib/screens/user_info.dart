@@ -367,6 +367,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                         ),
                                         value: _state,
                                         onChanged: (newValue) {
+                                          _constituency = null;
                                           setState(() {
                                             if (newValue == "None") {
                                               _state = null;
@@ -430,7 +431,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                             }
                                           });
                                         },
-                                        items: constituencies.map((location) {
+                                        items: getcities(_state).map((location) {
                                           return DropdownMenuItem(
                                             child: new Text(location),
                                             value: location,
@@ -639,7 +640,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
   }
 
   Future<bool> sendData(bool isupdate) async {
-     final pref = await SharedPreferences.getInstance();
+    final pref = await SharedPreferences.getInstance();
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
       if (isupdate) {
@@ -654,12 +655,14 @@ class _UserInfoScreenState extends State<UserInfoScreen>
           'city': _constituency == null ? null : _constituency,
         }).then((value) {
           pref.setString('city', _constituency);
+          pref.setString("name", _nameController.text);
           print("Success");
           return true;
         });
         return true;
       } else {
-        await databaseReference.collection("Users").document(uid).setData({
+        var ref =
+            await databaseReference.collection("Users").document(uid).setData({
           'name': _nameController.text,
           'phoneNumber': _phoneController.text,
           'age': int.parse(_ageController.text),
@@ -668,11 +671,15 @@ class _UserInfoScreenState extends State<UserInfoScreen>
           'street': _streetController.text,
           'state': _state == null ? null : _state,
           'city': _constituency == null ? null : _constituency,
-        }).then((value) {
-          pref.setString('city', _constituency);
-          print("Success");
-          return true;
         });
+        pref.setString('city', _constituency);
+        pref.setString("name", _nameController.text);
+        print("Success");
+        var path = Firestore.instance.collection('Users').document(uid).path;
+        print(path);
+        databaseReference
+            .collection("States/$_state/$_constituency/Users/users")
+            .add({"user": path});
         return true;
       }
     } catch (e) {
