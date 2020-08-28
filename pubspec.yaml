@@ -40,6 +40,7 @@ dependencies:
   firebase_admin: ^0.1.2+1
   lite_rolling_switch: ^0.1.1
   day_night_switch: ^0.0.2+1
+  fluttertoast: ^7.0.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

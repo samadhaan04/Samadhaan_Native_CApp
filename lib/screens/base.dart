@@ -1,20 +1,18 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/providers/auth.dart';
+import 'package:faridabad/screens/fileComplaint2.dart';
 import 'package:faridabad/screens/filecomplaint.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/previouscomplaints.dart';
-import 'package:faridabad/screens/prevtest.dart';
-import 'package:faridabad/screens/showcomplaint.dart';
 import 'package:faridabad/screens/user_info.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Base extends StatefulWidget {
   static const routeName = '/base-screen';
@@ -28,6 +26,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   Animation<double> _animation;
   var username;
   var city;
+  var countNotifications;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -61,13 +60,22 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       onMessage: (message) {
         print('onMessage');
         print(message);
+        countNotifications++;
+        Fluttertoast.showToast(
+            msg: "You just recieved a toast notification!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 2,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
         return;
       },
       onResume: (message) {
         print('onBackgroundMessage');
         print(message);
-        Navigator.of(context).pushNamed(ShowComplaint.routeName,
-            arguments: message['data']['id']);
+        // Navigator.of(context).pushNamed(ShowComplaint.routeName,
+        //     arguments: message['data']['id']);
         return;
       },
     );
@@ -89,7 +97,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     print('city $city');
     username = dname;
     setState(() {
-       loading = false;
+      loading = false;
     });
   }
 

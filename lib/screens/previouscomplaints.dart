@@ -27,6 +27,7 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
   void initState() {
     super.initState();
     getCurrentUser();
+    setState(() {});
   }
 
   void getCurrentUser() async {
@@ -35,8 +36,8 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
       if (user != null) {
         setState(() {
           uid = user.uid;
-        loggedInUser = user;
-        email = loggedInUser.email;  
+          loggedInUser = user;
+          email = loggedInUser.email;
         });
       }
     } catch (e) {
@@ -100,9 +101,7 @@ List<Widget> getBubbles(list) {
             stream: _firestore.document(l['ref']).snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+                return Container();
               } else {
                 // print(l.documentID);
                 return MessageBubble(
@@ -131,9 +130,8 @@ class MessagesStream extends StatelessWidget {
   Widget build(BuildContext context) {
     print('uid $uid');
     return StreamBuilder(
-        stream: _firestore
-            .collection('Users/$uid/previousComplaints')
-            .snapshots(),
+        stream:
+            _firestore.collection('Users/$uid/previousComplaints').snapshots(),
         builder: (context, value) {
           if (!value.hasData) {
             return Expanded(

@@ -8,7 +8,6 @@ import 'package:faridabad/screens/example.dart';
 import 'package:faridabad/screens/filecomplaint.dart';
 import 'package:faridabad/screens/home.dart';
 import 'package:faridabad/screens/previouscomplaints.dart';
-import 'package:faridabad/screens/prevtest.dart';
 import 'package:faridabad/screens/showcomplaint.dart';
 import 'package:faridabad/screens/splash_screen.dart';
 import 'package:faridabad/screens/user_info.dart';
@@ -40,7 +39,6 @@ class MyApp extends StatelessWidget {
         FileComplaint.routeName: (ctx) => FileComplaint(),
         Base.routeName: (ctx) => Base(),
         PreviousComplanints.routeName : (ctx) => PreviousComplanints(),
-        PreviousComplanintst.routeName : (ctx) => PreviousComplanintst(),
         AdminScreen.routename : (ctx) => AdminScreen(),
         AdminApp.routeName : (ctx) => AdminApp(),
         ComplaintDetails.routeName : (ctx) => ComplaintDetails(),
