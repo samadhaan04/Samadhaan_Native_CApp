@@ -15,36 +15,19 @@ class Coloured extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            flex: 1,
             child: ReusableCardComplaint(
               colour: Color(0xff51B328),
               // colour2: Color(0xff85EB29),
               cardChild: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    '12 / 35',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        letterSpacing: 2.0,
-                        fontSize: 25.0,
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Solved',
-                    style: TextStyle(
-                        letterSpacing: 2.0,
-                        fontSize: 25.0,
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.w900),
-                  ),
+                  Block('12/35', 2.0, 25.0),
+                  Block('Solved', 2.0, 25.0),
                 ],
               ),
             ),
           ),
           Expanded(
-            flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -55,22 +38,8 @@ class Coloured extends StatelessWidget {
                     cardChild: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          '2/5',
-                          style: TextStyle(
-                              letterSpacing: 2.0,
-                              fontSize: 22.0,
-                              fontFamily: 'Lato',
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Per Day',
-                          style: TextStyle(
-                              letterSpacing: 1.5,
-                              fontSize: 17.0,
-                              fontFamily: 'Lato',
-                              fontWeight: FontWeight.w900),
-                        ),
+                        Block('2/5', 2.0, 22.0),
+                        Block('Per Day', 1.5, 17.0),
                       ],
                     ),
                   ),
@@ -82,22 +51,8 @@ class Coloured extends StatelessWidget {
                     cardChild: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          '4.5',
-                          style: TextStyle(
-                              letterSpacing: 2.0,
-                              fontSize: 20.0,
-                              fontFamily: 'Lato',
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'User Rating',
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              fontFamily: 'Lato',
-                              letterSpacing: 2.0,
-                              fontWeight: FontWeight.w900),
-                        ),
+                        Block('4.5', 2.0, 20.0),
+                        Block('User Rating', 2.0, 18.0),
                       ],
                     ),
                   ),
@@ -107,6 +62,27 @@ class Coloured extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class Block extends StatelessWidget {
+  final String text;
+  final double spacing;
+  final double sizeFont;
+
+  Block(this.text, this.spacing, this.sizeFont);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          letterSpacing: spacing,
+          fontSize: sizeFont,
+          fontFamily: 'Lato',
+          fontWeight: FontWeight.bold),
     );
   }
 }

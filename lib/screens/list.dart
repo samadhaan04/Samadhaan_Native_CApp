@@ -62,7 +62,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
         if (snapshot.hasData) {
           snapshot.data.documents.forEach((val) {
             print(val.documentID.toString());
-            listOfDepartments.add({val.documentID.toString() : val['p']});
+            listOfDepartments.add({val.documentID.toString(): val['p']});
           });
           return Container(
             child: ListView.builder(
@@ -72,16 +72,13 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
               itemBuilder: (context, index) {
                 return Container(
                   // color: Colors.green,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 1,
-                    horizontal: 10,
-                  ),
+                  margin: EdgeInsets.fromLTRB(6, 4, 12, 5),
                   decoration: BoxDecoration(
                     // color: Colors.red,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Badge(
-                    badgeColor: Colors.red,
+                    badgeColor: Colors.red.withOpacity(0.55),
                     badgeContent: Text('3'),
                     alignment: Alignment.centerRight,
                     animationType: BadgeAnimationType.scale,
@@ -112,7 +109,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 50, horizontal: 20),
+                                    vertical: 40, horizontal: 15),
                                 child: Text(
                                   // dept[index].department,
                                   listOfDepartments[index]
@@ -126,15 +123,20 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                   ),
                                 ),
                               ),
-                              Text(
-                                // '1     ',
-                                listOfDepartments[index]
-                                    .values
-                                    .single
-                                    .toString() + "    ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 40, horizontal: 30),
+                                child: Text(
+                                  // '1     ',
+                                  listOfDepartments[index]
+                                          .values
+                                          .single
+                                          .toString() +
+                                      "    ",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
                                 ),
                               ),
                             ],
@@ -147,9 +149,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
               },
             ),
           );
-        }
-        else
-        {
+        } else {
           return CircularProgressIndicator();
         }
       },

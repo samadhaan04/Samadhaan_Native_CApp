@@ -39,12 +39,11 @@ class _InputDataState extends State<InputData> {
         false;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-          child: Scaffold(
+      child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.grey),
           automaticallyImplyLeading: false,
@@ -84,7 +83,8 @@ class _InputDataState extends State<InputData> {
             icon: Icon(
               Icons.arrow_back,
             ),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context)
+                .pushReplacementNamed(HomeScreen.routeName),
           ),
           title: Text('Palwal,Haryana'),
         ),
