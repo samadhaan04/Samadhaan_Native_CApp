@@ -1,58 +1,43 @@
 {
   "project_info": {
-    "project_number": "623829185504",
-    "firebase_url": "https://samadhaan-d7092.firebaseio.com",
-    "project_id": "samadhaan-d7092",
-    "storage_bucket": "samadhaan-d7092.appspot.com"
+    "project_number": "934741543864",
+    "firebase_url": "https://innovation-ef3ef.firebaseio.com",
+    "project_id": "innovation-ef3ef",
+    "storage_bucket": "innovation-ef3ef.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:623829185504:android:2a4e28f3f753a5c0633185",
+        "mobilesdk_app_id": "1:934741543864:android:605fb01e4bfcaf73399d4d",
         "android_client_info": {
-          "package_name": "com.example.faridabad"
+          "package_name": "com.goga.innovtion"
         }
       },
       "oauth_client": [
         {
-          "client_id": "623829185504-6me2t3h15b8vcd2drd9mdkn3u3uf46p0.apps.googleusercontent.com",
+          "client_id": "934741543864-55km1ujkvt279rge3di450iujqq7772l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.faridabad",
+            "package_name": "com.goga.innovtion",
             "certificate_hash": "bfbf4ac4da191f757906d46517e2393986f8eb02"
           }
         },
         {
-          "client_id": "623829185504-2ak0rjjm2m1pcvspmeo711dmg1ih7rd9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.faridabad",
-            "certificate_hash": "6b2fc4a15b139296096c11da7f185a30fbd33c05"
-          }
-        },
-        {
-          "client_id": "623829185504-oleu56k9c76sl58uboqsga18iiru2brm.apps.googleusercontent.com",
+          "client_id": "934741543864-va2fje2mg1d47gmt1bnu64kus0s6tu1g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA5kz93OtFjnxG3vui6TJPwHbaCUwz-cd8"
+          "current_key": "AIzaSyAiC7TDtluuyzbNXf_7lbnnh1V2KBY-lSY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "623829185504-oleu56k9c76sl58uboqsga18iiru2brm.apps.googleusercontent.com",
+              "client_id": "934741543864-va2fje2mg1d47gmt1bnu64kus0s6tu1g.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "623829185504-vf06dpsa9tdfpm6q4cmt5to9hesfhs89.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.faridabad"
-              }
             }
           ]
         }
