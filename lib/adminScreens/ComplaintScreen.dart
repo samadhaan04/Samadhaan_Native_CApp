@@ -1,18 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faridabad/screens/complaint_details.dart';
-import 'package:faridabad/screens/showcomplaint.dart';
+import 'package:faridabad/adminScreens/complaint_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:lite_rolling_switch/lite_rolling_switch.dart';
-import 'screens/CircularAvatar.dart';
-import 'screens/complaint.dart';
-import 'widgets/switch.dart';
+import '../widgets/CircularAvatar.dart';
+import '../data/complaint.dart';
+import '../widgets/switch.dart';
 
-class AdminApp extends StatefulWidget {
-  static const routeName = '/admin-app';
+class ComplaintScreen extends StatefulWidget {
+  static const routeName = '/complaintScreen';
   @override
-  _AdminAppState createState() => _AdminAppState();
+  _ComplaintScreenState createState() => _ComplaintScreenState();
 }
 
 final _firestore = Firestore.instance;
@@ -20,7 +17,7 @@ FirebaseUser loggedInUser;
 String email;
 int sort = 0;
 
-class _AdminAppState extends State<AdminApp> {
+class _ComplaintScreenState extends State<ComplaintScreen> {
   var transferValue = false;
   var newValue = false;
   var ongoingValue = false;

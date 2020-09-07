@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/data/constants.dart';
-import 'package:faridabad/screens/base.dart';
+import 'package:faridabad/clientScreens/base.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

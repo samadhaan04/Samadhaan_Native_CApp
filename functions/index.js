@@ -44,9 +44,6 @@ exports.myFunction = functions.firestore
                 },
             );
         }
-
-
-
 });
 
 

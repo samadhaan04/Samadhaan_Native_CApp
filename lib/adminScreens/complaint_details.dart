@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faridabad/screens/reusable_card.dart';
+import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -136,7 +136,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       child: Column(
                         children: <Widget>[
                           descExpansion(data['complaintText']),
-                          imgExpansion(),
+                          imgExpansion(data['imageURL']),
                           logExpansion(),
                           reqExpansion(),
                         ],
@@ -219,7 +219,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           );
   }
 
-  Widget imgExpansion() {
+  Widget imgExpansion(var images) {
     return expandedImg
         ? Wrap(
             children: <Widget>[
@@ -249,7 +249,17 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 height: 7,
               ),
               SingleChildScrollView(
-                child: Container(),
+                child: Container(
+                  height: 200,
+                  child: ListView.builder(
+                    key: GlobalKey(),
+                    itemCount: images.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return imageBox(images[index]);
+                    },
+                  ),
+                ),
               )
             ],
           )
@@ -273,6 +283,20 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               )
             ],
           );
+  }
+
+  Widget imageBox(var imageUrl) {
+    print(imageUrl);
+    return Container(
+      margin: EdgeInsets.all(15),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+        ),
+      ),
+      child: Image.network(imageUrl),
+    );
   }
 
   Widget logExpansion() {

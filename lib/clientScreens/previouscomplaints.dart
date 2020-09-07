@@ -1,6 +1,6 @@
 import 'package:faridabad/data/constants.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/showcomplaint.dart';
+import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/clientScreens/showcomplaintNew.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,13 +12,13 @@ FirebaseUser loggedInUser;
 String email;
 int sort = 0;
 
-class PreviousComplanints extends StatefulWidget {
+class PreviousComplaints extends StatefulWidget {
   static const routeName = '/previous-complaints';
   @override
-  PreviousComplanintsState createState() => (PreviousComplanintsState());
+  PreviousComplaintsState createState() => (PreviousComplaintsState());
 }
 
-class PreviousComplanintsState extends State<PreviousComplanints> {
+class PreviousComplaintsState extends State<PreviousComplaints> {
 // final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   String messageText;
@@ -194,7 +194,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.of(context).pushNamed(ShowComplaint.routeName,
+              Navigator.of(context).pushNamed(ShowComplaintsNew.routeName,
                   arguments: widget.complaintId);
             },
             child: Container(

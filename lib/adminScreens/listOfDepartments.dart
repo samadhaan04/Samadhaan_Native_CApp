@@ -1,8 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faridabad/main2.dart';
-import 'package:faridabad/screens/department.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:flutter/material.dart';
 
 class ListOfDepartments extends StatefulWidget {
@@ -24,41 +22,12 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
     super.initState();
   }
 
-  // void fetchDepartments() async {
-  //   setState(() {
-  //     loading = true;
-  //   });
-  //   await databaseReference
-  //       .collection('States/Haryana/Palwal')
-  //       .getDocuments()
-  //       .then((value) {
-  //     value.documents.forEach((element) async {
-  //       await databaseReference
-  //           .collection(
-  //               'States/Haryana/Palwal/${element.documentID.toString()}/Complaints')
-  //           .getDocuments()
-  //           .then((value) {
-  //         String name = element.documentID.toString();
-  //         Map<String, int> entry = {name: value.documents.length};
-  //         listOfDepartments.add(entry);
-  //       });
-  //       setState(() {
-
-  //       });
-  //       // listOfDepartments.;
-  //     });
-  //   });
-  //   setState(() {
-  //     loading = false;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: databaseReference.collection('States/Haryana/Palwal').snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        List<Map> listOfDepartments = [];
+        List<Map>  listOfDepartments = [];
         if (snapshot.hasData) {
           snapshot.data.documents.forEach((val) {
             print(val.documentID.toString());
@@ -67,7 +36,6 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
           return Container(
             child: ListView.builder(
               key: GlobalKey(),
-              // shrinkWrap: true,
               itemCount: listOfDepartments.length,
               itemBuilder: (context, index) {
                 return Container(
@@ -84,7 +52,6 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                     animationType: BadgeAnimationType.scale,
                     animationDuration: Duration(seconds: 1),
                     child: Card(
-                      // margin: EdgeInsets.all(value),
                       color: Color(0xFF0A0E21),
                       child: Container(
                         decoration: BoxDecoration(
@@ -93,7 +60,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                         ),
                         child: InkWell(
                           onTap: () {
-                            Navigator.of(context).pushNamed(AdminApp.routeName,
+                            Navigator.of(context).pushNamed(ComplaintScreen.routeName,
                                 arguments: listOfDepartments[index]
                                     .keys
                                     .single

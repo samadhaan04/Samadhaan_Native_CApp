@@ -1,4 +1,4 @@
-import 'package:faridabad/screens/reusable_card.dart';
+import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
 import 'package:flutter/material.dart';
 
 class Coloured extends StatelessWidget {

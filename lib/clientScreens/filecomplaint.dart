@@ -40,7 +40,6 @@ class _FileComplaintState extends State<FileComplaint>
   TextEditingController _subjectController = new TextEditingController();
   String _department;
   List _images = [];
-  var urls = [];
   File _image;
   final List<String> depts = [
     "None",
@@ -213,8 +212,9 @@ class _FileComplaintState extends State<FileComplaint>
                                 child: Row(
                                   children: [
                                     Text(
-                                      _department == null ? 
-                                      "Select Department" : _department,
+                                      _department == null
+                                          ? "Select Department"
+                                          : _department,
                                       style: TextStyle(
                                         fontSize: 21,
                                         color: Colors.black54,
@@ -587,21 +587,9 @@ class _FileComplaintState extends State<FileComplaint>
   }
 
   Future<bool> sendData() async {
+    var urls = [];
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
-      if (_images.length != 0) {
-        _images.forEach((element) async {
-          final ref2 = FirebaseStorage.instance
-              .ref()
-              .child('complaintImages')
-              .child(uid + DateTime.now().toIso8601String() + '.jpg');
-          await ref2.putFile(_image).onComplete;
-          var url = await ref2.getDownloadURL();
-          print(url);
-          urls.add(url);
-        });
-      }
-      print(urls);
       DocumentReference ref =
           await databaseReference.collection("Complaints").add({
         'author': uid,
@@ -621,6 +609,21 @@ class _FileComplaintState extends State<FileComplaint>
         'date': DateTime.now().toIso8601String(),
         'token': pref.getString('token'),
       });
+      if (_images.length != 0) {
+        _images.forEach((element) async {
+          final ref2 = FirebaseStorage.instance
+              .ref()
+              .child('complaintImages')
+              .child(uid + DateTime.now().toIso8601String() + '.jpg');
+          await ref2.putFile(element).onComplete;
+          await ref2.getDownloadURL().then((value) {
+            urls.add(value);
+          }).then((value) {
+            databaseReference.document(ref.path).updateData({'imageURL': urls});
+          });
+        });
+      }
+
       print("start check");
       await databaseReference
           .collection("Users/$uid/previousComplaints")
@@ -648,17 +651,12 @@ class _FileComplaintState extends State<FileComplaint>
       }
 
       await databaseReference
-          // .collection("States/Haryana/Palwal")
           .document('States/Haryana/Palwal/$_department')
-          // .document(_department)
           .collection('Complaints')
           .add({
         'ref': ref.path,
         'subject': _subjectController.text,
         'status': 0,
-        // .document()
-        // .setData({
-        // 'ref': ref.path,
       }).then((value) {
         print("Success");
         return true;

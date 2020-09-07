@@ -1,16 +1,15 @@
-import 'package:faridabad/main2.dart';
+import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/main3.dart';
-import 'package:faridabad/screens/adminScreen.dart';
-import 'package:faridabad/screens/authScreen.dart';
-import 'package:faridabad/screens/base.dart';
-import 'package:faridabad/screens/complaint_details.dart';
-import 'package:faridabad/screens/example.dart';
-import 'package:faridabad/screens/filecomplaint.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/previouscomplaints.dart';
-import 'package:faridabad/screens/showcomplaint.dart';
-import 'package:faridabad/screens/splash_screen.dart';
-import 'package:faridabad/screens/user_info.dart';
+import 'package:faridabad/clientScreens/authScreen.dart';
+import 'package:faridabad/clientScreens/base.dart';
+import 'package:faridabad/adminScreens/complaint_details.dart';
+import 'package:faridabad/clientScreens/filecomplaint.dart';
+import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/adminScreens/departments.dart';
+import 'package:faridabad/clientScreens/previouscomplaints.dart';
+import 'package:faridabad/clientScreens/showcomplaintNew.dart';
+import 'package:faridabad/clientScreens/splash_screen.dart';
+import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,6 +26,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        // primaryColor: Color(0xFF0A0E21),
+        // scaffoldBackgroundColor: Color(0xFF0A0E21),
+        // textTheme: TextTheme(
+        //   bodyText1: TextStyle(
+        //     color: Colors.white,
+        //   ),
+        // ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: SplashScreen(),
@@ -34,15 +40,15 @@ class MyApp extends StatelessWidget {
         AuthScreen.routeName: (ctx) => AuthScreen(),
         HomeScreen.routeName: (ctx) => HomeScreen(),
         UserInfoScreen.routeName: (ctx) => UserInfoScreen(),
-        ExampleScreen.routeName: (ctx) => ExampleScreen(),
-        ShowComplaint.routeName: (ctx) => ShowComplaint(),
         FileComplaint.routeName: (ctx) => FileComplaint(),
         Base.routeName: (ctx) => Base(),
-        PreviousComplanints.routeName : (ctx) => PreviousComplanints(),
-        AdminScreen.routename : (ctx) => AdminScreen(),
-        AdminApp.routeName : (ctx) => AdminApp(),
+        PreviousComplaints.routeName : (ctx) => PreviousComplaints(),
+        ComplaintScreen.routeName : (ctx) => ComplaintScreen(),
         ComplaintDetails.routeName : (ctx) => ComplaintDetails(),
         AdminUi.routeName : (ctx) => AdminUi(),
+        ShowComplaintsNew.routeName : (ctx) => ShowComplaintsNew(),
+        MyApp.routeName : (ctx) => MyApp(),
+        InputData.routeName : (ctx) => InputData(),
       },
     );
   }

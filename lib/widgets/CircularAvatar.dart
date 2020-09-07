@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'complaint.dart';
+import '../data/complaint.dart';
 
 class CircularAvatar extends StatelessWidget {
   final ComplaintStatus status;

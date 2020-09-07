@@ -1,8 +1,8 @@
 import 'package:faridabad/main.dart';
 import 'package:faridabad/providers/auth.dart';
-import 'package:faridabad/screens/coloured.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/list.dart';
+import 'package:faridabad/adminScreens/statsBoxes.dart';
+import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/adminScreens/listOfDepartments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

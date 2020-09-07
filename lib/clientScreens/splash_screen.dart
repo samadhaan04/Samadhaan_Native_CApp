@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:faridabad/main2.dart';
+import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/main3.dart';
 import 'package:faridabad/providers/auth.dart';
-import 'package:faridabad/screens/base.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/input_data.dart';
-import 'package:faridabad/screens/user_info.dart';
+import 'package:faridabad/clientScreens/base.dart';
+import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/adminScreens/departments.dart';
+import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

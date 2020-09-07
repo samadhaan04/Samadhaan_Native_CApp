@@ -1,8 +1,8 @@
 import 'package:faridabad/main.dart';
-import 'package:faridabad/main2.dart';
-import 'package:faridabad/screens/complaint_details.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/input_data.dart';
+import 'package:faridabad/adminScreens/ComplaintScreen.dart';
+import 'package:faridabad/adminScreens/complaint_details.dart';
+import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/adminScreens/departments.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(AdminUi());
@@ -24,7 +24,7 @@ class AdminUi extends StatelessWidget {
         ),
       ),
       routes: {
-        AdminApp.routeName : (ctx) => AdminApp(),
+        ComplaintScreen.routeName : (ctx) => ComplaintScreen(),
         ComplaintDetails.routeName : (ctx) => ComplaintDetails(),
         HomeScreen.routeName : (ctx) => HomeScreen(),
         MyApp.routeName : (ctx) => MyApp(),

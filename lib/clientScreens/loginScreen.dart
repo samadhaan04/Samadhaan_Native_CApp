@@ -1,12 +1,10 @@
-import 'package:faridabad/main2.dart';
+import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/main3.dart';
 import 'package:faridabad/providers/auth.dart';
-import 'package:faridabad/screens/adminScreen.dart';
-import 'package:faridabad/screens/base.dart';
-import 'package:faridabad/screens/example.dart';
+import 'package:faridabad/clientScreens/base.dart';
 import 'package:faridabad/data/constants.dart';
-import 'package:faridabad/screens/input_data.dart';
-import 'package:faridabad/screens/user_info.dart';
+import 'package:faridabad/adminScreens/departments.dart';
+import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -39,29 +37,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // setState(() {
-    //   height = MediaQuery.of(context).size.height;
-    //   width = MediaQuery.of(context).size.width;
-    // });
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      // backgroundColor: ,
       key: _scaffoldKey,
       body: Container(
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //     colors: [Colors.black12, Colors.white],
-        //      begin: Alignment.topCenter,
-        //      end: Alignment.bottomCenter
-        //   ),
-        // ),
         child: Stack(
           children: <Widget>[
             Center(
               child: AnimatedContainer(
                 duration: Duration(seconds: 3),
                 curve: Curves.easeInOut,
-                // decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/samadhaan.png',),fit: BoxFit.cover)),
                 height: height,
                 width: width,
                 child: Hero(
@@ -85,9 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            // SizedBox(
-                            //   height: 20,
-                            // ),
                             brandText,
                             SizedBox(
                               height: 60,
@@ -107,12 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       border: Border.all(
                                           color: Colors.black38, width: 2),
                                       color: Colors.white,
-                                      // boxShadow: [
-                                      //   BoxShadow(
-                                      //       color: Colors.black38,
-                                      //       spreadRadius: 1,
-                                      //       blurRadius: 1)
-                                      // ],
                                       borderRadius: BorderRadius.circular(35),
                                     ),
                                     child: TextFormField(
@@ -146,12 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         horizontal: 20, vertical: 12),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      // boxShadow: [
-                                      //   BoxShadow(
-                                      //       color: Colors.black,
-                                      //       spreadRadius: 1,
-                                      //       blurRadius: 10)
-                                      // ],
                                       border: Border.all(
                                           color: Colors.black38, width: 2),
                                       borderRadius: BorderRadius.circular(35),
