@@ -35,8 +35,9 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 40),
+        padding: EdgeInsets.symmetric(vertical: 20),
         child: StreamBuilder<DocumentSnapshot>(
             stream: Firestore.instance
                 .collection('Complaints')
@@ -50,17 +51,43 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
               } else {
                 var data = snapshot.data.data;
                 return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
+                    SingleChildScrollView(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.12,
+                        width: MediaQuery.of(context).size.width,
+                        color: Color(0xf5f5f5f5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        child: Center(
+                          child: Text(
+                            'This is the subject of the complaint at the top of the screen.',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                            textAlign: TextAlign.left,
+                            softWrap: true,
+                          ),
+                        ),
+                      ),
+                    ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      margin: EdgeInsets.symmetric(horizontal: 2),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 25, vertical: 3),
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           descExpansion(data['complaintText']),
-                          imgExpansion(data['imageURL']),
+                          SizedBox(
+                            height: 20,
+                          ),
                           logExpansion(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          imgExpansion(data['imageURL']),
                           // reqExpansion(),
                           SizedBox(
                             height: 20,
@@ -71,28 +98,34 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                               'Actions',
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Color(0xff817F7F),
                               ),
                             ),
                           ),
                           SizedBox(
                             height: 20,
                           ),
-                          Container(
-                            height: 60,
-                            padding: EdgeInsets.all(15),
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                            ),
-                            child: TextField(
-                              decoration: InputDecoration(
-
+                          SingleChildScrollView(
+                            child: Container(
+                              // height: 60,
+                              padding: EdgeInsets.all(15),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black),
                               ),
-                              style: TextStyle(
-                                fontSize: 21,
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Enter Feedback',
+                                  border: InputBorder.none,
+                                ),
+                                maxLines: null,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                                textAlign: TextAlign.start,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ),
                           SizedBox(
@@ -102,12 +135,12 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                             child: Text(
                               "Feedback",
                               style: TextStyle(
-                                fontSize: 23,
-                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Color(0xff817F7F),
                               ),
                             ),
-                            onPressed: (){},
+                            onPressed: () {},
                           )
                         ],
                       ),
@@ -129,7 +162,9 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                   Text(
                     'Description',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color(0xff817F7F),
                     ),
                   ),
                   IconButton(
@@ -151,16 +186,16 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
               ),
               SingleChildScrollView(
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.08),
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.fromLTRB(25, 20, 25, 40),
+                  // decoration: BoxDecoration(
+                  //     color: Colors.black.withOpacity(0.08),
+                  //     shape: BoxShape.rectangle,
+                  //     borderRadius: BorderRadius.circular(15)),
+                  // padding: EdgeInsets.fromLTRB(25, 20, 25, 40),
                   child: Text(
                     complaint,
                     softWrap: true,
                     style: TextStyle(
-                      fontSize: 19,
+                      fontSize: 15,
                     ),
                   ),
                 ),
@@ -171,7 +206,11 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
             children: <Widget>[
               Text(
                 'Description',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Color(0xff817F7F),
+                ),
               ),
               IconButton(
                 icon: Icon(
@@ -198,7 +237,9 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                   Text(
                     'Images',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color(0xff817F7F),
                     ),
                   ),
                   IconButton(
@@ -238,7 +279,11 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
             children: <Widget>[
               Text(
                 'Images',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Color(0xff817F7F),
+                ),
               ),
               IconButton(
                 icon: Icon(
@@ -261,11 +306,11 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
     return Container(
       margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(
+      //     color: Colors.black,
+      //   ),
+      // ),
       child: Image.network(imageUrl),
     );
   }
@@ -279,7 +324,9 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                   Text(
                     'Logs',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color(0xff817F7F),
                     ),
                   ),
                   IconButton(
@@ -301,16 +348,16 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
               ),
               SingleChildScrollView(
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.08),
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
+                  // decoration: BoxDecoration(
+                  //     color: Colors.black.withOpacity(0.08),
+                  //     shape: BoxShape.rectangle,
+                  //     borderRadius: BorderRadius.circular(15)),
+                  // padding: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
                   child: Text(
                     'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
                     softWrap: true,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 15,
                     ),
                   ),
                 ),
@@ -321,7 +368,11 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
             children: <Widget>[
               Text(
                 'Logs',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Color(0xff817F7F),
+                ),
               ),
               IconButton(
                 icon: Icon(

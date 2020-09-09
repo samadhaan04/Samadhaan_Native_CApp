@@ -36,6 +36,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         iconTheme: IconThemeData(color: Colors.grey),
         automaticallyImplyLeading: false,
         titleSpacing: -12.0,
@@ -70,7 +71,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 return Column(
                   children: <Widget>[
                     ReusableCardComplaint(
-                      colour: Color(0xff1d1b27),
+                      colour: Theme.of(context).disabledColor,
+                      // Color(0xff1d1b27),
                       cardChild: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -82,7 +84,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 date.toString(),
                                 style: TextStyle(
                                   fontSize: 18,
-                                  color: Colors.grey[300],
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color,
                                 ),
                               ),
                               CircleAvatar(
@@ -108,6 +113,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                             // 'Sir hmare ghar ke bahr sadak tut gayi hai',
                             data['subject'],
                             style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color,
                               fontSize: 22,
                             ),
                           ),
@@ -121,7 +128,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               // data['name'],
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                  color: Colors.grey[400],
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color,
                                   fontSize: 20,
                                   fontStyle: FontStyle.italic),
                             ),
@@ -159,6 +169,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   Text(
                     'Description',
                     style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color,
                       fontSize: 20,
                     ),
                   ),
@@ -166,7 +177,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     icon: Icon(
                       Icons.expand_less,
                       size: 40,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                     onPressed: () {
                       setState(() {
@@ -191,6 +202,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     softWrap: true,
                     style: TextStyle(
                       fontSize: 19,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
                 ),
@@ -201,13 +213,16 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             children: <Widget>[
               Text(
                 'Description',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Theme.of(context).textTheme.bodyText1.color,
+                ),
               ),
               IconButton(
                 icon: Icon(
                   Icons.expand_more,
                   size: 40,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Theme.of(context).textTheme.bodyText1.color,
                 ),
                 onPressed: () {
                   setState(() {
@@ -228,6 +243,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   Text(
                     'Images',
                     style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color,
                       fontSize: 20,
                     ),
                   ),
@@ -235,7 +251,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     icon: Icon(
                       Icons.expand_less,
                       size: 40,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                     onPressed: () {
                       setState(() {
@@ -267,13 +283,16 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             children: <Widget>[
               Text(
                 'Images',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Theme.of(context).textTheme.bodyText1.color,
+                ),
               ),
               IconButton(
                 icon: Icon(
                   Icons.expand_more,
                   size: 40,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Theme.of(context).textTheme.bodyText1.color,
                 ),
                 onPressed: () {
                   setState(() {
@@ -290,11 +309,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     return Container(
       margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.black,
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(
+      //     color: Colors.black,
+      //   ),
+      // ),
       child: Image.network(imageUrl),
     );
   }
@@ -308,6 +327,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   Text(
                     'Logs',
                     style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1.color,
                       fontSize: 20,
                     ),
                   ),
@@ -315,7 +335,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     icon: Icon(
                       Icons.expand_less,
                       size: 40,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                     onPressed: () {
                       setState(() {
@@ -340,6 +360,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     softWrap: true,
                     style: TextStyle(
                       fontSize: 20,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
                 ),
@@ -350,13 +371,16 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             children: <Widget>[
               Text(
                 'Logs',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Theme.of(context).textTheme.bodyText1.color,
+                ),
               ),
               IconButton(
                 icon: Icon(
                   Icons.expand_more,
                   size: 40,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Theme.of(context).textTheme.bodyText1.color,
                 ),
                 onPressed: () {
                   setState(() {
@@ -381,13 +405,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     'Request',
                     style: TextStyle(
                       fontSize: 20,
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
                   IconButton(
                     icon: Icon(
                       Icons.expand_less,
                       size: 40,
-                      color: Colors.white.withOpacity(0.5),
+                      color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                     onPressed: () {
                       setState(() {
@@ -449,13 +474,16 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             children: <Widget>[
               Text(
                 'Request',
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Theme.of(context).textTheme.bodyText1.color,
+                ),
               ),
               IconButton(
                 icon: Icon(
                   Icons.expand_more,
                   size: 40,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Theme.of(context).textTheme.bodyText1.color,
                 ),
                 onPressed: () {
                   setState(() {
@@ -481,12 +509,13 @@ class UtilButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 12),
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 4),
       color: Colors.white.withOpacity(0.08),
       child: Text(
         childtext,
         style: TextStyle(
           fontSize: 16,
+          color: Theme.of(context).textTheme.bodyText1.color,
         ),
       ),
       onPressed: onpress,

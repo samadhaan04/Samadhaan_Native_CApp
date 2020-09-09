@@ -27,7 +27,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
     return StreamBuilder(
       stream: databaseReference.collection('States/Haryana/Palwal').snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        List<Map>  listOfDepartments = [];
+        List<Map> listOfDepartments = [];
         if (snapshot.hasData) {
           snapshot.data.documents.forEach((val) {
             print(val.documentID.toString());
@@ -39,28 +39,34 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
               itemCount: listOfDepartments.length,
               itemBuilder: (context, index) {
                 return Container(
-                  // color: Colors.green,
                   margin: EdgeInsets.fromLTRB(6, 4, 12, 5),
                   decoration: BoxDecoration(
                     // color: Colors.red,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Badge(
                     badgeColor: Colors.red.withOpacity(0.55),
-                    badgeContent: Text('3'),
+                    badgeContent: Text(
+                      '3',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     alignment: Alignment.centerRight,
                     animationType: BadgeAnimationType.scale,
                     animationDuration: Duration(seconds: 1),
                     child: Card(
-                      color: Color(0xFF0A0E21),
+                      color: Theme.of(context).disabledColor,
+                      //Color(0xFF0A0E21),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Color(0xff211E2B),
+                          color: Theme.of(context).disabledColor,
+                          // Color(0xff211E2B),
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: InkWell(
                           onTap: () {
-                            Navigator.of(context).pushNamed(ComplaintScreen.routeName,
+                            Navigator.of(context).pushNamed(
+                                ComplaintScreen.routeName,
                                 arguments: listOfDepartments[index]
                                     .keys
                                     .single
@@ -71,7 +77,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Color(0xff211E2B),
+                                  color: Theme.of(context).disabledColor,
                                   // color: Colors.green,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
@@ -84,6 +90,10 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                       .single
                                       .toString(),
                                   style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito',
                                     fontSize: 22,
@@ -92,7 +102,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 40, horizontal: 30),
+                                    vertical: 40, horizontal: 5),
                                 child: Text(
                                   // '1     ',
                                   listOfDepartments[index]
@@ -101,6 +111,10 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                           .toString() +
                                       "    ",
                                   style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                   ),

@@ -64,12 +64,19 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
     setState(() {});
   }
 
+  //condition function for theme to build switch gradients
+  bool darkMode() {
+    if (Theme.of(context).textTheme.bodyText1.color == Colors.white)
+      return true;
+    else
+      return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff15131E),
-      body:
-          Container(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -84,13 +91,14 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                   Padding(
                     padding: const EdgeInsets.all(15),
                   ),
+                  // ThemeMode == ThemeMode.light ? Text('') : Text(''),
                   Container(
                     margin: const EdgeInsets.only(right: 15, left: 20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: 1,
-                        color: Colors.white,
+                        width: 2,
+                        color: Color(0xf3f3f3f3),
                       ),
                     ),
                     child:
@@ -108,15 +116,23 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                       value: transferValue,
                       colorOff: Colors.transparent,
                       colorOn: Color(0xffFE7325),
-                  
-                      myGradient: LinearGradient(
-                        colors: [
-                          Color(0xffff4A2B),
-                          Color(0xffFE7325),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
+                      myGradient: darkMode()
+                          ? LinearGradient(
+                              colors: [
+                                Color.fromRGBO(236, 93, 59, 0.8),
+                                Color.fromRGBO(238, 120, 61, 0.8),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            )
+                          : LinearGradient(
+                              colors: [
+                                Color(0xffff4A2B),
+                                Color(0xffFE7325),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
                     ),
                   ),
                   SizedBox(
@@ -128,17 +144,15 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: 1,
-                        color: Colors.white,
+                        width: 2,
+                        color: Color(0xf3f3f3f3),
                       ),
                     ),
-                    child:
-                        RollingSwitch(
+                    child: RollingSwitch(
                       value: ongoingValue,
                       textOff: 'Ongoing',
                       textOn: 'Ongoing',
-                      onChanged: (v) {
-                      },
+                      onChanged: (v) {},
                       onTap: () {
                         transferValue = false;
                         doneValue = false;
@@ -147,15 +161,23 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                       },
                       colorOff: Colors.transparent,
                       colorOn: Color(0xfff4b601),
-                      myGradient: LinearGradient(
-                        colors: [
-                          Color(0xfff4b601),
-                          Color(0xffffee77),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        //         ),
-                      ),
+                      myGradient: darkMode()
+                          ? LinearGradient(
+                              colors: [
+                                Color.fromRGBO(237, 190, 73, 0.8),
+                                Color.fromRGBO(251, 230, 128, 0.8),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            )
+                          : LinearGradient(
+                              colors: [
+                                Color(0xfff4b601),
+                                Color(0xffffee77),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
                     ),
                   ),
                 ],
@@ -174,37 +196,45 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                     padding: const EdgeInsets.all(15),
                   ),
                   Container(
-                   margin: const EdgeInsets.only(right: 15, left: 20),
+                    margin: const EdgeInsets.only(right: 15, left: 20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: 1,
-                        color: Colors.white,
+                        width: 2,
+                        color: Color(0xf3f3f3f3),
                       ),
                     ),
-                    child:
-                        RollingSwitch(
+                    child: RollingSwitch(
                       textOff: 'New',
                       textOn: 'New',
                       onChanged: (v) {},
                       onTap: () {
                         transferValue = false;
                         newValue = !newValue;
-                        doneValue  = false;
+                        doneValue = false;
                         ongoingValue = false;
                         setState(() {});
                       },
                       value: newValue,
                       colorOff: Colors.transparent,
                       colorOn: Color.fromRGBO(77, 136, 242, 1),
-                      myGradient: LinearGradient(
-                        colors: [
-                          Color.fromRGBO(77, 137, 241, 1),
-                          Color.fromRGBO(85, 167, 245, 1),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
+                      myGradient: darkMode()
+                          ? LinearGradient(
+                              colors: [
+                                Color.fromRGBO(80, 141, 243, 1),
+                                Color.fromRGBO(88, 170, 247, 1),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            )
+                          : LinearGradient(
+                              colors: [
+                                Color.fromRGBO(77, 137, 241, 0.8),
+                                Color.fromRGBO(85, 167, 245, 0.8),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
                     ),
                   ),
                   SizedBox(
@@ -215,12 +245,11 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: 1,
-                        color: Colors.white,
+                        width: 2,
+                        color: Color(0xf3f3f3f3),
                       ),
                     ),
-                    child:
-                        RollingSwitch(
+                    child: RollingSwitch(
                       textOff: 'Done',
                       textOn: 'Done',
                       onChanged: (v) {},
@@ -233,14 +262,23 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                       value: doneValue,
                       colorOff: Colors.transparent,
                       colorOn: Color(0xff85eb29),
-                      myGradient: LinearGradient(
-                        colors: [
-                          Color(0xff51b328),
-                          Color(0xff85eb29),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
+                      myGradient: darkMode()
+                          ? LinearGradient(
+                              colors: [
+                                Color(0xff51b328),
+                                Color(0xff85eb29),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            )
+                          : LinearGradient(
+                              colors: [
+                                Color.fromRGBO(113, 182, 67, 0.8),
+                                Color.fromRGBO(153, 224, 80, 0.8),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
                     ),
                   ),
                 ],
@@ -295,7 +333,9 @@ class _MessagesStream1State extends State<MessagesStream1> {
             }).toList();
             // print(list);
           } else if (widget.doneValue == true) {
-            list = snapshot.data.documents.where((val) => (val['status'] == 1)).toList();
+            list = snapshot.data.documents
+                .where((val) => (val['status'] == 1))
+                .toList();
             // print(list);
           } else {
             list = snapshot.data.documents;
@@ -311,8 +351,10 @@ class _MessagesStream1State extends State<MessagesStream1> {
                   status: list[index]['status'].toString(),
                   complaintId: list[index]['ref'],
                   color: (index % 2 == 0)
-                      ? Color.fromARGB(255, 33, 30, 43)
-                      : Color(0xff15131E),
+                      ? Theme.of(context).disabledColor
+                      //Color.fromARGB(255, 33, 30, 43)
+                      : Theme.of(context).scaffoldBackgroundColor,
+                  //Color(0xff15131E),
                 );
               });
         }
@@ -372,14 +414,14 @@ class _MessageBubbleState extends State<MessageBubble> {
               title: Text(
                 widget.complaint,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyText1.color,
                   fontSize: 18,
                 ),
               ),
               subtitle: Text(
                 'Formatted Date',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyText1.color,
                   fontSize: 12,
                 ),
               ),
@@ -390,4 +432,3 @@ class _MessageBubbleState extends State<MessageBubble> {
     );
   }
 }
-

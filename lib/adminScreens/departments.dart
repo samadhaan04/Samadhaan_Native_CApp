@@ -44,7 +44,9 @@ class _InputDataState extends State<InputData> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           iconTheme: IconThemeData(color: Colors.grey),
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -86,7 +88,12 @@ class _InputDataState extends State<InputData> {
             onPressed: () => Navigator.of(context)
                 .pushReplacementNamed(HomeScreen.routeName),
           ),
-          title: Text('Palwal,Haryana'),
+          title: Text(
+            'Palwal,Haryana',
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
+            ),
+          ),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
