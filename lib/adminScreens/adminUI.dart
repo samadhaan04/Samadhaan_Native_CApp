@@ -1,30 +1,20 @@
 import 'package:faridabad/main.dart';
 import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/adminScreens/complaint_details.dart';
-import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/loginScreen.dart';
 import 'package:faridabad/adminScreens/departments.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(
-      AdminUi(),
-    );
-
 class AdminUi extends StatelessWidget {
   static const routeName = '/adminUi';
+  
   @override
   Widget build(BuildContext context) {
+    var user = ModalRoute.of(context).settings.arguments;
+    print('adminUI $user');
     return MaterialApp(
       title: 'Samadhaan UI',
       debugShowCheckedModeBanner: false,
-      // ThemeData.dark().copyWith(
-      //   primaryColor: Color(0xFF0A0E21),
-      //   scaffoldBackgroundColor: Color(0xFF0A0E21),
-      //   textTheme: TextTheme(
-      //     bodyText1: TextStyle(
-      //       color: Colors.white,
-      //     ),
-      //   ),
-      // ),
       theme: Theme.of(context),
       routes: {
         ComplaintScreen.routeName: (ctx) => ComplaintScreen(),
@@ -32,7 +22,7 @@ class AdminUi extends StatelessWidget {
         HomeScreen.routeName: (ctx) => HomeScreen(),
         MyApp.routeName: (ctx) => MyApp(),
       },
-      home: InputData(),
+      home: user == 'admin' ? InputData() : ComplaintScreen(user),
     );
   }
 }

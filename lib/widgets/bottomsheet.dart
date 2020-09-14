@@ -1,4 +1,4 @@
-import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:samadhan/screens/home.dart';

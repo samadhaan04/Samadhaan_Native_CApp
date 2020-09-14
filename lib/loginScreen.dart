@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:faridabad/adminScreens/ComplaintScreen.dart';
-import 'package:faridabad/main3.dart';
+import 'package:faridabad/adminScreens/adminUI.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/clientScreens/base.dart';
 import 'package:faridabad/data/constants.dart';
@@ -7,6 +9,7 @@ import 'package:faridabad/adminScreens/departments.dart';
 import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -22,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var height = 0.0;
   var width = 0.0;
+  var loading = false;
 
   @override
   void didChangeDependencies() {
@@ -40,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
-      body: Container(
+      body: loading ? Center(child: CircularProgressIndicator(),) :  Container(
         child: Stack(
           children: <Widget>[
             Center(
@@ -155,24 +159,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                       BorderRadius.all(Radius.circular(20))),
                               color: Colors.grey,
                               onPressed: () async {
+                                var user, result;
+                                final pref =
+                                    await SharedPreferences.getInstance();
                                 if (_formKey.currentState.validate()) {
-                                  print('$email $password');
-                                  final result =
-                                      await Auth().signIn(email, password);
-                                  if (result) {
-                                    Navigator.of(context)
-                                        .pushReplacementNamed(AdminUi.routeName);
-                                  } else {
-                                    _scaffoldKey.currentState.showSnackBar(
-                                      SnackBar(
-                                        backgroundColor: Colors.red,
-                                        content: Text(
-                                          'Please Enter Valid Details',
-                                        ),
-                                        duration: Duration(seconds: 2),
-                                      ),
-                                    );
-                                  }
+                                  await Auth()
+                                      .signIn(email, password)
+                                      .then((value) {
+                                    Timer(Duration(milliseconds: 1500), () {
+                                      result = value;
+                                      user = pref.getString('currentUser');
+                                      if (result == true) {
+                                        print('login $user');
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                AdminUi.routeName,
+                                                arguments: user);
+                                      } else {
+                                        _scaffoldKey.currentState.showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                              'Please Enter Valid Details',
+                                            ),
+                                            duration: Duration(seconds: 2),
+                                          ),
+                                        );
+                                      }
+                                    });
+                                  });
                                 }
                               },
                               child: Text(
@@ -210,6 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(20),
                               splashColor: Colors.orange,
                               onTap: () async {
+                                
                                 final result = await Auth().signInWithGoogle();
                                 if (result) {
                                   final check = await Auth().checkuserInfo();

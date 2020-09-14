@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/showModal.dart';
 
 class ShowComplaintsNew extends StatefulWidget {
@@ -19,11 +21,22 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
   bool expandedReq = true;
   String complaintId;
   Firestore _firestore;
+  List logs;
+  String logsText;
+  var name;
+
+  TextEditingController feedback = TextEditingController();
 
   @override
   void initState() {
     _firestore = Firestore.instance;
+    setName();
     super.initState();
+  }
+
+  void setName() async {
+    var pref = await SharedPreferences.getInstance();
+    name = pref.getString('name');
   }
 
   @override
@@ -50,6 +63,7 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                 );
               } else {
                 var data = snapshot.data.data;
+                logs = data['logs'];
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -62,9 +76,9 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                             EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                         child: Center(
                           child: Text(
-                            'This is the subject of the complaint at the top of the screen.',
+                            data['subject'],
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 20,
                             ),
                             textAlign: TextAlign.left,
                             softWrap: true,
@@ -77,17 +91,15 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           descExpansion(data['complaintText']),
                           SizedBox(
                             height: 20,
                           ),
-                          logExpansion(),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          imgExpansion(data['imageURL']),
+                          logs.length != 0 ? logExpansion() : Container(),
+                          data['imageURL'] != null
+                              ? imgExpansion(data['imageURL'])
+                              : Container(),
                           // reqExpansion(),
                           SizedBox(
                             height: 20,
@@ -109,7 +121,6 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                           ),
                           SingleChildScrollView(
                             child: Container(
-                              // height: 60,
                               padding: EdgeInsets.all(15),
                               width: double.infinity,
                               decoration: BoxDecoration(
@@ -125,6 +136,7 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                                   fontSize: 15,
                                 ),
                                 textAlign: TextAlign.start,
+                                controller: feedback,
                               ),
                             ),
                           ),
@@ -140,7 +152,9 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                                 color: Color(0xff817F7F),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              sendFeedback();
+                            },
                           )
                         ],
                       ),
@@ -151,6 +165,21 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
             }),
       ),
     );
+  }
+
+  void sendFeedback() {
+    logs.add('$name : ${feedback.text}');
+    Firestore.instance
+        .collection('Complaints')
+        .document(complaintId)
+        .updateData({
+      'userFeedback': feedback.text,
+      'logs': logs,
+    }).then((value) {
+      setState(() {
+        feedback.text = '';
+      });
+    });
   }
 
   Widget descExpansion(String complaint) {
@@ -261,17 +290,18 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
               ),
               SingleChildScrollView(
                 child: Container(
-                  height: 200,
-                  // margin: EdgeInsets.symmetric(vertical: 10),
-                  child: ListView.builder(
-                    key: GlobalKey(),
-                    itemCount: images.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return imageBox(images[index]);
-                    },
-                  ),
-                ),
+                    height: 200,
+                    // margin: EdgeInsets.symmetric(vertical: 10),
+                    child: images != null
+                        ? ListView.builder(
+                            key: GlobalKey(),
+                            itemCount: images.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return imageBox(images[index]);
+                            },
+                          )
+                        : Container()),
               ),
             ],
           )
@@ -302,16 +332,37 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
   }
 
   Widget imageBox(var imageUrl) {
-    print(imageUrl);
     return Container(
       margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(10),
-      // decoration: BoxDecoration(
-      //   border: Border.all(
-      //     color: Colors.black,
-      //   ),
-      // ),
-      child: Image.network(imageUrl),
+      child: GestureDetector(
+        child: Hero(
+          tag: 'image',
+          child: Image.network(imageUrl),
+        ),
+        onTap: () {
+          showDialog(
+            context: context,
+            child: AlertDialog(
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: Hero(
+                tag: 'image',
+                child: Image.network(imageUrl),
+              ),
+              actions: [
+                FlatButton(
+                  padding: EdgeInsets.all(10),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("Okay!"),
+                )
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -343,23 +394,33 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                   )
                 ],
               ),
-              SizedBox(
-                height: 5,
-              ),
-              SingleChildScrollView(
-                child: Container(
-                  // decoration: BoxDecoration(
-                  //     color: Colors.black.withOpacity(0.08),
-                  //     shape: BoxShape.rectangle,
-                  //     borderRadius: BorderRadius.circular(15)),
-                  // padding: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
-                  child: Text(
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-                    softWrap: true,
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
+              Container(
+                height: logs.length * 20.0 < 150.0 ? logs.length * 20.0 : 150,
+                child: ListView.builder(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  shrinkWrap: true,
+                  itemCount: logs.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.black,
+                          ),
+                          height: 5,
+                          width: 20,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          logs[index],
+                          style: TextStyle(color: Colors.black),
+                        )
+                      ],
+                    );
+                  },
                 ),
               )
             ],

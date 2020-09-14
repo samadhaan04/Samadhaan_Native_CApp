@@ -4,6 +4,7 @@ class ModalSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       child: Container(
         height: MediaQuery.of(context).size.height / 3,
         padding: EdgeInsets.all(5),

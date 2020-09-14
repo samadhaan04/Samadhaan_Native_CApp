@@ -1,13 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/adminScreens/complaint_details.dart';
+import 'package:faridabad/adminScreens/departmentComplaintDescription.dart';
+import 'package:faridabad/main.dart';
+import 'package:faridabad/providers/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/CircularAvatar.dart';
 import '../data/complaint.dart';
 import '../widgets/switch.dart';
 
 class ComplaintScreen extends StatefulWidget {
   static const routeName = '/complaintScreen';
+  final String department;
+  ComplaintScreen([this.department]);
   @override
   _ComplaintScreenState createState() => _ComplaintScreenState();
 }
@@ -23,39 +31,34 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
   var ongoingValue = false;
   var doneValue = false;
 
-  final _auth = FirebaseAuth.instance;
   final databaseReference = Firestore.instance;
   String messageText;
-  var uid;
+  // var uid;
   var ref;
+  var user;
+
   List<String> listOfReferences = [];
+  
   @override
-  void initState() {
+  void initState() { 
     super.initState();
-
-    getCurrentUser();
+    
   }
+
 
   @override
-  void didChangeDependencies() {
-    ref = ModalRoute.of(context).settings.arguments;
-    // getComplaints(ref);
-
-    super.didChangeDependencies();
-  }
-
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser();
-      if (user != null) {
-        uid = user.uid;
-        loggedInUser = user;
-        email = loggedInUser.email;
-        setState(() {});
-      }
-    } catch (e) {
-      print(e);
+  void didChangeDependencies() async {
+    if (widget.department != null) {
+      ref = widget.department;
+    } else {
+      ref = ModalRoute.of(context).settings.arguments;
     }
+    setState(() {
+      SharedPreferences.getInstance().then((value) {
+        user = value.getString('currentUser');
+      });
+    });
+    super.didChangeDependencies();
   }
 
   bool transfer = false;
@@ -72,9 +75,51 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
       return false;
   }
 
+
+  String dropdownValue = '';
+
+  var _items = ['Logout'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 0,
+        actions: [
+          Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+              
+              alignment: Alignment.bottomRight,
+              child: DropdownButton(
+                underline: Container(),
+                onChanged: (value) async {
+                  setState(() {
+                    dropdownValue = value;
+                  });
+                  if (dropdownValue == 'Logout') {
+                    final signoutResult = await Auth().signOut();
+                    // print('sign out');
+                    if (signoutResult) {
+                      Navigator.of(context)
+                          .pushReplacementNamed(MyApp.routeName);
+                    }
+                  }
+                },
+                icon: Icon(
+                  Icons.account_circle,
+                  size: 35,
+                ),
+                items: _items.map((e) {
+                  return DropdownMenuItem(
+                    child: Text(e),
+                    value: e,
+                  );
+                }).toList(),
+              ),
+            ),
+        ],
+      ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -82,8 +127,9 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 50, 30, 2),
+              padding: const EdgeInsets.fromLTRB(0, 10, 30, 2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 mainAxisSize: MainAxisSize.min,
@@ -164,8 +210,8 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                       myGradient: darkMode()
                           ? LinearGradient(
                               colors: [
-                                Color.fromRGBO(237, 190, 73, 0.8),
-                                Color.fromRGBO(251, 230, 128, 0.8),
+                                Color(0xfff4b601),
+                                Color(0xffffee77),
                               ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
@@ -288,8 +334,8 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
               height: 10,
             ),
             Expanded(
-                child: MessagesStream1(uid, transferValue, ongoingValue,
-                    doneValue, listOfReferences, ref)),
+                child: MessagesStream1(transferValue, ongoingValue, doneValue,
+                    listOfReferences, ref)),
           ],
         ),
       ),
@@ -298,14 +344,14 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
 }
 
 class MessagesStream1 extends StatefulWidget {
-  final uid;
+  // final uid;
   final transferValue;
   final ongoingValue;
   final doneValue;
   final listOfReferences;
   final department;
-  MessagesStream1(this.uid, this.transferValue, this.ongoingValue,
-      this.doneValue, this.listOfReferences, this.department);
+  MessagesStream1(this.transferValue, this.ongoingValue, this.doneValue,
+      this.listOfReferences, this.department);
 
   @override
   _MessagesStream1State createState() => _MessagesStream1State();
@@ -337,26 +383,45 @@ class _MessagesStream1State extends State<MessagesStream1> {
                 .where((val) => (val['status'] == 1))
                 .toList();
             // print(list);
+          } else if (widget.transferValue == true) {
+            list = snapshot.data.documents
+                .where((val) => (val['status'] == 2))
+                .toList();
           } else {
             list = snapshot.data.documents;
           }
           // print(list);
-          return ListView.builder(
-              key: GlobalKey(),
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                return MessageBubble(
-                  complaint: list[index]['subject'],
-                  department: widget.department,
-                  status: list[index]['status'].toString(),
-                  complaintId: list[index]['ref'],
-                  color: (index % 2 == 0)
-                      ? Theme.of(context).disabledColor
-                      //Color.fromARGB(255, 33, 30, 43)
-                      : Theme.of(context).scaffoldBackgroundColor,
-                  //Color(0xff15131E),
-                );
-              });
+          return list.isEmpty
+              ? Container(
+                  child: Center(
+                    child: Text(
+                      "No Complaints Yet !!!",
+                      style: TextStyle(
+                        fontSize: 21,
+                        color: Theme.of(context).textTheme.bodyText1.color,
+                      ),
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  key: GlobalKey(),
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    print(list[index].reference.path);
+                    return MessageBubble(
+                      complaint: list[index]['subject'],
+                      department: widget.department,
+                      status: list[index]['status'],
+                      complaintId: list[index]['ref'],
+                      date: list[index]['date'],
+                      path: list[index].reference.path,
+                      color: (index % 2 == 0)
+                          ? Theme.of(context).disabledColor
+                          //Color.fromARGB(255, 33, 30, 43)
+                          : Theme.of(context).scaffoldBackgroundColor,
+                      //Color(0xff15131E),
+                    );
+                  });
         }
       },
     );
@@ -369,12 +434,16 @@ class MessageBubble extends StatefulWidget {
       this.complaint,
       this.complaintId,
       this.department,
+      this.path,
+      this.date,
       this.color});
-  final String status;
+  final int status;
   final String complaint;
   final String complaintId;
+  final String date;
   final String department;
   final Color color;
+  final String path;
 
   @override
   _MessageBubbleState createState() => _MessageBubbleState();
@@ -385,8 +454,10 @@ class _MessageBubbleState extends State<MessageBubble> {
   ComplaintStatus _status;
   @override
   void initState() {
-    if (widget.status == '0') {
+    if (widget.status == 0) {
       _status = ComplaintStatus.Ongoing;
+    } else if (widget.status == 2) {
+      _status = ComplaintStatus.Transfer;
     } else {
       _status = ComplaintStatus.Done;
     }
@@ -395,6 +466,8 @@ class _MessageBubbleState extends State<MessageBubble> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.status);
+    var date = DateFormat.yMMMEd().format(DateTime.parse(widget.date));
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
       color: widget.color,
@@ -403,8 +476,11 @@ class _MessageBubbleState extends State<MessageBubble> {
           GestureDetector(
             child: ListTile(
               onTap: () {
-                Navigator.of(context).pushNamed(ComplaintDetails.routeName,
-                    arguments: widget.complaintId);
+                Navigator.of(context)
+                    .pushNamed(ComplaintDetails.routeName, arguments: {
+                  'complaintId': widget.complaintId,
+                  'path': widget.path,
+                });
               },
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 6, horizontal: 23),
@@ -419,7 +495,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 ),
               ),
               subtitle: Text(
-                'Formatted Date',
+                date == null ? 'Formatted date' : date.toString(),
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1.color,
                   fontSize: 12,

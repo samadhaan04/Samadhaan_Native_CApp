@@ -1,12 +1,13 @@
 import 'package:faridabad/main.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/adminScreens/statsBoxes.dart';
-import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/loginScreen.dart';
 import 'package:faridabad/adminScreens/listOfDepartments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InputData extends StatefulWidget {
+
   static const routeName = '/input-data';
 
   @override
@@ -51,7 +52,7 @@ class _InputDataState extends State<InputData> {
           automaticallyImplyLeading: false,
           actions: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
               child: DropdownButton(
                 underline: Container(),
                 onChanged: (value) async {
@@ -80,14 +81,6 @@ class _InputDataState extends State<InputData> {
               ),
             ),
           ],
-          titleSpacing: -6.0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-            ),
-            onPressed: () => Navigator.of(context)
-                .pushReplacementNamed(HomeScreen.routeName),
-          ),
           title: Text(
             'Palwal,Haryana',
             style: TextStyle(

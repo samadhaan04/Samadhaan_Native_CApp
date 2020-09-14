@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
+import 'package:faridabad/data/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/showModal.dart';
 
 class ComplaintDetails extends StatefulWidget {
@@ -17,24 +19,54 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   bool expandedImg = true;
   bool expandedLog = true;
   bool expandedReq = true;
+  bool request = true;
+  bool pressed = true;
+  bool feedback = true;
+  var department;
+  var requestText = "Enter Request";
+  TextEditingController reqORfeed = TextEditingController();
   var ref;
+  var previouspath;
+  int selectitem = 1;
+  var user;
+  // TextEditingController requestFromDepartment = TextEditingController();
+  String requestFromDepartment;
+  List logs;
   Firestore _firestore;
+
+  var previousDepartment;
+  var transferToDepartment;
 
   @override
   void initState() {
     _firestore = Firestore.instance;
+    getCurrentUserAndFetchDetails();
     super.initState();
   }
 
+  void getCurrentUserAndFetchDetails() async {
+    var pref = await SharedPreferences.getInstance();
+    setState(() {
+      user = pref.getString('currentUser');
+      print(' requestfromDepartment $requestFromDepartment');
+    });
+  }
+
   @override
-  void didChangeDependencies() {
-    ref = ModalRoute.of(context).settings.arguments;
+  void didChangeDependencies() async {
+    dynamic arguments = ModalRoute.of(context).settings.arguments;
+    ref = arguments['complaintId'];
+    previouspath = arguments['path'];
+
     super.didChangeDependencies();
   }
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         iconTheme: IconThemeData(color: Colors.grey),
@@ -68,6 +100,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 var data = snapshot.data.data;
                 var date =
                     DateFormat.yMMMEd().format(DateTime.parse(data['date']));
+                requestFromDepartment = data['transferRequest'] == ''
+                    ? null
+                    : data['transferRequest'];
+                previousDepartment = data['department'];
+                transferToDepartment = data['transferToDepartment'] == ''
+                    ? null
+                    : data['transferToDepartment'];
+                logs = data['logs'];
                 return Column(
                   children: <Widget>[
                     ReusableCardComplaint(
@@ -95,12 +135,32 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xffFF4A2B),
-                                        Color(0xffFE7325),
-                                      ],
-                                    ),
+                                    gradient: data['status'] == 0
+                                        ? LinearGradient(
+                                            colors: [
+                                              Color(0xfff4b601),
+                                              Color(0xffffee77),
+                                            ],
+                                          )
+                                        : data['status'] == 1
+                                            ? LinearGradient(
+                                                colors: [
+                                                  Color(0xff51b328),
+                                                  Color(0xff85eb29),
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                              )
+                                            : LinearGradient(
+                                                colors: [
+                                                  Color.fromRGBO(
+                                                      236, 93, 59, 0.8),
+                                                  Color.fromRGBO(
+                                                      238, 120, 61, 0.8),
+                                                ],
+                                                begin: Alignment.centerLeft,
+                                                end: Alignment.centerRight,
+                                              ),
                                   ),
                                 ),
                               )
@@ -146,9 +206,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       child: Column(
                         children: <Widget>[
                           descExpansion(data['complaintText']),
-                          imgExpansion(data['imageURL']),
-                          logExpansion(),
-                          reqExpansion(),
+                          data['imageURL'] == null
+                              ? Container()
+                              : imgExpansion(data['imageURL']),
+                          logs.length != 0 ? logExpansion() : Container(),
+                          user == 'admin'
+                              ? requestFromDepartment != null
+                                  ? reqExpansionAdmin()
+                                  : Container()
+                              : actionExpansionDepartment(),
                         ],
                       ),
                     )
@@ -192,6 +258,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               ),
               SingleChildScrollView(
                 child: Container(
+                  width: double.infinity,
                   decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.08),
                       shape: BoxShape.rectangle,
@@ -305,16 +372,31 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   Widget imageBox(var imageUrl) {
-    print(imageUrl);
+    // print(imageUrl);
     return Container(
       margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(10),
-      // decoration: BoxDecoration(
-      //   border: Border.all(
-      //     color: Colors.black,
-      //   ),
-      // ),
-      child: Image.network(imageUrl),
+      child: GestureDetector(
+        child: Hero(
+          tag: 'image',
+          child: Image.network(imageUrl),
+        ),
+        onTap: () {
+          showDialog(
+            context: context,
+            child: AlertDialog(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              title: Hero(
+                tag: 'image',
+                child: Image.network(imageUrl),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -348,23 +430,61 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               SizedBox(
                 height: 5,
               ),
-              SingleChildScrollView(
-                child: Container(
+              Container(
+                  width: double.infinity,
                   decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.08),
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
-                  child: Text(
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-                    softWrap: true,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).textTheme.bodyText1.color,
+                  padding: EdgeInsets.symmetric(vertical: 25, horizontal: 25),
+                  child: Container(
+                    width: double.infinity,
+                    height:
+                        logs.length * 40.0 < 150.0 ? logs.length * 40.0 : 150,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: logs.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color,
+                                ),
+                                height: 20,
+                                width: 5,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Container(
+                                width: 300,
+                                child: Text(
+                                  logs[index],
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                ),
-              )
+                  ))
             ],
           )
         : Row(
@@ -392,10 +512,402 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           );
   }
 
-  //************************************************REQUEST*********************************************/
+  //************************************************REQUEST*************************************  ********/
+  Widget actionExpansionDepartment() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Actions',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            !request || !feedback
+                ? FlatButton(
+                    onPressed: () {
+                      setState(() {
+                        request = true;
+                        feedback = true;
+                        pressed = true;
+                        department = null;
+                        reqORfeed.text = "";
+                      });
+                    },
+                    child: Text(
+                      "Go back <--",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
+        SizedBox(
+          height: 14,
+        ),
+        pressed
+            ? SingleChildScrollView(
+                child: Container(
+                  padding:
+                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buttonFlat(
+                        "Feedback",
+                        () {
+                          setState(() {
+                            pressed = false;
+                            feedback = false;
+                            request = true;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      buttonFlat(
+                        "Request Transfer",
+                        () {
+                          setState(() {
+                            pressed = false;
+                            feedback = true;
+                            request = false;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : request
+                ? Column(
+                    children: <Widget>[
+                      textField(
+                        'Enter Feedback',
+                      ),
+                      Center(
+                        child: FlatButton(
+                            onPressed: () {
+                              sendFeedbackFromDepartment();
+                            },
+                            child: Text(
+                              'Send Feedback',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      )
+                    ],
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        textField(requestText),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(5),
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              FlatButton(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 7),
+                                shape: Border.all(color: Colors.white),
+                                child: Text(
+                                  department == null
+                                      ? "Select Department"
+                                      : department,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  ),
+                                  softWrap: true,
+                                ),
+                                onPressed: () {
+                                  showModal(context);
+                                },
+                              ),
+                              SizedBox(
+                                width: 14,
+                              ),
+                              FlatButton(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 7),
+                                shape: Border.all(color: Colors.white),
+                                child: Text(
+                                  "Submit Transfer Request",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  ),
+                                  softWrap: true,
+                                ),
+                                onPressed: () async {
+                                  if ((department == null ||
+                                          department == "None") &&
+                                      reqORfeed.text.isEmpty) {
+                                    showSnackbar("Please Fill Information");
+                                  } else if (department == null) {
+                                    showSnackbar("Please Select Department");
+                                  } else if (reqORfeed.text.isEmpty) {
+                                    showSnackbar('Please Enter Request');
+                                  } else {
+                                    submitTransferRequest();
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+        SizedBox(
+          height: 15,
+        ),
+        FlatButton(
+          padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+          shape: Border.all(color: Colors.white),
+          child: Text(
+            "Mark Complete",
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+            ),
+          ),
+          onPressed: () {
+            markComplete();
+          },
+        ),
+        SizedBox(
+          height: 20,
+        ),
+      ],
+    );
+  }
 
-  Widget reqExpansion() {
-    TextEditingController request = TextEditingController();
+  void sendFeedbackFromDepartment() {
+    logs.add('$previousDepartment : ${reqORfeed.text}');
+    _firestore.document(ref).updateData({
+      "deptFeedback": reqORfeed.text,
+      'logs': logs,
+    }).then((value) {
+      setState(() {
+        reqORfeed.text = '';
+      });
+    });
+    showSnackbar('Feedback Sent Successfully!!');
+  }
+
+  void markComplete() {
+    logs.add('$previousDepartment : Completed the Complaint');
+    _firestore.document(ref).updateData({
+      'status': 1,
+      'logs': logs,
+    }).then((value) {
+      _firestore.document(previouspath).updateData({
+        'status': 1,
+      });
+    }).then((value) {
+      Navigator.of(context).pop();
+    });
+  }
+
+  void submitTransferRequest() {
+    logs.add(
+        '$previousDepartment Requested Transfer of Complaint to $department');
+    _firestore.document(ref).updateData({
+      'transferRequest': reqORfeed.text,
+      'transferToDepartment': department,
+      'logs': logs,
+      'status': 2,
+    }).then((value) {
+      reqORfeed.text = '';
+      _firestore.document(previouspath).updateData({
+        'status': 2,
+      }).then((value) {
+        Navigator.of(context).pop();
+      });
+    });
+  }
+
+  void dismissRequest() {
+    logs.add('Transfer Request Disapproved');
+    _firestore.document(ref).updateData({
+      'status': 0,
+      'transferRequest': null,
+      'transferToDepartment': null,
+      'logs': logs,
+    }).then((value) {
+      _firestore.document(previouspath).updateData({
+        'status': 0,
+      }).then((value) {
+        Navigator.of(context).pop();
+      });
+    });
+  }
+
+  void confirmAction() {
+    transferComplaintToanotherDepartmentInReference();
+    logs.add('Transfer Request Approved');
+    var p;
+    _firestore.document(previouspath).delete();
+    var referenceParentPath =
+        _firestore.document(previouspath).parent().parent().path;
+    print('path $referenceParentPath');
+    _firestore.document(referenceParentPath).get().then((value) {
+      p = value.data['p'];
+    }).whenComplete(() {
+      _firestore.document(referenceParentPath).updateData({'p': p - 1});
+    }).whenComplete(() {
+      _firestore.document(ref).updateData({
+        'status': 0,
+        'department': transferToDepartment,
+        'transferRequest': null,
+        'transferToDepartment': null,
+        'logs': logs,
+        'deptFeedback': null,
+      }).whenComplete(() {
+        Navigator.of(context).pop();
+      });
+    });
+  }
+
+  void transferComplaintToanotherDepartmentInReference()  {
+    var subject, date;
+    _firestore.document(ref).get().then((value) {
+      subject = value.data['subject'];
+      date = value.data['date'];
+    }).whenComplete(() async {
+      int length;
+      
+      await _firestore
+          .collection("States/Haryana/Palwal")
+          .document(transferToDepartment)
+          .get()
+          .then((value) {
+        if (value.data != null) {
+          length = value.data['p'];
+        }
+      }).catchError((e) {
+        _firestore
+          .collection("States/Haryana/Palwal")
+          .document(transferToDepartment)
+          .setData({"p": 1});
+        length = 0;
+      });
+
+      if (length != 0) {
+        _firestore
+            .collection("States/Haryana/Palwal")
+            .document(transferToDepartment)
+            .setData({"p": length + 1});
+      }
+
+      _firestore
+          .document('States/Haryana/Palwal/$transferToDepartment')
+          .collection('Complaints')
+          .add({
+        'ref': ref,
+        'subject': subject,
+        'status': 0,
+        'date': date,
+      }).then((value) {
+        print("Success");
+        return true;
+      });
+    });
+  }
+
+  void showSnackbar(String message) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.blue,
+        content: Text(
+          message,
+        ),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void showModal(context) {
+    var items = depts;
+    showModalBottomSheet(
+        isScrollControlled: false,
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (context) {
+          return Container(
+            height: 300,
+            child: Column(
+              children: [
+                Container(
+                  child: FlatButton(
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Done",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.blueAccent,
+                      ),
+                    ),
+                    shape: CircleBorder(
+                        side: BorderSide(
+                      color: Colors.transparent,
+                    )),
+                  ),
+                ),
+                Expanded(
+                  child: CupertinoPicker(
+                    magnification: 1.5,
+                    diameterRatio: 100.0,
+                    scrollController:
+                        FixedExtentScrollController(initialItem: 5),
+                    backgroundColor: Color(0xffd0d5da),
+                    children: List<Widget>.generate(
+                      items.length,
+                      (index) => Center(
+                        child: Text(
+                          items[index],
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    itemExtent: 50, //height of each item
+                    looping: false,
+                    onSelectedItemChanged: (int index) {
+                      setState(() {
+                        selectitem = index;
+                        department = items[selectitem];
+                        print('department $department');
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget reqExpansionAdmin() {
     return expandedReq
         ? Wrap(
             children: <Widget>[
@@ -434,16 +946,21 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                         borderRadius: BorderRadius.circular(15)),
                     padding: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
                     child: TextFormField(
+                      readOnly: true,
                       maxLines: 4,
-                      controller: request,
+                      initialValue: requestFromDepartment,
+                      // controller: request,
                       minLines: 1,
                       decoration: InputDecoration(border: InputBorder.none),
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color,
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  ShowModalDrop(), //FUNCTION***************************//
+                  // ShowModalDrop(), //FUNCTION***************************//
                   SizedBox(
                     height: 10,
                   ),
@@ -452,14 +969,18 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     children: <Widget>[
                       UtilButton(
                         childtext: 'Dismiss Request',
-                        onpress: () {},
+                        onpress: () {
+                          dismissRequest();
+                        },
                       ),
                       SizedBox(
                         width: 25,
                       ),
                       UtilButton(
                         childtext: 'Confirm Action',
-                        onpress: () {},
+                        onpress: () {
+                          confirmAction();
+                        },
                       ),
                     ],
                   ),
@@ -493,6 +1014,47 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               )
             ],
           );
+  }
+
+  Widget textField(String text) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.white,
+        ),
+      ),
+      child: TextField(
+        controller: reqORfeed,
+        decoration: InputDecoration(
+          hintText: text,
+          hintStyle: TextStyle(
+            color: Colors.white.withOpacity(0.5),
+          ),
+        ),
+        maxLines: null,
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.white,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget buttonFlat(String childtext, Function pressed) {
+    return FlatButton(
+      padding: EdgeInsets.all(20),
+      shape: Border.all(color: Colors.white),
+      child: Text(
+        childtext,
+        style: TextStyle(
+          fontSize: 15,
+          color: Colors.white,
+        ),
+      ),
+      onPressed: pressed,
+    );
   }
 }
 

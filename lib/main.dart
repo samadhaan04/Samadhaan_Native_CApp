@@ -1,23 +1,38 @@
 import 'package:faridabad/adminScreens/ComplaintScreen.dart';
-import 'package:faridabad/main3.dart';
+import 'package:faridabad/adminScreens/departmentComplaintDescription.dart';
+import 'package:faridabad/adminScreens/adminUI.dart';
 import 'package:faridabad/clientScreens/authScreen.dart';
 import 'package:faridabad/clientScreens/base.dart';
 import 'package:faridabad/adminScreens/complaint_details.dart';
 import 'package:faridabad/clientScreens/filecomplaint.dart';
-import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/loginScreen.dart';
 import 'package:faridabad/adminScreens/departments.dart';
 import 'package:faridabad/clientScreens/previouscomplaints.dart';
 import 'package:faridabad/clientScreens/showcomplaintNew.dart';
 import 'package:faridabad/clientScreens/splash_screen.dart';
 import 'package:faridabad/clientScreens/user_info.dart';
+import 'package:faridabad/providers/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import './data/appTheme.dart';
+import 'data/appTheme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   runApp(
-    ChangeNotifierProvider<AppStateNotifier>(
-      create: (context) => AppStateNotifier(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppStateNotifier>(
+          create: (context) => AppStateNotifier(),
+        ),
+        ChangeNotifierProvider<User>(
+          create: (context) => User(),
+        ),
+      ],
       child: MyApp(),
     ),
   );
@@ -36,19 +51,9 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: value.isDarkMode ? ThemeMode.light : ThemeMode.dark,
-          // theme: ThemeData(
-          //   primarySwatch: Colors.blue,
-          // primaryColor: Color(0xFF0A0E21),
-          // scaffoldBackgroundColor: Color(0xFF0A0E21),
-          // textTheme: TextTheme(
-          //   bodyText1: TextStyle(
-          //     color: Colors.white,
-          //   ),
-          // ),
-          //   visualDensity: VisualDensity.adaptivePlatformDensity,
-          // ),
           home: SplashScreen(),
           routes: {
+            ShowComplaintsNew1.routeName: (ctx) => ShowComplaintsNew1(),
             AuthScreen.routeName: (ctx) => AuthScreen(),
             HomeScreen.routeName: (ctx) => HomeScreen(),
             UserInfoScreen.routeName: (ctx) => UserInfoScreen(),
@@ -71,6 +76,7 @@ class MyApp extends StatelessWidget {
 class AppStateNotifier extends ChangeNotifier {
   //
   bool isDarkMode = false;
+  var user;
 
   void updateTheme(bool isDarkMode) {
     this.isDarkMode = isDarkMode;

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ShowComplaintsNew extends StatefulWidget {
+class ShowComplaintsNew1 extends StatefulWidget {
+  static const routeName = "/yoscjns";
   @override
-  _ShowComplaintsNewState createState() => _ShowComplaintsNewState();
+  _ShowComplaintsNew1State createState() => _ShowComplaintsNew1State();
 }
 
-class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
+class _ShowComplaintsNew1State extends State<ShowComplaintsNew1> {
   bool expandedDesc = true;
   bool expandedImg = true;
   bool expandedLog = true;

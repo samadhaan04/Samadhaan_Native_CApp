@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/clientScreens/filecomplaint.dart';
-import 'package:faridabad/clientScreens/loginScreen.dart';
+import 'package:faridabad/loginScreen.dart';
 import 'package:faridabad/clientScreens/previouscomplaints.dart';
 import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
