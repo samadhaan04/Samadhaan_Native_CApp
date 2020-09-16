@@ -1,12 +1,10 @@
 import 'dart:async';
-
 import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/providers/auth.dart';
-import 'package:faridabad/screens/fileComplaint2.dart';
-import 'package:faridabad/screens/filecomplaint.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/previouscomplaints.dart';
-import 'package:faridabad/screens/user_info.dart';
+import 'package:faridabad/clientScreens/filecomplaint.dart';
+import 'package:faridabad/loginScreen.dart';
+import 'package:faridabad/clientScreens/previouscomplaints.dart';
+import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -274,7 +272,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                     InkWell(
                                       onTap: () {
                                         Navigator.of(context).pushNamed(
-                                            PreviousComplanints.routeName);
+                                            PreviousComplaints.routeName);
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(0),

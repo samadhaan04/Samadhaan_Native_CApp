@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 List<String> depts = [
   "None",
@@ -8,7 +7,7 @@ List<String> depts = [
   "Civil Hospital",
   "DHBVN(Urban)",
   "DHBVN(Rural)",
-  "Distt. Town planner ",
+  "Distt. Town planner",
   "Education(Elementary)",
   "Education(Higher)",
   "Fire Department",
@@ -22,6 +21,28 @@ List<String> depts = [
   "Social Welfare",
   "Tehsil"
 ];
+
+Map<String, String> emailValue = {
+  'animal@samadhaan.com': 'Animal Husbandry',
+  'bdpo@samadhaan.com': 'BDPO',
+  'civilh@samadhaan.com': 'Civil Hospital',
+  'dhbvnu@samadhaan.com': 'DHBVN(Urban)',
+  'dhbvnr@samadhaan.com': 'DHBVN(Rural)',
+  'dtownPlanner@samadhaan.com': 'Distt. Town planner',
+  'elementaryedu@samadhaan.com': 'Education(Elementary)',
+  'higheredu@samadhaan.com': 'Education(Higher)',
+  'firedepartment@samadhaan.com': 'Fire Department',
+  'hvpnl@samadhaan.com': 'HVPNL',
+  'irrigation@samadhaan.com': "Irrigation",
+  'nagarparishad@samadhaan.com': "Nagar Parishad",
+  'pwd@samadhaan.com': "PWD",
+  'publicwater@samadhaan.com': "PUBLIC HEALTH(Water)",
+  'publicsewage@samadhaan.com': "Public health(Sewage)",
+  'publicrenywell@samadhaan.com': "Public health (Reny Well)",
+  'socialwelfare@samadhaan.com': "Social Welfare",
+  'tehsil@samadhaan.com': "Tehsil",
+  'rishi@rishi.com' : 'admin'
+};
 
 List<String> getStateList() {
   List<String> wards = [];
@@ -37,12 +58,12 @@ List<String> getcities(state) {
     return constituencies;
   }
   if (state == "Delhi") {
-    var constituencies = ["None","Rkpuram"];
+    var constituencies = ["None", "Rkpuram"];
     return constituencies;
-  }
-  else
-  {
-    var constituencies = ["None",];
+  } else {
+    var constituencies = [
+      "None",
+    ];
     return constituencies;
   }
 }

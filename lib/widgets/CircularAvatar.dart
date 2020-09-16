@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'complaint.dart';
+import '../data/complaint.dart';
 
 class CircularAvatar extends StatelessWidget {
   final ComplaintStatus status;
@@ -60,8 +60,8 @@ class CircularAvatar extends StatelessWidget {
           shape: BoxShape.circle,
           gradient: LinearGradient(
             colors: [
-              Color(0xffff4A2B),
-              Color(0xffFE7325),
+              Color.fromRGBO(236, 93, 59, 0.8),
+              Color.fromRGBO(238, 120, 61, 0.8),
             ],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,

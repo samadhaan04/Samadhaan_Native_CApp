@@ -27,8 +27,8 @@ class ReusableCardComplaint extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: cardChild,
-      margin: EdgeInsets.symmetric(horizontal: 6.0, vertical: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      margin: EdgeInsets.symmetric(horizontal: 3, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         color: colour,
         borderRadius: BorderRadius.circular(15.0),

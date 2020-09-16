@@ -1,12 +1,13 @@
 import 'package:faridabad/main.dart';
 import 'package:faridabad/providers/auth.dart';
-import 'package:faridabad/screens/coloured.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/list.dart';
+import 'package:faridabad/adminScreens/statsBoxes.dart';
+import 'package:faridabad/loginScreen.dart';
+import 'package:faridabad/adminScreens/listOfDepartments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class InputData extends StatefulWidget {
+
   static const routeName = '/input-data';
 
   @override
@@ -39,18 +40,19 @@ class _InputDataState extends State<InputData> {
         false;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-          child: Scaffold(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           iconTheme: IconThemeData(color: Colors.grey),
           automaticallyImplyLeading: false,
           actions: <Widget>[
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
               child: DropdownButton(
                 underline: Container(),
                 onChanged: (value) async {
@@ -79,14 +81,12 @@ class _InputDataState extends State<InputData> {
               ),
             ),
           ],
-          titleSpacing: -6.0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
+          title: Text(
+            'Palwal,Haryana',
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodyText1.color,
             ),
-            onPressed: () => Navigator.of(context).pop(),
           ),
-          title: Text('Palwal,Haryana'),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

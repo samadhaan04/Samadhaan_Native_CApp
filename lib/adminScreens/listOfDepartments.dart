@@ -1,8 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faridabad/main2.dart';
-import 'package:faridabad/screens/department.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:flutter/material.dart';
 
 class ListOfDepartments extends StatefulWidget {
@@ -24,35 +22,6 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
     super.initState();
   }
 
-  // void fetchDepartments() async {
-  //   setState(() {
-  //     loading = true;
-  //   });
-  //   await databaseReference
-  //       .collection('States/Haryana/Palwal')
-  //       .getDocuments()
-  //       .then((value) {
-  //     value.documents.forEach((element) async {
-  //       await databaseReference
-  //           .collection(
-  //               'States/Haryana/Palwal/${element.documentID.toString()}/Complaints')
-  //           .getDocuments()
-  //           .then((value) {
-  //         String name = element.documentID.toString();
-  //         Map<String, int> entry = {name: value.documents.length};
-  //         listOfDepartments.add(entry);
-  //       });
-  //       setState(() {
-
-  //       });
-  //       // listOfDepartments.;
-  //     });
-  //   });
-  //   setState(() {
-  //     loading = false;
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -62,41 +31,42 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
         if (snapshot.hasData) {
           snapshot.data.documents.forEach((val) {
             print(val.documentID.toString());
-            listOfDepartments.add({val.documentID.toString() : val['p']});
+            listOfDepartments.add({val.documentID.toString(): val['p']});
           });
           return Container(
             child: ListView.builder(
               key: GlobalKey(),
-              // shrinkWrap: true,
               itemCount: listOfDepartments.length,
               itemBuilder: (context, index) {
                 return Container(
-                  // color: Colors.green,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 1,
-                    horizontal: 10,
-                  ),
+                  margin: EdgeInsets.fromLTRB(6, 4, 12, 5),
                   decoration: BoxDecoration(
                     // color: Colors.red,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Badge(
-                    badgeColor: Colors.red,
-                    badgeContent: Text('3'),
+                    badgeColor: Colors.red.withOpacity(0.55),
+                    badgeContent: Text(
+                      '3',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     alignment: Alignment.centerRight,
                     animationType: BadgeAnimationType.scale,
                     animationDuration: Duration(seconds: 1),
                     child: Card(
-                      // margin: EdgeInsets.all(value),
-                      color: Color(0xFF0A0E21),
+                      color: Theme.of(context).disabledColor,
+                      //Color(0xFF0A0E21),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Color(0xff211E2B),
+                          color: Theme.of(context).disabledColor,
+                          // Color(0xff211E2B),
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: InkWell(
                           onTap: () {
-                            Navigator.of(context).pushNamed(AdminApp.routeName,
+                            Navigator.of(context).pushNamed(
+                                ComplaintScreen.routeName,
                                 arguments: listOfDepartments[index]
                                     .keys
                                     .single
@@ -107,12 +77,12 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Color(0xff211E2B),
+                                  color: Theme.of(context).disabledColor,
                                   // color: Colors.green,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 50, horizontal: 20),
+                                    vertical: 40, horizontal: 15),
                                 child: Text(
                                   // dept[index].department,
                                   listOfDepartments[index]
@@ -120,21 +90,34 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                       .single
                                       .toString(),
                                   style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Nunito',
                                     fontSize: 22,
                                   ),
                                 ),
                               ),
-                              Text(
-                                // '1     ',
-                                listOfDepartments[index]
-                                    .values
-                                    .single
-                                    .toString() + "    ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 40, horizontal: 5),
+                                child: Text(
+                                  // '1     ',
+                                  listOfDepartments[index]
+                                          .values
+                                          .single
+                                          .toString() +
+                                      "    ",
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
                                 ),
                               ),
                             ],
@@ -147,9 +130,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
               },
             ),
           );
-        }
-        else
-        {
+        } else {
           return CircularProgressIndicator();
         }
       },

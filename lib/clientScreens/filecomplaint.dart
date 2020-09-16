@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/widgets/modalSheet.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -20,6 +21,7 @@ class _FileComplaintState extends State<FileComplaint>
     with SingleTickerProviderStateMixin {
   final databaseReference = Firestore.instance;
   final _auth = FirebaseAuth.instance;
+  List listOfDepartments = depts;
   bool isupdate = false;
   double width, height;
   bool loading = false;
@@ -40,29 +42,9 @@ class _FileComplaintState extends State<FileComplaint>
   TextEditingController _subjectController = new TextEditingController();
   String _department;
   List _images = [];
-  var urls = [];
   File _image;
-  final List<String> depts = [
-    "None",
-    "Animal Husbandry",
-    "BDPO",
-    "Civil Hospital",
-    "DHBVN(Urban)",
-    "DHBVN(Rural)",
-    "Distt. Town planner ",
-    "Education(Elementary)",
-    "Education(Higher)",
-    "Fire Department",
-    "HVPNL",
-    "Irrigation",
-    "Nagar Parishad",
-    "PWD",
-    "PUBLIC HEALTH(Water)",
-    "Public health(Sewage)",
-    "Public health (Reny Well)",
-    "Social Welfare",
-    "Tehsil"
-  ];
+  
+  
 
   void showModalSheet(BuildContext context) {
     showModalBottomSheet(
@@ -102,6 +84,7 @@ class _FileComplaintState extends State<FileComplaint>
     return Scaffold(
       key: _scaffoldKey,
       body: Container(
+        color: Colors.white,
         child: ListView(
           children: <Widget>[
             Container(
@@ -168,41 +151,6 @@ class _FileComplaintState extends State<FileComplaint>
                           Container(
                             padding: EdgeInsets.symmetric(vertical: 10),
                             width: double.infinity,
-                            // child: DropdownButton(
-                            //   style: TextStyle(
-                            //     fontSize: 21,
-                            //   ),
-                            //   // dropdownColor: Colors.red,
-                            //   hint: Text(
-                            //     'Select Department ',
-                            //     style: TextStyle(
-                            //       color: Colors.black54,
-                            //     ),
-                            //   ), // Not necessary for Option 1
-                            //   value: _department,
-                            //   isExpanded: true,
-                            //   underline: Container(
-                            //     color: Colors.black45,
-                            //     child: Divider(
-                            //       thickness: 1,
-                            //       height: 1,
-                            //     ),
-                            //   ),
-                            //   onChanged: (newValue) {
-                            //     setState(() {
-                            //       _department = newValue;
-                            //     });
-                            //   },
-                            //   items: depts.map((location) {
-                            //     return DropdownMenuItem(
-                            //       child: new Text(
-                            //         location,
-                            //         style: TextStyle(color: Colors.black54),
-                            //       ),
-                            //       value: location,
-                            //     );
-                            //   }).toList(),
-                            // ),
                             child: GestureDetector(
                               child: Container(
                                 padding: EdgeInsets.all(5),
@@ -213,8 +161,9 @@ class _FileComplaintState extends State<FileComplaint>
                                 child: Row(
                                   children: [
                                     Text(
-                                      _department == null ? 
-                                      "Select Department" : _department,
+                                      _department == null
+                                          ? "Select Department"
+                                          : _department,
                                       style: TextStyle(
                                         fontSize: 21,
                                         color: Colors.black54,
@@ -339,8 +288,7 @@ class _FileComplaintState extends State<FileComplaint>
                                             final pickedImage =
                                                 await picker.getImage(
                                                     source: ImageSource.gallery,
-                                                    imageQuality: 60,
-                                                    maxWidth: 150);
+                                                    imageQuality: 50,);
                                             setState(() {
                                               _image = File(pickedImage.path);
                                               _images.add(_image);
@@ -359,8 +307,7 @@ class _FileComplaintState extends State<FileComplaint>
                                             final pickedImage =
                                                 await picker.getImage(
                                                     source: ImageSource.camera,
-                                                    imageQuality: 60,
-                                                    maxWidth: 150);
+                                                    imageQuality: 50,);
                                             setState(() {
                                               _image = File(pickedImage.path);
                                               _images.add(_image);
@@ -587,21 +534,9 @@ class _FileComplaintState extends State<FileComplaint>
   }
 
   Future<bool> sendData() async {
+    var urls = [];
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
-      if (_images.length != 0) {
-        _images.forEach((element) async {
-          final ref2 = FirebaseStorage.instance
-              .ref()
-              .child('complaintImages')
-              .child(uid + DateTime.now().toIso8601String() + '.jpg');
-          await ref2.putFile(_image).onComplete;
-          var url = await ref2.getDownloadURL();
-          print(url);
-          urls.add(url);
-        });
-      }
-      print(urls);
       DocumentReference ref =
           await databaseReference.collection("Complaints").add({
         'author': uid,
@@ -620,7 +555,26 @@ class _FileComplaintState extends State<FileComplaint>
         'star': null,
         'date': DateTime.now().toIso8601String(),
         'token': pref.getString('token'),
+        'transferToDepartment' : null,
+        'transferRequest' : null,
+        'logs' : [],
+
       });
+      if (_images.length != 0) {
+        _images.forEach((element) async {
+          final ref2 = FirebaseStorage.instance
+              .ref()
+              .child('complaintImages')
+              .child(uid + DateTime.now().toIso8601String() + '.jpg');
+          await ref2.putFile(element).onComplete;
+          await ref2.getDownloadURL().then((value) {
+            urls.add(value);
+          }).then((value) {
+            databaseReference.document(ref.path).updateData({'imageURL': urls});
+          });
+        });
+      }
+
       print("start check");
       await databaseReference
           .collection("Users/$uid/previousComplaints")
@@ -648,17 +602,13 @@ class _FileComplaintState extends State<FileComplaint>
       }
 
       await databaseReference
-          // .collection("States/Haryana/Palwal")
           .document('States/Haryana/Palwal/$_department')
-          // .document(_department)
           .collection('Complaints')
           .add({
         'ref': ref.path,
         'subject': _subjectController.text,
         'status': 0,
-        // .document()
-        // .setData({
-        // 'ref': ref.path,
+        'date' : DateTime.now().toIso8601String(),
       }).then((value) {
         print("Success");
         return true;
@@ -708,10 +658,10 @@ class _FileComplaintState extends State<FileComplaint>
                         FixedExtentScrollController(initialItem: 5),
                     backgroundColor: Color(0xffd0d5da),
                     children: List<Widget>.generate(
-                      depts.length,
+                      listOfDepartments.length,
                       (index) => Center(
                         child: Text(
-                          depts[index],
+                          listOfDepartments[index],
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
@@ -720,7 +670,7 @@ class _FileComplaintState extends State<FileComplaint>
                     looping: false,
                     onSelectedItemChanged: (int index) {
                       setState(() {
-                        _department = depts[index];
+                        _department = listOfDepartments[index];
                         print(_department);
                       });
                     },

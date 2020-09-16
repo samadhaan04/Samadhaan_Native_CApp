@@ -1,6 +1,6 @@
 import 'package:faridabad/data/constants.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/showcomplaint.dart';
+import 'package:faridabad/loginScreen.dart';
+import 'package:faridabad/clientScreens/showcomplaintNew.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,13 +12,13 @@ FirebaseUser loggedInUser;
 String email;
 int sort = 0;
 
-class PreviousComplanints extends StatefulWidget {
+class PreviousComplaints extends StatefulWidget {
   static const routeName = '/previous-complaints';
   @override
-  PreviousComplanintsState createState() => (PreviousComplanintsState());
+  PreviousComplaintsState createState() => (PreviousComplaintsState());
 }
 
-class PreviousComplanintsState extends State<PreviousComplanints> {
+class PreviousComplaintsState extends State<PreviousComplaints> {
 // final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
   String messageText;
@@ -49,39 +49,36 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 4,
-        title: FittedBox(
-          fit: BoxFit.contain,
-          child: RichText(
-            text: TextSpan(
-                text: "COMPLA",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 35,
-                    letterSpacing: 1,
-                    color: Colors.black),
-                children: <TextSpan>[
-                  TextSpan(
-                      text: "INTS",
-                      style: TextStyle(
-                          letterSpacing: 1,
-                          fontSize: 35,
-                          color: Colors.grey[500],
-                          fontFamily: "Sans Serif"))
-                ]),
-          ),
-        ),
-      ),
       body: SafeArea(
         child: Container(
+          color: Colors.white,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 20),
+                alignment: Alignment.center,
+                child: RichText(
+                  text: TextSpan(
+                      text: "COMPLA",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                          letterSpacing: 1,
+                          color: Colors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "INTS",
+                            style: TextStyle(
+                                letterSpacing: 1,
+                                fontSize: 40,
+                                color: Colors.grey[500],
+                                fontFamily: "Sans Serif"))
+                      ]),
+                ),
+              ),
               MessagesStream(uid),
             ],
           ),
@@ -91,7 +88,7 @@ class PreviousComplanintsState extends State<PreviousComplanints> {
   }
 }
 
-List<Widget> getBubbles(list) {
+List<Widget> getBubbles(List list) {
   List<Widget> messageBubbles = [];
   if (list != null) {
     for (var l in list) {
@@ -105,10 +102,11 @@ List<Widget> getBubbles(list) {
               } else {
                 // print(l.documentID);
                 return MessageBubble(
-                  complaint: snapshot.data['complaintText'],
+                  subject: snapshot.data['subject'],
                   department: snapshot.data['department'],
                   status: snapshot.data['status'].toString(),
                   complaintId: snapshot.data.documentID,
+                  index: list.indexOf(l),
                 );
               }
             },
@@ -128,7 +126,7 @@ class MessagesStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('uid $uid');
+    // print('uid $uid');
     return StreamBuilder(
         stream:
             _firestore.collection('Users/$uid/previousComplaints').snapshots(),
@@ -142,7 +140,7 @@ class MessagesStream extends StatelessWidget {
           } else {
             final list = value.data.documents;
             var messageBubbles = getBubbles(list);
-            print('l ${list.length}');
+            // print('l ${list.length}');
             if (messageBubbles.length == 0) {
               return Expanded(
                 child: Center(
@@ -168,14 +166,16 @@ class MessagesStream extends StatelessWidget {
 class MessageBubble extends StatefulWidget {
   MessageBubble({
     this.status,
-    this.complaint,
+    this.subject,
     this.complaintId,
     this.department,
+    this.index,
   });
   final String status;
-  final String complaint;
+  final String subject;
   final String complaintId;
   final String department;
+  final index;
   @override
   _MessageBubbleState createState() => _MessageBubbleState();
 }
@@ -188,61 +188,56 @@ class _MessageBubbleState extends State<MessageBubble> {
   String _status;
   @override
   Widget build(BuildContext context) {
+    print('index ${widget.index}');
     return Container(
-      margin: EdgeInsets.all(10),
+      key: GlobalKey(),
+      margin: EdgeInsets.all(5),
       child: Column(
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.of(context).pushNamed(ShowComplaint.routeName,
+              Navigator.of(context).pushNamed(ShowComplaintsNew.routeName,
                   arguments: widget.complaintId);
             },
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    widget.status == '0' ? Colors.blue[300] : Colors.green[300],
-                    widget.status == '0' ? Colors.blue[200] : Colors.green[200],
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                borderRadius: BorderRadius.circular(15),
-              ),
+                  borderRadius: BorderRadius.circular(15),
+                  color: widget.index % 2 == 0
+                      ? Color.fromRGBO(244, 244, 244, 1)
+                      : Colors.white,
+                  border: widget.index % 2 != 0
+                      ? Border.all(
+                          color: Colors.grey[400],
+                        )
+                      : null),
               child: Container(
-                padding: EdgeInsets.all(30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
+                  padding: EdgeInsets.all(15),
+                  child: Container(
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: widget.status == '0'
+                              ? Color.fromRGBO(80, 141, 243, 1)
+                              : Color.fromRGBO(113, 182, 67, 67),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
                         Expanded(
                           child: Text(
-                            ' ${widget.department}',
+                            widget.subject,
+                            maxLines: 2,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 16, fontWeight: FontWeight.w500),
                           ),
                         ),
-                        Icon(widget.status == '0'
-                            ? Icons.watch_later
-                            : Icons.done),
                       ],
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      '${widget.complaint}',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  )),
             ),
           ),
           SizedBox(

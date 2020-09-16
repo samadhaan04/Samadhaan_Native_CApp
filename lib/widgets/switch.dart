@@ -103,14 +103,10 @@ class _RollingSwitchState extends State<RollingSwitch>
     // });
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    if(!widget.value)
-    {
-      if(turnState) turnState = false;
+    if (!widget.value) {
+      if (turnState) turnState = false;
       animationController.reverse();
     }
     Color transitionColor = Color.lerp(widget.colorOff, widget.colorOn, value);
@@ -147,7 +143,7 @@ class _RollingSwitchState extends State<RollingSwitch>
                   child: Text(
                     widget.textOff,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: FontWeight.bold,
                         fontSize: widget.textSize),
                   ),
@@ -165,7 +161,7 @@ class _RollingSwitchState extends State<RollingSwitch>
                   child: Text(
                     widget.textOn,
                     style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: FontWeight.bold,
                         fontSize: widget.textSize),
                   ),

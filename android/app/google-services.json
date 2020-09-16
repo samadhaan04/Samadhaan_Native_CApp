@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "623829185504-nmupgc40hh96et77qup6kkm7i3harkpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.faridabad",
+            "certificate_hash": "e6e39eb3c2f54fe01a5ff4ac292abe15bdbeb6a5"
+          }
+        },
+        {
+          "client_id": "623829185504-jkt2ppdv5uvt644fu102t01ap8rg0vb5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.faridabad",
+            "certificate_hash": "0c12ddd01d7b0e1588c654395d09bc769aa37d79"
+          }
+        },
+        {
           "client_id": "623829185504-6me2t3h15b8vcd2drd9mdkn3u3uf46p0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

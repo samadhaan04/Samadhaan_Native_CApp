@@ -1,49 +1,85 @@
-import 'package:faridabad/main2.dart';
-import 'package:faridabad/main3.dart';
-import 'package:faridabad/screens/adminScreen.dart';
-import 'package:faridabad/screens/authScreen.dart';
-import 'package:faridabad/screens/base.dart';
-import 'package:faridabad/screens/complaint_details.dart';
-import 'package:faridabad/screens/example.dart';
-import 'package:faridabad/screens/filecomplaint.dart';
-import 'package:faridabad/screens/home.dart';
-import 'package:faridabad/screens/previouscomplaints.dart';
-import 'package:faridabad/screens/showcomplaint.dart';
-import 'package:faridabad/screens/splash_screen.dart';
-import 'package:faridabad/screens/user_info.dart';
+import 'package:faridabad/adminScreens/ComplaintScreen.dart';
+import 'package:faridabad/adminScreens/departmentComplaintDescription.dart';
+import 'package:faridabad/adminScreens/adminUI.dart';
+import 'package:faridabad/clientScreens/authScreen.dart';
+import 'package:faridabad/clientScreens/base.dart';
+import 'package:faridabad/adminScreens/complaint_details.dart';
+import 'package:faridabad/clientScreens/filecomplaint.dart';
+import 'package:faridabad/loginScreen.dart';
+import 'package:faridabad/adminScreens/departments.dart';
+import 'package:faridabad/clientScreens/previouscomplaints.dart';
+import 'package:faridabad/clientScreens/showcomplaintNew.dart';
+import 'package:faridabad/clientScreens/splash_screen.dart';
+import 'package:faridabad/clientScreens/user_info.dart';
+import 'package:faridabad/providers/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'data/appTheme.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppStateNotifier>(
+          create: (context) => AppStateNotifier(),
+        ),
+        ChangeNotifierProvider<User>(
+          create: (context) => User(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  static const routeName  = '/myapp';
+  static const routeName = '/myapp';
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Samadhaan',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: SplashScreen(),
-      routes: {
-        AuthScreen.routeName: (ctx) => AuthScreen(),
-        HomeScreen.routeName: (ctx) => HomeScreen(),
-        UserInfoScreen.routeName: (ctx) => UserInfoScreen(),
-        ExampleScreen.routeName: (ctx) => ExampleScreen(),
-        ShowComplaint.routeName: (ctx) => ShowComplaint(),
-        FileComplaint.routeName: (ctx) => FileComplaint(),
-        Base.routeName: (ctx) => Base(),
-        PreviousComplanints.routeName : (ctx) => PreviousComplanints(),
-        AdminScreen.routename : (ctx) => AdminScreen(),
-        AdminApp.routeName : (ctx) => AdminApp(),
-        ComplaintDetails.routeName : (ctx) => ComplaintDetails(),
-        AdminUi.routeName : (ctx) => AdminUi(),
+    return Consumer<AppStateNotifier>(
+      builder: (context, value, child) {
+        return MaterialApp(
+          title: 'Samadhaan',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: value.isDarkMode ? ThemeMode.light : ThemeMode.dark,
+          home: SplashScreen(),
+          routes: {
+            ShowComplaintsNew1.routeName: (ctx) => ShowComplaintsNew1(),
+            AuthScreen.routeName: (ctx) => AuthScreen(),
+            HomeScreen.routeName: (ctx) => HomeScreen(),
+            UserInfoScreen.routeName: (ctx) => UserInfoScreen(),
+            FileComplaint.routeName: (ctx) => FileComplaint(),
+            Base.routeName: (ctx) => Base(),
+            PreviousComplaints.routeName: (ctx) => PreviousComplaints(),
+            ComplaintScreen.routeName: (ctx) => ComplaintScreen(),
+            ComplaintDetails.routeName: (ctx) => ComplaintDetails(),
+            AdminUi.routeName: (ctx) => AdminUi(),
+            ShowComplaintsNew.routeName: (ctx) => ShowComplaintsNew(),
+            MyApp.routeName: (ctx) => MyApp(),
+            InputData.routeName: (ctx) => InputData(),
+          },
+        );
       },
     );
+  }
+}
+
+class AppStateNotifier extends ChangeNotifier {
+  //
+  bool isDarkMode = false;
+  var user;
+
+  void updateTheme(bool isDarkMode) {
+    this.isDarkMode = isDarkMode;
+    notifyListeners();
   }
 }
