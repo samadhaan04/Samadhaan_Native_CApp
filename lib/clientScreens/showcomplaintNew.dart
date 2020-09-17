@@ -338,7 +338,20 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
       child: GestureDetector(
         child: Hero(
           tag: 'image',
-          child: Image.network(imageUrl),
+          child: Image.network(imageUrl,
+              loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null)
+              return child;
+            else
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes
+                      : null,
+                ),
+              );
+          }),
         ),
         onTap: () {
           showDialog(

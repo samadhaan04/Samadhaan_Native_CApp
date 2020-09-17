@@ -377,10 +377,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(10),
       child: GestureDetector(
-        child: Hero(
-          tag: 'image',
-          child: Image.network(imageUrl),
-        ),
         onTap: () {
           showDialog(
             context: context,
@@ -396,6 +392,22 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             ),
           );
         },
+        child: Hero(
+          tag: 'image',
+          child: Image.network(imageUrl,
+              loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            else
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes
+                    : null,
+              ),
+            );
+          }),
+        ),
       ),
     );
   }
@@ -786,14 +798,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     });
   }
 
-  void transferComplaintToanotherDepartmentInReference()  {
+  void transferComplaintToanotherDepartmentInReference() {
     var subject, date;
     _firestore.document(ref).get().then((value) {
       subject = value.data['subject'];
       date = value.data['date'];
     }).whenComplete(() async {
       int length;
-      
+
       await _firestore
           .collection("States/Haryana/Palwal")
           .document(transferToDepartment)
@@ -804,9 +816,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         }
       }).catchError((e) {
         _firestore
-          .collection("States/Haryana/Palwal")
-          .document(transferToDepartment)
-          .setData({"p": 1});
+            .collection("States/Haryana/Palwal")
+            .document(transferToDepartment)
+            .setData({"p": 1});
         length = 0;
       });
 
