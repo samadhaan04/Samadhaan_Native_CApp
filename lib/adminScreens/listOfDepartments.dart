@@ -94,8 +94,11 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                         .textTheme
                                         .bodyText1
                                         .color,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Nunito',
+                                    // fontWeight: FontWeight.bold,
+                                    fontFamily: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .fontFamily,
                                     fontSize: 22,
                                   ),
                                 ),
@@ -115,8 +118,12 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                         .textTheme
                                         .bodyText1
                                         .color,
-                                    fontWeight: FontWeight.bold,
+                                    // fontWeight: FontWeight.bold,
                                     fontSize: 20,
+                                    fontFamily: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .fontFamily,
                                   ),
                                 ),
                               ),

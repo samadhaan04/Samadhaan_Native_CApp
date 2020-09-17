@@ -58,25 +58,27 @@ class PreviousComplaintsState extends State<PreviousComplaints> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.symmetric(vertical: 20),
+                margin: EdgeInsets.only(bottom: 10, top: 30),
                 alignment: Alignment.center,
                 child: RichText(
                   text: TextSpan(
-                      text: "COMPLA",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 40,
-                          letterSpacing: 1,
-                          color: Colors.black),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: "INTS",
-                            style: TextStyle(
-                                letterSpacing: 1,
-                                fontSize: 40,
-                                color: Colors.grey[500],
-                                fontFamily: "Sans Serif"))
-                      ]),
+                    text: "Complaints",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 48,
+                      letterSpacing: 1,
+                      color: Color(0xff817f7f),
+                    ),
+                    // children: <TextSpan>[
+                    //   TextSpan(
+                    //       text: "INTS",
+                    //       style: TextStyle(
+                    //           letterSpacing: 1,
+                    //           fontSize: 40,
+                    //           color: Colors.grey[500],
+                    //           fontFamily: "Sans Serif"))
+                    // ]),
+                  ),
                 ),
               ),
               MessagesStream(uid),
@@ -201,15 +203,16 @@ class _MessageBubbleState extends State<MessageBubble> {
             },
             child: Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: widget.index % 2 == 0
-                      ? Color.fromRGBO(244, 244, 244, 1)
-                      : Colors.white,
-                  border: widget.index % 2 != 0
-                      ? Border.all(
-                          color: Colors.grey[400],
-                        )
-                      : null),
+                borderRadius: BorderRadius.circular(15),
+                color: widget.index % 2 == 0
+                    ? Colors.white
+                    : Color.fromRGBO(244, 244, 244, 1),
+                border: widget.index % 2 != 0
+                    ? null
+                    : Border.all(
+                        color: Colors.grey[300],
+                      ),
+              ),
               child: Container(
                   padding: EdgeInsets.all(15),
                   child: Container(

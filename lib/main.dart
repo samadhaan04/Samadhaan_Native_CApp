@@ -16,13 +16,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'data/appTheme.dart';
+import './adminScreens/adminProfile.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
     MultiProvider(
       providers: [
@@ -66,6 +65,7 @@ class MyApp extends StatelessWidget {
             ShowComplaintsNew.routeName: (ctx) => ShowComplaintsNew(),
             MyApp.routeName: (ctx) => MyApp(),
             InputData.routeName: (ctx) => InputData(),
+            AdminProfile.routename: (ctx) => AdminProfile(),
           },
         );
       },

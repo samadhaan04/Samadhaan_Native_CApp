@@ -74,14 +74,20 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                         color: Color(0xf5f5f5f5),
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                        child: Center(
-                          child: Text(
-                            data['subject'],
-                            style: TextStyle(
-                              fontSize: 20,
+                        child: SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.03,
                             ),
-                            textAlign: TextAlign.left,
-                            softWrap: true,
+                            child: Text(
+                              'qwertyuiopl,mnbgfdszxcvbnjklpoiuytfrdsxcvbnkl.,mnbvcxsertyuiopoiuhgvbnmkliuytfdcvbn',
+                              // data['subject'],
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                              textAlign: TextAlign.left,
+                              softWrap: true,
+                            ),
                           ),
                         ),
                       ),

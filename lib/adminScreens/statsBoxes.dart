@@ -1,7 +1,7 @@
 import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
 import 'package:flutter/material.dart';
-import '../main.dart';
-import 'package:provider/provider.dart';
+// import '../main.dart';
+// import 'package:provider/provider.dart';
 
 class Coloured extends StatefulWidget {
   const Coloured({Key key}) : super(key: key);
@@ -29,20 +29,20 @@ class _ColouredState extends State<Coloured> {
               cardChild: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Switch(
-                    activeColor: Colors.white,
-                    inactiveThumbColor: Colors.black,
-                    inactiveTrackColor: Colors.white,
-                    activeTrackColor: Colors.black87,
-                    value: Provider.of<AppStateNotifier>(context, listen: false)
-                        .isDarkMode,
-                    onChanged: (boolValue) {
-                      setState(() {
-                        Provider.of<AppStateNotifier>(context, listen: false)
-                            .updateTheme(boolValue);
-                      });
-                    },
-                  ),
+                  // Switch(
+                  //   activeColor: Colors.white,
+                  //   inactiveThumbColor: Colors.black,
+                  //   inactiveTrackColor: Colors.white,
+                  //   activeTrackColor: Colors.black87,
+                  //   value: Provider.of<AppStateNotifier>(context, listen: false)
+                  //       .isDarkMode,
+                  //   onChanged: (boolValue) {
+                  //     setState(() {
+                  //       Provider.of<AppStateNotifier>(context, listen: false)
+                  //           .updateTheme(boolValue);
+                  //     });
+                  //   },
+                  // ),
                   Block('12/35', 2.0, 25.0,
                       Theme.of(context).textTheme.bodyText1.color),
                   Block('Solved', 2.0, 25.0,

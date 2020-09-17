@@ -123,11 +123,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 // '15 Jul 2020',
                                 date.toString(),
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  color: Theme.of(context)
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                  fontFamily: Theme.of(context)
                                       .textTheme
                                       .bodyText1
-                                      .color,
+                                      .fontFamily,
                                 ),
                               ),
                               CircleAvatar(
@@ -175,7 +176,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                             style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyText1.color,
-                              fontSize: 22,
+                              fontSize: 16,
+                              fontFamily: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .fontFamily,
                             ),
                           ),
                           Container(
@@ -188,11 +193,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               // data['name'],
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                  color: Theme.of(context)
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontFamily: Theme.of(context)
                                       .textTheme
                                       .bodyText1
-                                      .color,
-                                  fontSize: 20,
+                                      .fontFamily,
                                   fontStyle: FontStyle.italic),
                             ),
                           ),
@@ -236,7 +242,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     'Description',
                     style: TextStyle(
                       color: Theme.of(context).textTheme.bodyText1.color,
-                      fontSize: 20,
+                      fontSize: 16,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                     ),
                   ),
                   IconButton(
@@ -268,7 +276,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     complaint,
                     softWrap: true,
                     style: TextStyle(
-                      fontSize: 19,
+                      fontSize: 14,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                       color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
@@ -281,7 +291,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               Text(
                 'Description',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                   color: Theme.of(context).textTheme.bodyText1.color,
                 ),
               ),
@@ -311,7 +322,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     'Images',
                     style: TextStyle(
                       color: Theme.of(context).textTheme.bodyText1.color,
-                      fontSize: 20,
+                      fontSize: 16,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                     ),
                   ),
                   IconButton(
@@ -351,7 +364,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               Text(
                 'Images',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                   color: Theme.of(context).textTheme.bodyText1.color,
                 ),
               ),
@@ -396,16 +410,17 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           tag: 'image',
           child: Image.network(imageUrl,
               loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
+            if (loadingProgress == null)
+              return child;
             else
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes
-                    : null,
-              ),
-            );
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes
+                      : null,
+                ),
+              );
           }),
         ),
       ),
@@ -422,7 +437,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     'Logs',
                     style: TextStyle(
                       color: Theme.of(context).textTheme.bodyText1.color,
-                      fontSize: 20,
+                      fontSize: 16,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                     ),
                   ),
                   IconButton(
@@ -448,7 +465,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       color: Colors.white.withOpacity(0.08),
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.symmetric(vertical: 25, horizontal: 25),
+                  padding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.05,
+                    25,
+                    MediaQuery.of(context).size.width * 0.03,
+                    25,
+                  ),
                   child: Container(
                     width: double.infinity,
                     height:
@@ -488,6 +510,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                         .textTheme
                                         .bodyText1
                                         .color,
+                                    fontFamily: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .fontFamily,
+                                    fontSize: 14,
                                   ),
                                 ),
                               )

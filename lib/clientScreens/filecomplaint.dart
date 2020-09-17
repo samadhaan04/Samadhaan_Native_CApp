@@ -43,8 +43,6 @@ class _FileComplaintState extends State<FileComplaint>
   String _department;
   List _images = [];
   File _image;
-  
-  
 
   void showModalSheet(BuildContext context) {
     showModalBottomSheet(
@@ -96,21 +94,22 @@ class _FileComplaintState extends State<FileComplaint>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          'File ',
+                          'File Complaint',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 30,
+                            fontSize: 35,
+                            color: Color(0xff817f7f),
                           ),
                         ),
-                        Text(
-                          'Complaint',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: Colors.teal[200]),
-                        ),
+                        // Text(
+                        //   'Complaint',
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //       fontWeight: FontWeight.bold,
+                        //       fontSize: 30,
+                        //       color: Colors.teal[200]),
+                        // ),
                       ],
                     ),
                   ),
@@ -118,16 +117,16 @@ class _FileComplaintState extends State<FileComplaint>
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    city ?? "empty",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                      letterSpacing: 1,
-                      color: Colors.blue[300],
-                    ),
-                  ),
+                  // Text(
+                  //   city ?? "empty",
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(
+                  //     fontWeight: FontWeight.bold,
+                  //     fontSize: 25,
+                  //     letterSpacing: 1,
+                  //     color: Colors.blue[300],
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 30,
                   ),
@@ -287,8 +286,9 @@ class _FileComplaintState extends State<FileComplaint>
                                             final picker = ImagePicker();
                                             final pickedImage =
                                                 await picker.getImage(
-                                                    source: ImageSource.gallery,
-                                                    imageQuality: 50,);
+                                              source: ImageSource.gallery,
+                                              imageQuality: 50,
+                                            );
                                             setState(() {
                                               _image = File(pickedImage.path);
                                               _images.add(_image);
@@ -306,8 +306,9 @@ class _FileComplaintState extends State<FileComplaint>
                                             final picker = ImagePicker();
                                             final pickedImage =
                                                 await picker.getImage(
-                                                    source: ImageSource.camera,
-                                                    imageQuality: 50,);
+                                              source: ImageSource.camera,
+                                              imageQuality: 50,
+                                            );
                                             setState(() {
                                               _image = File(pickedImage.path);
                                               _images.add(_image);
@@ -555,10 +556,9 @@ class _FileComplaintState extends State<FileComplaint>
         'star': null,
         'date': DateTime.now().toIso8601String(),
         'token': pref.getString('token'),
-        'transferToDepartment' : null,
-        'transferRequest' : null,
-        'logs' : [],
-
+        'transferToDepartment': null,
+        'transferRequest': null,
+        'logs': [],
       });
       if (_images.length != 0) {
         _images.forEach((element) async {
@@ -608,7 +608,7 @@ class _FileComplaintState extends State<FileComplaint>
         'ref': ref.path,
         'subject': _subjectController.text,
         'status': 0,
-        'date' : DateTime.now().toIso8601String(),
+        'date': DateTime.now().toIso8601String(),
       }).then((value) {
         print("Success");
         return true;

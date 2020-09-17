@@ -156,7 +156,9 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                           Text(
                             '$username',
                             style: TextStyle(
-                                fontSize: 23.0, fontFamily: 'Lobster'),
+                              fontSize: 23.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           DropdownButton(
                             underline: Container(),

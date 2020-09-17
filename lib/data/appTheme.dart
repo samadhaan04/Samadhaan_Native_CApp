@@ -12,7 +12,7 @@ class AppTheme {
     accentColor: Color.fromARGB(255, 221, 222, 248),
     //all text
     textTheme: TextTheme(
-      bodyText1: TextStyle(color: Colors.black),
+      bodyText1: TextStyle(color: Colors.black, fontFamily: 'verdana0'),
     ),
     //lighter shade
     disabledColor: Color(0xf3f3f3f3),
@@ -29,7 +29,7 @@ class AppTheme {
     disabledColor: Color(0xff211E2B),
     //all text
     textTheme: TextTheme(
-      bodyText1: TextStyle(color: Colors.white),
+      bodyText1: TextStyle(color: Colors.white, fontFamily: 'verdana0'),
     ),
   );
 }

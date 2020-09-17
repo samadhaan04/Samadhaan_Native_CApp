@@ -38,13 +38,11 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
   var user;
 
   List<String> listOfReferences = [];
-  
-  @override
-  void initState() { 
-    super.initState();
-    
-  }
 
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() async {
@@ -75,10 +73,11 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
       return false;
   }
 
-
   String dropdownValue = '';
 
-  var _items = ['Logout'];
+  var _items = [
+    'Logout',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -88,36 +87,34 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
         elevation: 0,
         actions: [
           Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              
-              alignment: Alignment.bottomRight,
-              child: DropdownButton(
-                underline: Container(),
-                onChanged: (value) async {
-                  setState(() {
-                    dropdownValue = value;
-                  });
-                  if (dropdownValue == 'Logout') {
-                    final signoutResult = await Auth().signOut();
-                    // print('sign out');
-                    if (signoutResult) {
-                      Navigator.of(context)
-                          .pushReplacementNamed(MyApp.routeName);
-                    }
+            margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
+            alignment: Alignment.bottomRight,
+            child: DropdownButton(
+              underline: Container(),
+              onChanged: (value) async {
+                setState(() {
+                  dropdownValue = value;
+                });
+                if (dropdownValue == 'Logout') {
+                  final signoutResult = await Auth().signOut();
+                  // print('sign out');
+                  if (signoutResult) {
+                    Navigator.of(context).pushReplacementNamed(MyApp.routeName);
                   }
-                },
-                icon: Icon(
-                  Icons.account_circle,
-                  size: 35,
-                ),
-                items: _items.map((e) {
-                  return DropdownMenuItem(
-                    child: Text(e),
-                    value: e,
-                  );
-                }).toList(),
+                }
+              },
+              icon: Icon(
+                Icons.account_circle,
+                size: 35,
               ),
+              items: _items.map((e) {
+                return DropdownMenuItem(
+                  child: Text(e),
+                  value: e,
+                );
+              }).toList(),
             ),
+          ),
         ],
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -127,7 +124,6 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 30, 2),
               child: Row(
@@ -137,7 +133,6 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                   Padding(
                     padding: const EdgeInsets.all(15),
                   ),
-                  // ThemeMode == ThemeMode.light ? Text('') : Text(''),
                   Container(
                     margin: const EdgeInsets.only(right: 15, left: 20),
                     decoration: BoxDecoration(
@@ -179,6 +174,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
+                      pad: 0,
                     ),
                   ),
                   SizedBox(
@@ -224,6 +220,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
+                      pad: 0,
                     ),
                   ),
                 ],
@@ -281,6 +278,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
+                      pad: 10,
                     ),
                   ),
                   SizedBox(
@@ -325,6 +323,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
+                      pad: 10,
                     ),
                   ),
                 ],
@@ -491,7 +490,8 @@ class _MessageBubbleState extends State<MessageBubble> {
                 widget.complaint,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1.color,
-                  fontSize: 18,
+                  fontSize: 14,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                 ),
               ),
               subtitle: Text(
@@ -499,6 +499,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1.color,
                   fontSize: 12,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                 ),
               ),
             ),

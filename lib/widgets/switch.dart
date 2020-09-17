@@ -37,22 +37,25 @@ class RollingSwitch extends StatefulWidget {
   final Function onTap;
   final Function onDoubleTap;
   final Function onSwipe;
+  final double pad;
 
-  RollingSwitch(
-      {this.value,
-      this.myGradient,
-      this.textOff = "Off",
-      this.textOn = "On",
-      this.textSize = 14.0,
-      this.colorOn = Colors.green,
-      this.colorOff = Colors.red,
-      this.iconOff = Icons.flag,
-      this.iconOn = Icons.check,
-      this.animationDuration = const Duration(milliseconds: 600),
-      this.onTap,
-      this.onDoubleTap,
-      this.onSwipe,
-      this.onChanged});
+  RollingSwitch({
+    this.value,
+    this.myGradient,
+    this.textOff = "Off",
+    this.textOn = "On",
+    this.textSize = 14.0,
+    this.colorOn = Colors.green,
+    this.colorOff = Colors.red,
+    this.iconOff = Icons.flag,
+    this.iconOn = Icons.check,
+    this.animationDuration = const Duration(milliseconds: 600),
+    this.onTap,
+    this.onDoubleTap,
+    this.onSwipe,
+    this.onChanged,
+    this.pad,
+  });
 
   @override
   _RollingSwitchState createState() => _RollingSwitchState();
@@ -137,7 +140,9 @@ class _RollingSwitchState extends State<RollingSwitch>
               child: Opacity(
                 opacity: (1 - value).clamp(0.0, 1.0),
                 child: Container(
-                  padding: EdgeInsets.only(right: 10),
+                  padding: EdgeInsets.only(
+                    right: widget.pad,
+                  ),
                   alignment: Alignment.centerRight,
                   height: 40,
                   child: Text(
