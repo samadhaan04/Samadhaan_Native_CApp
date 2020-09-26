@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faridabad/adminScreens/adminProfile.dart';
 import 'package:faridabad/adminScreens/complaint_details.dart';
 import 'package:faridabad/adminScreens/departmentComplaintDescription.dart';
 import 'package:faridabad/main.dart';
@@ -73,12 +74,6 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
       return false;
   }
 
-  String dropdownValue = '';
-
-  var _items = [
-    'Logout',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,35 +81,14 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         actions: [
-          Container(
-            margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-            alignment: Alignment.bottomRight,
-            child: DropdownButton(
-              underline: Container(),
-              onChanged: (value) async {
-                setState(() {
-                  dropdownValue = value;
-                });
-                if (dropdownValue == 'Logout') {
-                  final signoutResult = await Auth().signOut();
-                  // print('sign out');
-                  if (signoutResult) {
-                    Navigator.of(context).pushReplacementNamed(MyApp.routeName);
-                  }
-                }
-              },
-              icon: Icon(
-                Icons.account_circle,
-                size: 35,
-              ),
-              items: _items.map((e) {
-                return DropdownMenuItem(
-                  child: Text(e),
-                  value: e,
-                );
-              }).toList(),
-            ),
-          ),
+          IconButton(
+            padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+            icon: Icon(Icons.account_circle),
+            onPressed: () => Navigator.of(context)
+                .pushReplacementNamed(AdminProfile.routename, arguments: user),
+            iconSize: 35,
+            color: Colors.grey[600],
+          )
         ],
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

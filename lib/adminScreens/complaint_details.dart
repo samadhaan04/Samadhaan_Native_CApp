@@ -32,6 +32,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   // TextEditingController requestFromDepartment = TextEditingController();
   String requestFromDepartment;
   List logs;
+  var status;
+  var isNew;
   Firestore _firestore;
 
   var previousDepartment;
@@ -108,6 +110,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     ? null
                     : data['transferToDepartment'];
                 logs = data['logs'];
+                status = data['status'];
+                isNew = data['new'];
+                print('status $status');
                 return Column(
                   children: <Widget>[
                     ReusableCardComplaint(
@@ -136,14 +141,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    gradient: data['status'] == 0
+                                    gradient: status == 0
                                         ? LinearGradient(
                                             colors: [
                                               Color(0xfff4b601),
                                               Color(0xffffee77),
                                             ],
                                           )
-                                        : data['status'] == 1
+                                        : status == 1
                                             ? LinearGradient(
                                                 colors: [
                                                   Color(0xff51b328),
@@ -216,11 +221,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               ? Container()
                               : imgExpansion(data['imageURL']),
                           logs.length != 0 ? logExpansion() : Container(),
-                          user == 'admin'
+                          user == 'Admin'
                               ? requestFromDepartment != null
                                   ? reqExpansionAdmin()
                                   : Container()
-                              : actionExpansionDepartment(),
+                              : status != 2
+                                  ? status != 1
+                                      ? actionExpansionDepartment()
+                                      : Container()
+                                  : Container(),
                         ],
                       ),
                     )
@@ -474,7 +483,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   child: Container(
                     width: double.infinity,
                     height:
-                        logs.length * 40.0 < 150.0 ? logs.length * 40.0 : 150,
+                        logs.length * 90.0 < 200.0 ? logs.length * 90.0 : 200,
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: logs.length,
@@ -717,20 +726,22 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         SizedBox(
           height: 15,
         ),
-        FlatButton(
-          padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-          shape: Border.all(color: Colors.white),
-          child: Text(
-            "Mark Complete",
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-            ),
-          ),
-          onPressed: () {
-            markComplete();
-          },
-        ),
+        status != 1 || status != 2
+            ? FlatButton(
+                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+                shape: Border.all(color: Colors.white),
+                child: Text(
+                  "Mark Complete",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  markComplete();
+                },
+              )
+            : Container(),
         SizedBox(
           height: 20,
         ),
@@ -766,6 +777,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   void submitTransferRequest() {
+    var pending;
     logs.add(
         '$previousDepartment Requested Transfer of Complaint to $department');
     _firestore.document(ref).updateData({
@@ -775,8 +787,19 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       'status': 2,
     }).then((value) {
       reqORfeed.text = '';
+      var referenceParentPath =
+          _firestore.document(previouspath).parent().parent().path;
       _firestore.document(previouspath).updateData({
         'status': 2,
+      }).then((value) {
+        _firestore.document(referenceParentPath).get().then((value) {
+          pending = value.data['pending'];
+          print(pending);
+        }).whenComplete(() {
+          _firestore.document(referenceParentPath).updateData({
+            "pending": pending + 1,
+          });
+        });
       }).then((value) {
         Navigator.of(context).pop();
       });
@@ -802,15 +825,18 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   void confirmAction() {
     transferComplaintToanotherDepartmentInReference();
     logs.add('Transfer Request Approved');
-    var p;
+    var p, pending;
     _firestore.document(previouspath).delete();
     var referenceParentPath =
         _firestore.document(previouspath).parent().parent().path;
     print('path $referenceParentPath');
     _firestore.document(referenceParentPath).get().then((value) {
       p = value.data['p'];
+      pending = value.data['pending'];
     }).whenComplete(() {
-      _firestore.document(referenceParentPath).updateData({'p': p - 1});
+      _firestore
+          .document(referenceParentPath)
+          .updateData({'p': p - 1, 'pending': pending - 1});
     }).whenComplete(() {
       _firestore.document(ref).updateData({
         'status': 0,
@@ -845,7 +871,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         _firestore
             .collection("States/Haryana/Palwal")
             .document(transferToDepartment)
-            .setData({"p": 1});
+            .setData({"p": 1, "pending": 0});
         length = 0;
       });
 
@@ -853,7 +879,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         _firestore
             .collection("States/Haryana/Palwal")
             .document(transferToDepartment)
-            .setData({"p": length + 1});
+            .updateData({"p": length + 1});
       }
 
       _firestore
@@ -884,7 +910,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   void showModal(context) {
-    var items = depts;
+    var items = depts.where((element) => element != user).toList();
     showModalBottomSheet(
         isScrollControlled: false,
         backgroundColor: Colors.white,

@@ -25,7 +25,7 @@ class AdminUi extends StatelessWidget {
         AdminProfile.routename: (ctx) => AdminProfile(),
         InputData.routeName: (ctx) => InputData(),
       },
-      home: user == 'admin' ? InputData() : ComplaintScreen(user),
+      home: user == 'Admin' ? InputData() : ComplaintScreen(user),
     );
   }
 }

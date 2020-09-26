@@ -41,7 +41,7 @@ Map<String, String> emailValue = {
   'publicrenywell@samadhaan.com': "Public health (Reny Well)",
   'socialwelfare@samadhaan.com': "Social Welfare",
   'tehsil@samadhaan.com': "Tehsil",
-  'rishi@rishi.com' : 'admin'
+  'rishi@rishi.com' : 'Admin'
 };
 
 List<String> getStateList() {

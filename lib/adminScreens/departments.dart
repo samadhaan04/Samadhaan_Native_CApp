@@ -51,43 +51,10 @@ class _InputDataState extends State<InputData> {
           iconTheme: IconThemeData(color: Colors.grey),
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            //   Container(
-            //     margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-            //     child: DropdownButton(
-            //       underline: Container(),
-            //       onChanged: (value) async {
-            //         setState(() {
-            //           dropdownValue = value;
-            //         });
-            //         // if (dropdownValue == 'Logout') {
-            //         //   final signoutResult = await Auth().signOut();
-            //         //   // print('sign out');
-            //         //   if (signoutResult) {
-            //         //     Navigator.of(context)
-            //         //         .pushReplacementNamed(MyApp.routeName);
-            //         //   }
-            //         // }
-            //         if (dropdownValue == 'Profile') {
-            //           Navigator.of(context)
-            //               .pushReplacementNamed(AdminProfile.routename);
-            //         }
-            //       },
-            //       icon: Icon(
-            //         Icons.account_circle,
-            //         size: 35,
-            //       ),
-            //       items: _items.map((e) {
-            //         return DropdownMenuItem(
-            //           child: Text(e),
-            //           value: e,
-            //         );
-            //       }).toList(),
-            //     ),
-            //   ),
             IconButton(
               icon: Icon(Icons.account_circle),
               onPressed: () => Navigator.of(context)
-                  .pushReplacementNamed(AdminProfile.routename),
+                  .pushReplacementNamed(AdminProfile.routename,arguments: "Admin"),
               iconSize: 35,
               color: Colors.grey[600],
             )

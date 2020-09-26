@@ -31,7 +31,9 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
         if (snapshot.hasData) {
           snapshot.data.documents.forEach((val) {
             print(val.documentID.toString());
-            listOfDepartments.add({val.documentID.toString(): val['p']});
+            listOfDepartments.add({
+              val.documentID.toString(): [val['p'], val['pending']]
+            });
           });
           return Container(
             child: ListView.builder(
@@ -48,7 +50,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                   child: Badge(
                     badgeColor: Colors.red.withOpacity(0.55),
                     badgeContent: Text(
-                      '3',
+                      listOfDepartments[index].values.first[1].toString(),
                       style: TextStyle(color: Colors.white),
                     ),
                     alignment: Alignment.centerRight,
@@ -110,7 +112,7 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                   // '1     ',
                                   listOfDepartments[index]
                                           .values
-                                          .single
+                                          .first[0]
                                           .toString() +
                                       "    ",
                                   style: TextStyle(

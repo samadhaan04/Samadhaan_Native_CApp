@@ -37,7 +37,7 @@ class Auth {
         } else {
           user = result.user;
           // Provider.of<User>(Buildcontext c).setUser('client');
-          currentUser = 'client';
+          currentUser = 'Client';
           setCurrentUser();
           print('user ${user.uid}');
           print(googleSignIn.currentUser.displayName);

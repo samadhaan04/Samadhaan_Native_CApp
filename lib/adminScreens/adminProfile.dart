@@ -1,6 +1,9 @@
+import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/adminScreens/departments.dart';
+import 'package:faridabad/providers/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 
 // void main() {
@@ -14,6 +17,21 @@ class AdminProfile extends StatefulWidget {
 }
 
 class _AdminProfileState extends State<AdminProfile> {
+  var user;
+
+  @override
+  void initState() { 
+    super.initState();
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('hello');
+    user = ModalRoute.of(context).settings.arguments;
+  }
+
   bool isSwitched = false;
   @override
   Widget build(BuildContext context) {
@@ -35,8 +53,9 @@ class _AdminProfileState extends State<AdminProfile> {
                   icon: Icon(Icons.arrow_back_ios),
                   iconSize: 30,
                   color: Colors.blue,
-                  onPressed: () => Navigator.of(context)
-                      .pushReplacementNamed(InputData.routeName),
+                  onPressed: () => user == "Admin" ? Navigator.of(context)
+                      .pushReplacementNamed(InputData.routeName) : Navigator.of(context)
+                      .pushReplacementNamed(ComplaintScreen.routeName,arguments: user),
                 ),
               ),
             ],
@@ -58,7 +77,7 @@ class _AdminProfileState extends State<AdminProfile> {
                 height: 30.0,
               ),
               Text(
-                'Deepak Mangla',
+                user,
                 style: TextStyle(
                     fontSize: 30.0,
                     color: Theme.of(context).textTheme.bodyText1.color,
@@ -105,7 +124,12 @@ class _AdminProfileState extends State<AdminProfile> {
                 height: 50,
               ),
               FlatButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final signoutResult = await Auth().signOut();
+                  if (signoutResult) {
+                    Navigator.of(context).pushReplacementNamed(MyApp.routeName);
+                  }
+                },
                 child: Text(
                   'Logout',
                   style: TextStyle(

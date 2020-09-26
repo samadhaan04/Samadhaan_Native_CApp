@@ -554,6 +554,7 @@ class _FileComplaintState extends State<FileComplaint>
         'deptFeedbackImg': null,
         'adminRemark': null,
         'star': null,
+        'new': true,
         'date': DateTime.now().toIso8601String(),
         'token': pref.getString('token'),
         'transferToDepartment': null,
@@ -581,24 +582,35 @@ class _FileComplaintState extends State<FileComplaint>
           .add({"ref": ref.path});
       print(ref.path);
       int length;
+      int pending;
       try {
-        length = await databaseReference
+        await databaseReference
             .collection("States/Haryana/Palwal")
             .document(_department)
             .get()
-            .then((value) => value.data['p']);
+            .then((value) {
+          length = value.data['p'];
+          pending = value.data['pending'];
+        });
       } catch (e) {
         await databaseReference
             .collection("States/Haryana/Palwal")
             .document(_department)
-            .setData({"p": 1});
+            .setData({
+          "p": 1,
+          "pending": 0,
+        });
         length = 0;
+        pending = 0;
       }
       if (length != 0) {
         await databaseReference
             .collection("States/Haryana/Palwal")
             .document(_department)
-            .setData({"p": length + 1});
+            .setData({
+          "p": length + 1,
+          "pending": pending,
+        });
       }
 
       await databaseReference
