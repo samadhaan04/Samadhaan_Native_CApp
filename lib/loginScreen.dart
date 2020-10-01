@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/adminScreens/adminUI.dart';
 import 'package:faridabad/providers/auth.dart';
@@ -22,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String email;
 
   String password;
+
+  final _auth = Auth();
 
   var height = 0.0;
   var width = 0.0;
@@ -163,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 final pref =
                                     await SharedPreferences.getInstance();
                                 if (_formKey.currentState.validate()) {
-                                  await Auth()
+                                  await _auth
                                       .signIn(email, password)
                                       .then((value) {
                                     Timer(Duration(milliseconds: 1500), () {

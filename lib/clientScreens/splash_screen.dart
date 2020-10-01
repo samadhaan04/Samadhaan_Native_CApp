@@ -20,8 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void movetoHome() async {
     final pref = await SharedPreferences.getInstance();
-    await Future.delayed(Duration(milliseconds: 2000));
     final result = await _auth.autoLogin();
+    await Future.delayed(Duration(milliseconds: 2000));
     print('result $result');
     if (result == true) {
       var currentUser = pref.getString('currentUser');

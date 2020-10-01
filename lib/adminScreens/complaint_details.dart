@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
+import 'package:faridabad/adminScreens/listOfDepartments.dart';
 import 'package:faridabad/data/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../widgets/showModal.dart';
 
 class ComplaintDetails extends StatefulWidget {
   static const routeName = '/complaint-details';
@@ -32,8 +32,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   // TextEditingController requestFromDepartment = TextEditingController();
   String requestFromDepartment;
   List logs;
+  var status;
+  var isNew;
   Firestore _firestore;
-
+  bool isOnce = true;
+  var depts;
   var previousDepartment;
   var transferToDepartment;
 
@@ -48,6 +51,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     var pref = await SharedPreferences.getInstance();
     setState(() {
       user = pref.getString('currentUser');
+      _firestore.document('DepartmentNames/Names').get().then((value) {
+        depts = value.data['names'].toList();
+      });
       print(' requestfromDepartment $requestFromDepartment');
     });
   }
@@ -57,7 +63,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     dynamic arguments = ModalRoute.of(context).settings.arguments;
     ref = arguments['complaintId'];
     previouspath = arguments['path'];
-
+    if (isOnce && user != null && user != "Admin") {
+      _firestore.document(previouspath).updateData({
+        'status': 0,
+      });
+      _firestore.document(ref).updateData({
+        'status' : 0,
+      });
+      isOnce = false;
+    }
     super.didChangeDependencies();
   }
 
@@ -108,11 +122,13 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     ? null
                     : data['transferToDepartment'];
                 logs = data['logs'];
+                status = data['status'];
+                isNew = data['new'];
+                print('status $status');
                 return Column(
                   children: <Widget>[
                     ReusableCardComplaint(
                       colour: Theme.of(context).disabledColor,
-                      // Color(0xff1d1b27),
                       cardChild: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -123,11 +139,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 // '15 Jul 2020',
                                 date.toString(),
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  color: Theme.of(context)
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                  fontFamily: Theme.of(context)
                                       .textTheme
                                       .bodyText1
-                                      .color,
+                                      .fontFamily,
                                 ),
                               ),
                               CircleAvatar(
@@ -135,14 +152,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    gradient: data['status'] == 0
+                                    gradient: status == 0
                                         ? LinearGradient(
                                             colors: [
                                               Color(0xfff4b601),
                                               Color(0xffffee77),
                                             ],
                                           )
-                                        : data['status'] == 1
+                                        : status == 1
                                             ? LinearGradient(
                                                 colors: [
                                                   Color(0xff51b328),
@@ -151,16 +168,25 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                                 begin: Alignment.centerLeft,
                                                 end: Alignment.centerRight,
                                               )
-                                            : LinearGradient(
-                                                colors: [
-                                                  Color.fromRGBO(
-                                                      236, 93, 59, 0.8),
-                                                  Color.fromRGBO(
-                                                      238, 120, 61, 0.8),
-                                                ],
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                              ),
+                                            : status == 3
+                                                ? LinearGradient(
+                                                    colors: [
+                                                      Color(0xff3d84fa),
+                                                      Color(0xff34afff),
+                                                    ],
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                  )
+                                                : LinearGradient(
+                                                    colors: [
+                                                      Color.fromRGBO(
+                                                          236, 93, 59, 0.8),
+                                                      Color.fromRGBO(
+                                                          238, 120, 61, 0.8),
+                                                    ],
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                  ),
                                   ),
                                 ),
                               )
@@ -175,7 +201,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                             style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.bodyText1.color,
-                              fontSize: 22,
+                              fontSize: 16,
+                              fontFamily: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .fontFamily,
                             ),
                           ),
                           Container(
@@ -188,11 +218,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               // data['name'],
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                  color: Theme.of(context)
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                  fontFamily: Theme.of(context)
                                       .textTheme
                                       .bodyText1
-                                      .color,
-                                  fontSize: 20,
+                                      .fontFamily,
                                   fontStyle: FontStyle.italic),
                             ),
                           ),
@@ -210,11 +241,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               ? Container()
                               : imgExpansion(data['imageURL']),
                           logs.length != 0 ? logExpansion() : Container(),
-                          user == 'admin'
+                          user == 'Admin'
                               ? requestFromDepartment != null
                                   ? reqExpansionAdmin()
                                   : Container()
-                              : actionExpansionDepartment(),
+                              : status != 2
+                                  ? status != 1
+                                      ? actionExpansionDepartment()
+                                      : Container()
+                                  : Container(),
                         ],
                       ),
                     )
@@ -236,7 +271,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     'Description',
                     style: TextStyle(
                       color: Theme.of(context).textTheme.bodyText1.color,
-                      fontSize: 20,
+                      fontSize: 16,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                     ),
                   ),
                   IconButton(
@@ -268,7 +305,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     complaint,
                     softWrap: true,
                     style: TextStyle(
-                      fontSize: 19,
+                      fontSize: 14,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                       color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
@@ -281,7 +320,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               Text(
                 'Description',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                   color: Theme.of(context).textTheme.bodyText1.color,
                 ),
               ),
@@ -311,7 +351,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     'Images',
                     style: TextStyle(
                       color: Theme.of(context).textTheme.bodyText1.color,
-                      fontSize: 20,
+                      fontSize: 16,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                     ),
                   ),
                   IconButton(
@@ -351,7 +393,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               Text(
                 'Images',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                   color: Theme.of(context).textTheme.bodyText1.color,
                 ),
               ),
@@ -377,10 +420,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(10),
       child: GestureDetector(
-        child: Hero(
-          tag: 'image',
-          child: Image.network(imageUrl),
-        ),
         onTap: () {
           showDialog(
             context: context,
@@ -396,6 +435,23 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             ),
           );
         },
+        child: Hero(
+          tag: 'image',
+          child: Image.network(imageUrl,
+              loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null)
+              return child;
+            else
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes
+                      : null,
+                ),
+              );
+          }),
+        ),
       ),
     );
   }
@@ -410,7 +466,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     'Logs',
                     style: TextStyle(
                       color: Theme.of(context).textTheme.bodyText1.color,
-                      fontSize: 20,
+                      fontSize: 16,
+                      fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                     ),
                   ),
                   IconButton(
@@ -436,11 +494,16 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       color: Colors.white.withOpacity(0.08),
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(15)),
-                  padding: EdgeInsets.symmetric(vertical: 25, horizontal: 25),
+                  padding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.05,
+                    25,
+                    MediaQuery.of(context).size.width * 0.03,
+                    25,
+                  ),
                   child: Container(
                     width: double.infinity,
                     height:
-                        logs.length * 40.0 < 150.0 ? logs.length * 40.0 : 150,
+                        logs.length * 90.0 < 200.0 ? logs.length * 90.0 : 200,
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: logs.length,
@@ -476,6 +539,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                         .textTheme
                                         .bodyText1
                                         .color,
+                                    fontFamily: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .fontFamily,
+                                    fontSize: 14,
                                   ),
                                 ),
                               )
@@ -678,20 +746,22 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         SizedBox(
           height: 15,
         ),
-        FlatButton(
-          padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-          shape: Border.all(color: Colors.white),
-          child: Text(
-            "Mark Complete",
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-            ),
-          ),
-          onPressed: () {
-            markComplete();
-          },
-        ),
+        status != 1 || status != 2
+            ? FlatButton(
+                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
+                shape: Border.all(color: Colors.white),
+                child: Text(
+                  "Mark Complete",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  markComplete();
+                },
+              )
+            : Container(),
         SizedBox(
           height: 20,
         ),
@@ -727,6 +797,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   void submitTransferRequest() {
+    var pending;
     logs.add(
         '$previousDepartment Requested Transfer of Complaint to $department');
     _firestore.document(ref).updateData({
@@ -736,8 +807,19 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       'status': 2,
     }).then((value) {
       reqORfeed.text = '';
+      var referenceParentPath =
+          _firestore.document(previouspath).parent().parent().path;
       _firestore.document(previouspath).updateData({
         'status': 2,
+      }).then((value) {
+        _firestore.document(referenceParentPath).get().then((value) {
+          pending = value.data['pending'];
+          print(pending);
+        }).whenComplete(() {
+          _firestore.document(referenceParentPath).updateData({
+            "pending": pending + 1,
+          });
+        });
       }).then((value) {
         Navigator.of(context).pop();
       });
@@ -763,15 +845,18 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   void confirmAction() {
     transferComplaintToanotherDepartmentInReference();
     logs.add('Transfer Request Approved');
-    var p;
+    var p, pending;
     _firestore.document(previouspath).delete();
     var referenceParentPath =
         _firestore.document(previouspath).parent().parent().path;
     print('path $referenceParentPath');
     _firestore.document(referenceParentPath).get().then((value) {
       p = value.data['p'];
+      pending = value.data['pending'];
     }).whenComplete(() {
-      _firestore.document(referenceParentPath).updateData({'p': p - 1});
+      _firestore
+          .document(referenceParentPath)
+          .updateData({'p': p - 1, 'pending': pending - 1});
     }).whenComplete(() {
       _firestore.document(ref).updateData({
         'status': 0,
@@ -786,14 +871,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     });
   }
 
-  void transferComplaintToanotherDepartmentInReference()  {
+  void transferComplaintToanotherDepartmentInReference() {
     var subject, date;
     _firestore.document(ref).get().then((value) {
       subject = value.data['subject'];
       date = value.data['date'];
     }).whenComplete(() async {
       int length;
-      
+
       await _firestore
           .collection("States/Haryana/Palwal")
           .document(transferToDepartment)
@@ -804,9 +889,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         }
       }).catchError((e) {
         _firestore
-          .collection("States/Haryana/Palwal")
-          .document(transferToDepartment)
-          .setData({"p": 1});
+            .collection("States/Haryana/Palwal")
+            .document(transferToDepartment)
+            .setData({"p": 1, "pending": 0});
         length = 0;
       });
 
@@ -814,7 +899,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         _firestore
             .collection("States/Haryana/Palwal")
             .document(transferToDepartment)
-            .setData({"p": length + 1});
+            .updateData({"p": length + 1});
       }
 
       _firestore
@@ -845,7 +930,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   void showModal(context) {
-    var items = depts;
+    var items = depts.where((element) => element != user).toList();
     showModalBottomSheet(
         isScrollControlled: false,
         backgroundColor: Colors.white,

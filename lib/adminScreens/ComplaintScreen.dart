@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faridabad/adminScreens/adminProfile.dart';
 import 'package:faridabad/adminScreens/complaint_details.dart';
 import 'package:faridabad/adminScreens/departmentComplaintDescription.dart';
 import 'package:faridabad/main.dart';
@@ -38,13 +39,11 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
   var user;
 
   List<String> listOfReferences = [];
-  
-  @override
-  void initState() { 
-    super.initState();
-    
-  }
 
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() async {
@@ -56,6 +55,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
     setState(() {
       SharedPreferences.getInstance().then((value) {
         user = value.getString('currentUser');
+        print("User is $user");
       });
     });
     super.didChangeDependencies();
@@ -75,11 +75,6 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
       return false;
   }
 
-
-  String dropdownValue = '';
-
-  var _items = ['Logout'];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,37 +82,14 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         actions: [
-          Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              
-              alignment: Alignment.bottomRight,
-              child: DropdownButton(
-                underline: Container(),
-                onChanged: (value) async {
-                  setState(() {
-                    dropdownValue = value;
-                  });
-                  if (dropdownValue == 'Logout') {
-                    final signoutResult = await Auth().signOut();
-                    // print('sign out');
-                    if (signoutResult) {
-                      Navigator.of(context)
-                          .pushReplacementNamed(MyApp.routeName);
-                    }
-                  }
-                },
-                icon: Icon(
-                  Icons.account_circle,
-                  size: 35,
-                ),
-                items: _items.map((e) {
-                  return DropdownMenuItem(
-                    child: Text(e),
-                    value: e,
-                  );
-                }).toList(),
-              ),
-            ),
+          IconButton(
+            padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+            icon: Icon(Icons.account_circle),
+            onPressed: () => Navigator.of(context)
+                .pushReplacementNamed(AdminProfile.routename, arguments: user),
+            iconSize: 35,
+            color: Colors.grey[600],
+          )
         ],
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -127,7 +99,6 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 10, 30, 2),
               child: Row(
@@ -137,7 +108,6 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                   Padding(
                     padding: const EdgeInsets.all(15),
                   ),
-                  // ThemeMode == ThemeMode.light ? Text('') : Text(''),
                   Container(
                     margin: const EdgeInsets.only(right: 15, left: 20),
                     decoration: BoxDecoration(
@@ -179,6 +149,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
+                      pad: 0,
                     ),
                   ),
                   SizedBox(
@@ -224,6 +195,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
+                      pad: 0,
                     ),
                   ),
                 ],
@@ -281,6 +253,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
+                      pad: 10,
                     ),
                   ),
                   SizedBox(
@@ -325,6 +298,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
+                      pad: 10,
                     ),
                   ),
                 ],
@@ -335,7 +309,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
             ),
             Expanded(
                 child: MessagesStream1(transferValue, ongoingValue, doneValue,
-                    listOfReferences, ref)),
+                    newValue, listOfReferences, ref)),
           ],
         ),
       ),
@@ -347,11 +321,12 @@ class MessagesStream1 extends StatefulWidget {
   // final uid;
   final transferValue;
   final ongoingValue;
+  final newValue;
   final doneValue;
   final listOfReferences;
   final department;
   MessagesStream1(this.transferValue, this.ongoingValue, this.doneValue,
-      this.listOfReferences, this.department);
+      this.newValue, this.listOfReferences, this.department);
 
   @override
   _MessagesStream1State createState() => _MessagesStream1State();
@@ -386,6 +361,10 @@ class _MessagesStream1State extends State<MessagesStream1> {
           } else if (widget.transferValue == true) {
             list = snapshot.data.documents
                 .where((val) => (val['status'] == 2))
+                .toList();
+          } else if (widget.newValue == true) {
+            list = snapshot.data.documents
+                .where((val) => (val['status'] == 3))
                 .toList();
           } else {
             list = snapshot.data.documents;
@@ -458,6 +437,8 @@ class _MessageBubbleState extends State<MessageBubble> {
       _status = ComplaintStatus.Ongoing;
     } else if (widget.status == 2) {
       _status = ComplaintStatus.Transfer;
+    } else if (widget.status == 3) {
+      _status = ComplaintStatus.New;
     } else {
       _status = ComplaintStatus.Done;
     }
@@ -491,7 +472,8 @@ class _MessageBubbleState extends State<MessageBubble> {
                 widget.complaint,
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1.color,
-                  fontSize: 18,
+                  fontSize: 14,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                 ),
               ),
               subtitle: Text(
@@ -499,6 +481,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 style: TextStyle(
                   color: Theme.of(context).textTheme.bodyText1.color,
                   fontSize: 12,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                 ),
               ),
             ),

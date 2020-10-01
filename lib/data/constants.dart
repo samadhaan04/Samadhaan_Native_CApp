@@ -1,48 +1,6 @@
 import 'package:flutter/material.dart';
 
-List<String> depts = [
-  "None",
-  "Animal Husbandry",
-  "BDPO",
-  "Civil Hospital",
-  "DHBVN(Urban)",
-  "DHBVN(Rural)",
-  "Distt. Town planner",
-  "Education(Elementary)",
-  "Education(Higher)",
-  "Fire Department",
-  "HVPNL",
-  "Irrigation",
-  "Nagar Parishad",
-  "PWD",
-  "PUBLIC HEALTH(Water)",
-  "Public health(Sewage)",
-  "Public health (Reny Well)",
-  "Social Welfare",
-  "Tehsil"
-];
 
-Map<String, String> emailValue = {
-  'animal@samadhaan.com': 'Animal Husbandry',
-  'bdpo@samadhaan.com': 'BDPO',
-  'civilh@samadhaan.com': 'Civil Hospital',
-  'dhbvnu@samadhaan.com': 'DHBVN(Urban)',
-  'dhbvnr@samadhaan.com': 'DHBVN(Rural)',
-  'dtownPlanner@samadhaan.com': 'Distt. Town planner',
-  'elementaryedu@samadhaan.com': 'Education(Elementary)',
-  'higheredu@samadhaan.com': 'Education(Higher)',
-  'firedepartment@samadhaan.com': 'Fire Department',
-  'hvpnl@samadhaan.com': 'HVPNL',
-  'irrigation@samadhaan.com': "Irrigation",
-  'nagarparishad@samadhaan.com': "Nagar Parishad",
-  'pwd@samadhaan.com': "PWD",
-  'publicwater@samadhaan.com': "PUBLIC HEALTH(Water)",
-  'publicsewage@samadhaan.com': "Public health(Sewage)",
-  'publicrenywell@samadhaan.com': "Public health (Reny Well)",
-  'socialwelfare@samadhaan.com': "Social Welfare",
-  'tehsil@samadhaan.com': "Tehsil",
-  'rishi@rishi.com' : 'admin'
-};
 
 List<String> getStateList() {
   List<String> wards = [];

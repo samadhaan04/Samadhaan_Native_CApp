@@ -24,7 +24,12 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   Animation<double> _animation;
   var username;
   var city;
+  Widget imageWidget;
   var countNotifications;
+  String dropdownValue = '';
+  var _items = ['User Profile', 'Logout'];
+
+  var image, loading;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -40,13 +45,6 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       loading = true;
     });
     fetchNameAndCity();
-    print(image);
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
-    _animation =
-        CurvedAnimation(parent: _animationController, curve: Curves.easeInCirc);
-    _animation.addListener(() => this.setState(() {}));
-    _animationController.forward();
     final fbm = FirebaseMessaging();
     fbm.requestNotificationPermissions();
     fbm.configure(
@@ -79,15 +77,17 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     );
   }
 
-  String dropdownValue = '';
-  var _items = ['User Profile', 'Logout'];
-
-  var image, loading;
+  
+  
 
   void fetchNameAndCity() async {
     final storage = FirebaseStorage.instance;
-    image = await storage.ref().child('family.jpg').getDownloadURL();
-    generateWidget(image);
+    setState(() {
+      loading = true;
+    });
+    await storage.ref().child('family.jpg').getDownloadURL().then((image) {
+      imageWidget = Image.network(image, width: double.infinity,height: 450,);
+    });
     final pref = await SharedPreferences.getInstance();
     final dname = pref.getString('name');
     print('name $dname');
@@ -97,21 +97,9 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     setState(() {
       loading = false;
     });
-  }
-
-  Widget imageWidget;
-  void generateWidget(url) {
-    setState(() {
-      loading = true;
-    });
-    imageWidget = Image.network(
-      url,
-      width: _animation.value * 500,
-    );
-    setState(() {
-      loading = false;
-    });
-  }
+  }  
+  
+  
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -156,7 +144,9 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                           Text(
                             '$username',
                             style: TextStyle(
-                                fontSize: 23.0, fontFamily: 'Lobster'),
+                              fontSize: 23.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           DropdownButton(
                             underline: Container(),

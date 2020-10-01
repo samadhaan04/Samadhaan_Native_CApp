@@ -5,9 +5,9 @@ import 'package:faridabad/loginScreen.dart';
 import 'package:faridabad/adminScreens/listOfDepartments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'adminProfile.dart';
 
 class InputData extends StatefulWidget {
-
   static const routeName = '/input-data';
 
   @override
@@ -17,7 +17,7 @@ class InputData extends StatefulWidget {
 class _InputDataState extends State<InputData> {
   String dropdownValue = '';
 
-  var _items = ['Logout'];
+  // var _items = ['Profile'];
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -51,35 +51,13 @@ class _InputDataState extends State<InputData> {
           iconTheme: IconThemeData(color: Colors.grey),
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
-              child: DropdownButton(
-                underline: Container(),
-                onChanged: (value) async {
-                  setState(() {
-                    dropdownValue = value;
-                  });
-                  if (dropdownValue == 'Logout') {
-                    final signoutResult = await Auth().signOut();
-                    // print('sign out');
-                    if (signoutResult) {
-                      Navigator.of(context)
-                          .pushReplacementNamed(MyApp.routeName);
-                    }
-                  }
-                },
-                icon: Icon(
-                  Icons.account_circle,
-                  size: 35,
-                ),
-                items: _items.map((e) {
-                  return DropdownMenuItem(
-                    child: Text(e),
-                    value: e,
-                  );
-                }).toList(),
-              ),
-            ),
+            IconButton(
+              icon: Icon(Icons.account_circle),
+              onPressed: () => Navigator.of(context)
+                  .pushReplacementNamed(AdminProfile.routename,arguments: "Admin"),
+              iconSize: 35,
+              color: Colors.grey[600],
+            )
           ],
           title: Text(
             'Palwal,Haryana',
