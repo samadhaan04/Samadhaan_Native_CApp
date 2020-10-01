@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/data/constants.dart';
@@ -21,7 +20,7 @@ class _FileComplaintState extends State<FileComplaint>
     with SingleTickerProviderStateMixin {
   final databaseReference = Firestore.instance;
   final _auth = FirebaseAuth.instance;
-  List listOfDepartments = depts;
+  List<dynamic> listOfDepartments;
   bool isupdate = false;
   double width, height;
   bool loading = false;
@@ -56,7 +55,9 @@ class _FileComplaintState extends State<FileComplaint>
   @override
   void initState() {
     super.initState();
-
+    databaseReference.document('DepartmentNames/Names').get().then((value) {
+      listOfDepartments = value.data['names'].toList();
+    });
     fetchCity();
   }
 
@@ -77,6 +78,7 @@ class _FileComplaintState extends State<FileComplaint>
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,186 +147,189 @@ class _FileComplaintState extends State<FileComplaint>
                     child: Container(
                       margin:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            width: double.infinity,
-                            child: GestureDetector(
-                              child: Container(
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    border: BorderDirectional(
-                                        bottom:
-                                            BorderSide(color: Colors.black54))),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      _department == null
-                                          ? "Select Department"
-                                          : _department,
-                                      style: TextStyle(
-                                        fontSize: 21,
-                                        color: Colors.black54,
+                      child: Form(
+                        key: _formKey,
+                          child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 10),
+                              width: double.infinity,
+                              child: GestureDetector(
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      border: BorderDirectional(
+                                          bottom:
+                                              BorderSide(color: Colors.black54))),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        _department == null
+                                            ? "Select Department"
+                                            : _department,
+                                        style: TextStyle(
+                                          fontSize: 21,
+                                          color: Colors.black54,
+                                        ),
                                       ),
-                                    ),
-                                    Icon(Icons.arrow_drop_down),
-                                  ],
+                                      Icon(Icons.arrow_drop_down),
+                                    ],
+                                  ),
                                 ),
+                                onTap: () => showModal(context),
                               ),
-                              onTap: () => showModal(context),
                             ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          TextFormField(
-                            controller: _subjectController,
-                            keyboardType: TextInputType.text,
-                            autocorrect: false,
-                            maxLines: null,
-                            validator: (value) {
-                              if (value.isEmpty || value.length < 1) {
-                                return 'Please enter Subject';
-                              } else if (value.length > 150) {
-                                return "Subject should Be less than 150 Words";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(5),
-                              hintText: "Subject",
+                            SizedBox(
+                              height: 5,
                             ),
-                            style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Expanded(
-                            child: TextFormField(
+                            TextFormField(
+                              controller: _subjectController,
                               keyboardType: TextInputType.text,
                               autocorrect: false,
-                              controller: _detailsController,
                               maxLines: null,
                               validator: (value) {
                                 if (value.isEmpty || value.length < 1) {
-                                  return 'Please enter details about your issue';
+                                  return 'Please enter Subject';
+                                } else if (value.length > 150) {
+                                  return "Subject should Be less than 150 Words";
                                 }
                                 return null;
                               },
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(5),
-                                hintText: "Complaint",
-                                border: InputBorder.none,
+                                hintText: "Subject",
                               ),
                               style: TextStyle(
                                 fontSize: 21,
                                 color: Colors.black,
                               ),
-                              minLines: 1,
-                              // maxLines: 100,
                             ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              (_images.length == 0)
-                                  ? Expanded(
-                                      child: Container(),
-                                    )
-                                  : Expanded(
-                                      child: SizedBox(
-                                        height: 60,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          key: GlobalKey(),
-                                          itemCount: _images.length,
-                                          itemBuilder: (context, index) {
-                                            return Row(
-                                              children: [
-                                                preview(_images[index]),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.photo_camera,
-                                  size: 30,
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    child: AlertDialog(
-                                      backgroundColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      title: Text(
-                                        "Choose an Option",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      actions: <Widget>[
-                                        MaterialButton(
-                                          child: Text(
-                                            "Gallery",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          onPressed: () async {
-                                            final picker = ImagePicker();
-                                            final pickedImage =
-                                                await picker.getImage(
-                                              source: ImageSource.gallery,
-                                              imageQuality: 50,
-                                            );
-                                            setState(() {
-                                              _image = File(pickedImage.path);
-                                              _images.add(_image);
-                                            });
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                        MaterialButton(
-                                          child: Text(
-                                            "Camera",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          onPressed: () async {
-                                            final picker = ImagePicker();
-                                            final pickedImage =
-                                                await picker.getImage(
-                                              source: ImageSource.camera,
-                                              imageQuality: 50,
-                                            );
-                                            setState(() {
-                                              _image = File(pickedImage.path);
-                                              _images.add(_image);
-                                              print(_images);
-                                            });
-                                            Navigator.of(context).pop();
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  );
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                keyboardType: TextInputType.text,
+                                autocorrect: false,
+                                controller: _detailsController,
+                                maxLines: null,
+                                validator: (value) {
+                                  if (value.isEmpty || value.length < 1) {
+                                    return 'Please enter details about your issue';
+                                  }
+                                  return null;
                                 },
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.all(5),
+                                  hintText: "Complaint",
+                                  border: InputBorder.none,
+                                ),
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  color: Colors.black,
+                                ),
+                                minLines: 1,
+                                // maxLines: 100,
                               ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                (_images.length == 0)
+                                    ? Expanded(
+                                        child: Container(),
+                                      )
+                                    : Expanded(
+                                        child: SizedBox(
+                                          height: 60,
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            key: GlobalKey(),
+                                            itemCount: _images.length,
+                                            itemBuilder: (context, index) {
+                                              return Row(
+                                                children: [
+                                                  preview(_images[index]),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.photo_camera,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      child: AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        title: Text(
+                                          "Choose an Option",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        actions: <Widget>[
+                                          MaterialButton(
+                                            child: Text(
+                                              "Gallery",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            onPressed: () async {
+                                              final picker = ImagePicker();
+                                              final pickedImage =
+                                                  await picker.getImage(
+                                                source: ImageSource.gallery,
+                                                imageQuality: 50,
+                                              );
+                                              setState(() {
+                                                _image = File(pickedImage.path);
+                                                _images.add(_image);
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          MaterialButton(
+                                            child: Text(
+                                              "Camera",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            onPressed: () async {
+                                              final picker = ImagePicker();
+                                              final pickedImage =
+                                                  await picker.getImage(
+                                                source: ImageSource.camera,
+                                                imageQuality: 50,
+                                              );
+                                              setState(() {
+                                                _image = File(pickedImage.path);
+                                                _images.add(_image);
+                                                print(_images);
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -353,13 +358,29 @@ class _FileComplaintState extends State<FileComplaint>
                     ),
                     onTap: () async {
                       {
+                        _formKey.currentState.validate();
                         setState(() {
                           loading = true;
                         });
-
-                        if (_department == null ||
+                        if(_images.length > 4)
+                        {
+                          setState(() {
+                            loading = false;
+                          });
+                          _scaffoldKey.currentState.showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                'Maximum 4 Images Can Be  Uploaded',
+                              ),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                        else if (_department == null ||
                             _detailsController.text == null ||
-                            _subjectController.text == null) {
+                            _subjectController.text == null) 
+                        {
                           setState(() {
                             loading = false;
                           });
@@ -372,8 +393,8 @@ class _FileComplaintState extends State<FileComplaint>
                               duration: Duration(seconds: 2),
                             ),
                           );
-                        } else {
-                          // responeTimer();
+                        } else 
+                        {
                           bool result = await checkInternet();
                           if (!result) {
                             print('result checked $result');
@@ -491,29 +512,6 @@ class _FileComplaintState extends State<FileComplaint>
     );
   }
 
-  // Future<bool> storeImages() async
-  // {
-  //   try {
-  //     final uid = await _auth.currentUser().then((value) => value.uid);
-  //     if (_images.length != 0) {
-  //       _images.forEach((element) async {
-  //         final ref2 = FirebaseStorage.instance
-  //             .ref()
-  //             .child('complaintImages')
-  //             .child(uid + DateTime.now().toIso8601String() + '.jpg');
-  //         await ref2.putFile(_image).onComplete;
-  //         var url = await ref2.getDownloadURL();
-  //         print(url);
-  //         urls.add(url);
-  //       });
-  //     }
-  //     return true;
-  //   }
-  //   catch(e) {
-  //     return false;
-  //   }
-  // }
-
   void responeTimer() async {
     print('timer fired');
     await Future.delayed(Duration(seconds: 10))
@@ -545,7 +543,7 @@ class _FileComplaintState extends State<FileComplaint>
         'imageURL': _images.length == 0 ? null : urls,
         'state': "Haryana",
         'subject': _subjectController.text,
-        'status': 0,
+        'status': 3,
         'name': pref.getString('name'),
         'city': "Palwal",
         'department': _department,
@@ -619,7 +617,7 @@ class _FileComplaintState extends State<FileComplaint>
           .add({
         'ref': ref.path,
         'subject': _subjectController.text,
-        'status': 0,
+        'status': 3,
         'date': DateTime.now().toIso8601String(),
       }).then((value) {
         print("Success");

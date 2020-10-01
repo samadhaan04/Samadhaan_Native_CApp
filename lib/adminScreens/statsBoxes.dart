@@ -1,7 +1,5 @@
 import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
 import 'package:flutter/material.dart';
-// import '../main.dart';
-// import 'package:provider/provider.dart';
 
 class Coloured extends StatefulWidget {
   const Coloured({Key key}) : super(key: key);

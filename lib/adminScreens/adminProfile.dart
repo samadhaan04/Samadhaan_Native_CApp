@@ -26,10 +26,15 @@ class _AdminProfileState extends State<AdminProfile> {
 
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async{
     super.didChangeDependencies();
     print('hello');
     user = ModalRoute.of(context).settings.arguments;
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      user = pref.getString("currentUser");
+      print(user);
+    });
   }
 
   bool isSwitched = false;
@@ -37,6 +42,7 @@ class _AdminProfileState extends State<AdminProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         actions: <Widget>[
           Row(

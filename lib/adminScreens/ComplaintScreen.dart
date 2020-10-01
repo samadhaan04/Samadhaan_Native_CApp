@@ -55,6 +55,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
     setState(() {
       SharedPreferences.getInstance().then((value) {
         user = value.getString('currentUser');
+        print("User is $user");
       });
     });
     super.didChangeDependencies();
@@ -308,7 +309,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
             ),
             Expanded(
                 child: MessagesStream1(transferValue, ongoingValue, doneValue,
-                    listOfReferences, ref)),
+                    newValue, listOfReferences, ref)),
           ],
         ),
       ),
@@ -320,11 +321,12 @@ class MessagesStream1 extends StatefulWidget {
   // final uid;
   final transferValue;
   final ongoingValue;
+  final newValue;
   final doneValue;
   final listOfReferences;
   final department;
   MessagesStream1(this.transferValue, this.ongoingValue, this.doneValue,
-      this.listOfReferences, this.department);
+      this.newValue, this.listOfReferences, this.department);
 
   @override
   _MessagesStream1State createState() => _MessagesStream1State();
@@ -359,6 +361,10 @@ class _MessagesStream1State extends State<MessagesStream1> {
           } else if (widget.transferValue == true) {
             list = snapshot.data.documents
                 .where((val) => (val['status'] == 2))
+                .toList();
+          } else if (widget.newValue == true) {
+            list = snapshot.data.documents
+                .where((val) => (val['status'] == 3))
                 .toList();
           } else {
             list = snapshot.data.documents;
@@ -431,6 +437,8 @@ class _MessageBubbleState extends State<MessageBubble> {
       _status = ComplaintStatus.Ongoing;
     } else if (widget.status == 2) {
       _status = ComplaintStatus.Transfer;
+    } else if (widget.status == 3) {
+      _status = ComplaintStatus.New;
     } else {
       _status = ComplaintStatus.Done;
     }

@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
+import 'package:faridabad/adminScreens/listOfDepartments.dart';
 import 'package:faridabad/data/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../widgets/showModal.dart';
 
 class ComplaintDetails extends StatefulWidget {
   static const routeName = '/complaint-details';
@@ -35,7 +35,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   var status;
   var isNew;
   Firestore _firestore;
-
+  bool isOnce = true;
+  var depts;
   var previousDepartment;
   var transferToDepartment;
 
@@ -50,6 +51,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     var pref = await SharedPreferences.getInstance();
     setState(() {
       user = pref.getString('currentUser');
+      _firestore.document('DepartmentNames/Names').get().then((value) {
+        depts = value.data['names'].toList();
+      });
       print(' requestfromDepartment $requestFromDepartment');
     });
   }
@@ -59,7 +63,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     dynamic arguments = ModalRoute.of(context).settings.arguments;
     ref = arguments['complaintId'];
     previouspath = arguments['path'];
-
+    if (isOnce && user != null && user != "Admin") {
+      _firestore.document(previouspath).updateData({
+        'status': 0,
+      });
+      _firestore.document(ref).updateData({
+        'status' : 0,
+      });
+      isOnce = false;
+    }
     super.didChangeDependencies();
   }
 
@@ -117,7 +129,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   children: <Widget>[
                     ReusableCardComplaint(
                       colour: Theme.of(context).disabledColor,
-                      // Color(0xff1d1b27),
                       cardChild: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -157,16 +168,25 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                                 begin: Alignment.centerLeft,
                                                 end: Alignment.centerRight,
                                               )
-                                            : LinearGradient(
-                                                colors: [
-                                                  Color.fromRGBO(
-                                                      236, 93, 59, 0.8),
-                                                  Color.fromRGBO(
-                                                      238, 120, 61, 0.8),
-                                                ],
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                              ),
+                                            : status == 3
+                                                ? LinearGradient(
+                                                    colors: [
+                                                      Color(0xff3d84fa),
+                                                      Color(0xff34afff),
+                                                    ],
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                  )
+                                                : LinearGradient(
+                                                    colors: [
+                                                      Color.fromRGBO(
+                                                          236, 93, 59, 0.8),
+                                                      Color.fromRGBO(
+                                                          238, 120, 61, 0.8),
+                                                    ],
+                                                    begin: Alignment.centerLeft,
+                                                    end: Alignment.centerRight,
+                                                  ),
                                   ),
                                 ),
                               )

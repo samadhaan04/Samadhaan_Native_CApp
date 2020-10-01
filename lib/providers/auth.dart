@@ -14,8 +14,11 @@ class Auth {
   final googleSignIn = new GoogleSignIn();
   FirebaseUser user;
   String currentUser;
-  Map emailList = emailValue;
+  Map emailList;
   final databaseReference = Firestore.instance;
+
+
+
 
   Future<bool> signInWithGoogle() async {
     try {
@@ -58,8 +61,7 @@ class Auth {
         return false;
       } else {
         user = result.user;
-        currentUser = checkEmailAndFindUser(user.email);
-        setCurrentUser();
+        await checkEmailAndFindUserAndSet(user.email);
         return true;
       }
     } catch (e) {
@@ -68,9 +70,15 @@ class Auth {
     }
   }
 
-  String checkEmailAndFindUser(email)
+  Future<void> checkEmailAndFindUserAndSet(email) async
   {
-    return emailList[email];
+    databaseReference.document('DepartmentNames/emails').get().then((value) {
+      emailList = value.data['email'];
+    }).whenComplete(() {
+      print('currentUser  ${emailList[email]}');
+      currentUser = emailList[email];
+      setCurrentUser();
+    });
   }
 
   Future<bool> signOut() async {
@@ -100,8 +108,7 @@ class Auth {
           setCurrentUser();
           return true;
         } else if (i[0] == "password") {
-          currentUser = checkEmailAndFindUser(value.email);
-          setCurrentUser();
+          checkEmailAndFindUserAndSet(value.email);
           return true;
         }
       });
@@ -114,7 +121,7 @@ class Auth {
   {
     final pref = await SharedPreferences.getInstance();
     pref.setString('currentUser', currentUser);
-    print('currentUser set');
+    print('currentUserSet $currentUser');
   }
 
 
