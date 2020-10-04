@@ -80,8 +80,7 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                               top: MediaQuery.of(context).size.height * 0.03,
                             ),
                             child: Text(
-                              'qwertyuiopl,mnbgfdszxcvbnjklpoiuytfrdsxcvbnkl.,mnbvcxsertyuiopoiuhgvbnmkliuytfdcvbn',
-                              // data['subject'],
+                              data['subject'],
                               style: TextStyle(
                                 fontSize: 15,
                               ),
@@ -110,58 +109,7 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                           SizedBox(
                             height: 20,
                           ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Actions',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Color(0xff817F7F),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SingleChildScrollView(
-                            child: Container(
-                              padding: EdgeInsets.all(15),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Enter Feedback',
-                                  border: InputBorder.none,
-                                ),
-                                maxLines: null,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
-                                textAlign: TextAlign.start,
-                                controller: feedback,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          FlatButton(
-                            child: Text(
-                              "Feedback",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Color(0xff817F7F),
-                              ),
-                            ),
-                            onPressed: () {
-                              sendFeedback();
-                            },
-                          )
+                          data['status'] != 1 ? actionExpansion() : Container(),
                         ],
                       ),
                     )
@@ -186,6 +134,65 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
         feedback.text = '';
       });
     });
+  }
+
+  Widget actionExpansion() {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Actions',
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Color(0xff817F7F),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(15),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter Feedback',
+                border: InputBorder.none,
+              ),
+              maxLines: null,
+              style: TextStyle(
+                fontSize: 15,
+              ),
+              textAlign: TextAlign.start,
+              controller: feedback,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        FlatButton(
+          child: Text(
+            "Feedback",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: Color(0xff817F7F),
+            ),
+          ),
+          onPressed: () {
+            sendFeedback();
+          },
+        )
+      ],
+    );
   }
 
   Widget descExpansion(String complaint) {

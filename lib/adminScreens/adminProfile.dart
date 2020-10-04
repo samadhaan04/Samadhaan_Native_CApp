@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/adminScreens/departments.dart';
 import 'package:faridabad/providers/auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,10 +20,17 @@ class AdminProfile extends StatefulWidget {
 
 class _AdminProfileState extends State<AdminProfile> {
   var user;
-
+  var topic;
+  var dataTopic;
+  final _firestore = Firestore.instance;
+  final fbm = FirebaseMessaging();
   @override
   void initState() { 
     super.initState();
+    
+    _firestore.document('DepartmentNames/topic').get().then((value) {
+      dataTopic = value.data['topic'];
+    });
   }
 
 
@@ -30,6 +39,7 @@ class _AdminProfileState extends State<AdminProfile> {
     super.didChangeDependencies();
     print('hello');
     user = ModalRoute.of(context).settings.arguments;
+    
     final pref = await SharedPreferences.getInstance();
     setState(() {
       user = pref.getString("currentUser");
@@ -133,6 +143,15 @@ class _AdminProfileState extends State<AdminProfile> {
                 onPressed: () async {
                   final signoutResult = await Auth().signOut();
                   if (signoutResult) {
+                    if(user == "Admin")
+                    {
+                      topic = 'admin';
+                    }
+                    else
+                    {
+                      topic = dataTopic[user];
+                    }
+                    fbm.unsubscribeFromTopic(topic);
                     Navigator.of(context).pushReplacementNamed(MyApp.routeName);
                   }
                 },
