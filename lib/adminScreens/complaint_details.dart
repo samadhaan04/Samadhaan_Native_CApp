@@ -63,6 +63,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     dynamic arguments = ModalRoute.of(context).settings.arguments;
     ref = arguments['complaintId'];
     previouspath = arguments['path'];
+    
+    super.didChangeDependencies();
+  }
+
+  void newToOld()
+  {
     if (isOnce && user != null && user != "Admin") {
       _firestore.document(previouspath).updateData({
         'status': 0,
@@ -72,7 +78,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       });
       isOnce = false;
     }
-    super.didChangeDependencies();
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -123,6 +128,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     : data['transferToDepartment'];
                 logs = data['logs'];
                 status = data['status'];
+                if(status == 3)
+                {
+                  newToOld();
+                }
                 isNew = data['new'];
                 print('status $status');
                 return Column(

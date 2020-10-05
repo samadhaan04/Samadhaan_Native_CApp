@@ -69,15 +69,6 @@ class PreviousComplaintsState extends State<PreviousComplaints> {
                       letterSpacing: 1,
                       color: Color(0xff817f7f),
                     ),
-                    // children: <TextSpan>[
-                    //   TextSpan(
-                    //       text: "INTS",
-                    //       style: TextStyle(
-                    //           letterSpacing: 1,
-                    //           fontSize: 40,
-                    //           color: Colors.grey[500],
-                    //           fontFamily: "Sans Serif"))
-                    // ]),
                   ),
                 ),
               ),
@@ -195,6 +186,7 @@ class _MessageBubbleState extends State<MessageBubble> {
       key: GlobalKey(),
       margin: EdgeInsets.all(5),
       child: Column(
+        key: GlobalKey(),
         children: <Widget>[
           GestureDetector(
             onTap: () {
@@ -221,9 +213,13 @@ class _MessageBubbleState extends State<MessageBubble> {
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundColor: widget.status == '0'
-                              ? Color.fromRGBO(80, 141, 243, 1)
-                              : Color.fromRGBO(113, 182, 67, 67),
+                          backgroundColor: widget.status == "0"
+                              ? Color.fromRGBO(240, 207, 98, 1)
+                              : widget.status == "1"
+                                  ? Color.fromRGBO(132, 202, 74, 1)
+                                  : widget.status == "2"
+                                      ? Color.fromRGBO(235, 103, 60, 1)
+                                      : Color.fromRGBO(82, 153, 253, 1),
                         ),
                         SizedBox(
                           width: 15,

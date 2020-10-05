@@ -5,6 +5,7 @@ import 'package:faridabad/adminScreens/departmentComplaintDescription.dart';
 import 'package:faridabad/main.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -32,17 +33,37 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
   var ongoingValue = false;
   var doneValue = false;
 
-  final databaseReference = Firestore.instance;
   String messageText;
   // var uid;
   var ref;
   var user;
-
+  bool isOnce = true;
+  Map topic;
+  final fbm = FirebaseMessaging();
   List<String> listOfReferences = [];
 
   @override
   void initState() {
     super.initState();
+    fbm.requestNotificationPermissions();
+    fbm.configure(
+      onLaunch: (message) {
+        print('onLaunch');
+        print(message);
+        return;
+      },
+      onMessage: (message) {
+        print('onMessage');
+        print(message);
+        return;
+      },
+      onResume: (message) {
+        print('onBackgroundMessage');
+        print(message);
+        return;
+      },
+    );
+    print('fbm configured');
   }
 
   @override
@@ -58,6 +79,15 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
         print("User is $user");
       });
     });
+    if(isOnce && user!='Admin')
+    {
+      _firestore.document('DepartmentNames/topic').get().then((value) {
+      topic = value.data['topic'];
+      fbm.subscribeToTopic(topic[user]);
+      print('subscribed to ${topic[user]}');
+    });
+      
+    }
     super.didChangeDependencies();
   }
 
@@ -439,7 +469,7 @@ class _MessageBubbleState extends State<MessageBubble> {
       _status = ComplaintStatus.Transfer;
     } else if (widget.status == 3) {
       _status = ComplaintStatus.New;
-    } else {
+    } else  if(widget.status == 1){
       _status = ComplaintStatus.Done;
     }
     super.initState();

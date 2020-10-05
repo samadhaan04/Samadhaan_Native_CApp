@@ -27,6 +27,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   Widget imageWidget;
   var countNotifications;
   String dropdownValue = '';
+  final fbm = FirebaseMessaging();
   var _items = ['User Profile', 'Logout'];
 
   var image, loading;
@@ -45,7 +46,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       loading = true;
     });
     fetchNameAndCity();
-    final fbm = FirebaseMessaging();
+    
     fbm.requestNotificationPermissions();
     fbm.configure(
       onLaunch: (message) {
@@ -57,14 +58,14 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
         print('onMessage');
         print(message);
         countNotifications++;
-        Fluttertoast.showToast(
-            msg: "You just recieved a toast notification!!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 2,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: "You just recieved a toast notification!!",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 2,
+        //     backgroundColor: Colors.red,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
         return;
       },
       onResume: (message) {
@@ -156,7 +157,6 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                               });
                               if (dropdownValue == 'Logout') {
                                 final signoutResult = await Auth().signOut();
-                                // print('sign out');
                                 if (signoutResult) {
                                   Navigator.of(context).pushReplacementNamed(
                                       HomeScreen.routeName);
