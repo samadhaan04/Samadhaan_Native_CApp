@@ -98,16 +98,16 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                       child: Column(
                         children: <Widget>[
                           descExpansion(data['complaintText']),
-                          SizedBox(
-                            height: 20,
-                          ),
+                          // SizedBox(
+                          //   height: 5,
+                          // ),
                           logs.length != 0 ? logExpansion() : Container(),
                           data['imageURL'] != null
                               ? imgExpansion(data['imageURL'])
                               : Container(),
                           // reqExpansion(),
                           SizedBox(
-                            height: 20,
+                            height: 12,
                           ),
                           data['status'] != 1 ? actionExpansion() : Container(),
                         ],
@@ -421,34 +421,74 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                 ],
               ),
               Container(
+                width: double.infinity,
                 height: logs.length * 20.0 < 150.0 ? logs.length * 20.0 : 150,
                 child: ListView.builder(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  padding: const EdgeInsets.all(0),
                   shrinkWrap: true,
                   itemCount: logs.length,
                   itemBuilder: (context, index) {
                     return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.black,
                           ),
-                          height: 5,
-                          width: 20,
+                          height: 20,
+                          width: 5,
                         ),
                         SizedBox(
-                          width: 10,
+                          width: 5,
                         ),
-                        Text(
-                          logs[index],
-                          style: TextStyle(color: Colors.black),
+                        Container(
+                          width: 300,
+                          child: Text(
+                            logs[index],
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
                         )
                       ],
                     );
                   },
                 ),
-              )
+              ),
+              // Container(
+              //   height: logs.length * 20.0 < 150.0 ? logs.length * 20.0 : 150,
+              //   child: ListView.builder(
+              //     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              //     shrinkWrap: true,
+              //     itemCount: logs.length,
+              //     itemBuilder: (context, index) {
+              //       return Row(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Container(
+              //             decoration: BoxDecoration(
+              //               shape: BoxShape.circle,
+              //               color: Colors.black,
+              //             ),
+              //             height: 5,
+              //             width: 20,
+              //           ),
+              //           SizedBox(
+              //             width: 10,
+              //           ),
+              //           Text(
+              //             logs[index],
+              //             style: TextStyle(color: Colors.black),
+              //           )
+              //         ],
+              //       );
+              //     },
+              //   ),
+              // )
             ],
           )
         : Row(

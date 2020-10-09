@@ -46,7 +46,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       loading = true;
     });
     fetchNameAndCity();
-    
+
     fbm.requestNotificationPermissions();
     fbm.configure(
       onLaunch: (message) {
@@ -78,16 +78,17 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     );
   }
 
-  
-  
-
   void fetchNameAndCity() async {
     final storage = FirebaseStorage.instance;
     setState(() {
       loading = true;
     });
     await storage.ref().child('family.jpg').getDownloadURL().then((image) {
-      imageWidget = Image.network(image, width: double.infinity,height: 450,);
+      imageWidget = Image.network(
+        image,
+        width: double.infinity,
+        height: 450,
+      );
     });
     final pref = await SharedPreferences.getInstance();
     final dname = pref.getString('name');
@@ -98,9 +99,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     setState(() {
       loading = false;
     });
-  }  
-  
-  
+  }
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -135,55 +134,10 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
               )
             : SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(14),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            '$username',
-                            style: TextStyle(
-                              fontSize: 23.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          DropdownButton(
-                            underline: Container(),
-                            onChanged: (value) async {
-                              setState(() {
-                                dropdownValue = value;
-                              });
-                              if (dropdownValue == 'Logout') {
-                                final signoutResult = await Auth().signOut();
-                                if (signoutResult) {
-                                  Navigator.of(context).pushReplacementNamed(
-                                      HomeScreen.routeName);
-                                }
-                              }
-                              if (dropdownValue == 'User Profile') {
-                                Navigator.of(context).pushNamed(
-                                    UserInfoScreen.routeName,
-                                    arguments: true);
-                              }
-                            },
-                            icon: Icon(
-                              Icons.menu,
-                              size: 35,
-                            ),
-                            // fit: BoxFit.contain,
-                            // height: 45,
-                            // ),
-                            items: _items.map((e) {
-                              return DropdownMenuItem(
-                                child: Text(e),
-                                value: e,
-                              );
-                            }).toList(),
-                          ),
-                        ],
-                      ),
                       SizedBox(
                         height: 20,
                       ),
@@ -194,6 +148,54 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      '$username',
+                                      style: TextStyle(
+                                        fontSize: 23.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    DropdownButton(
+                                      underline: Container(),
+                                      onChanged: (value) async {
+                                        setState(() {
+                                          dropdownValue = value;
+                                        });
+                                        if (dropdownValue == 'Logout') {
+                                          final signoutResult =
+                                              await Auth().signOut();
+                                          if (signoutResult) {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(
+                                                    HomeScreen.routeName);
+                                          }
+                                        }
+                                        if (dropdownValue == 'User Profile') {
+                                          Navigator.of(context).pushNamed(
+                                              UserInfoScreen.routeName,
+                                              arguments: true);
+                                        }
+                                      },
+                                      icon: Icon(
+                                        Icons.menu,
+                                        size: 35,
+                                      ),
+                                      // fit: BoxFit.contain,
+                                      // height: 45,
+                                      // ),
+                                      items: _items.map((e) {
+                                        return DropdownMenuItem(
+                                          child: Text(e),
+                                          value: e,
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
+                                ),
                                 // Image.asset(
                                 //   'assets/images/family.jpg',
                                 //   width: _animation.value * 500,

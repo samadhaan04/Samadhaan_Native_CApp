@@ -13,7 +13,7 @@ class _ColouredState extends State<Coloured> {
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
-      height: MediaQuery.of(context).size.height / 3.5,
+      height: MediaQuery.of(context).size.height / 6.5,
       margin: EdgeInsets.symmetric(
         vertical: 1,
         horizontal: 10,
@@ -55,7 +55,7 @@ class _ColouredState extends State<Coloured> {
               children: <Widget>[
                 Expanded(
                   child: ReusableCardComplaint(
-                    colour: Theme.of(context).cardColor,
+                    colour: Theme.of(context).accentColor,
                     // colour2: Color(0xffFE7325),
                     cardChild: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -68,21 +68,21 @@ class _ColouredState extends State<Coloured> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: ReusableCardComplaint(
-                    colour: Theme.of(context).accentColor,
-                    // colour2: Color(0xff34AFFF),
-                    cardChild: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Block('4.5', 2.0, 20.0,
-                            Theme.of(context).textTheme.bodyText1.color),
-                        Block('User Rating', 2.0, 18.0,
-                            Theme.of(context).textTheme.bodyText1.color),
-                      ],
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child: ReusableCardComplaint(
+                //     colour: Theme.of(context).accentColor,
+                //     // colour2: Color(0xff34AFFF),
+                //     cardChild: Column(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: <Widget>[
+                //         Block('4.5', 2.0, 20.0,
+                //             Theme.of(context).textTheme.bodyText1.color),
+                //         Block('User Rating', 2.0, 18.0,
+                //             Theme.of(context).textTheme.bodyText1.color),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

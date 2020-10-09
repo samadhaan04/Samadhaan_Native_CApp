@@ -16,6 +16,10 @@ class AppTheme {
     ),
     //lighter shade
     disabledColor: Color(0xf3f3f3f3),
+    // canvasColor: Colors.transparent,
+    // bottomSheetTheme: BottomSheetThemeData(
+    //   backgroundColor: Colors.transparent.withOpacity(0),
+    // ),
   );
 
   static final ThemeData darkTheme = ThemeData(

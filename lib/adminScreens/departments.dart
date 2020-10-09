@@ -21,9 +21,8 @@ class _InputDataState extends State<InputData> {
 
   // var _items = ['Profile'];
 
-
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     final fbm = FirebaseMessaging();
     fbm.requestNotificationPermissions();
@@ -76,35 +75,55 @@ class _InputDataState extends State<InputData> {
       onWillPop: _onWillPop,
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          iconTheme: IconThemeData(color: Colors.grey),
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () => Navigator.of(context)
-                  .pushReplacementNamed(AdminProfile.routename,arguments: "Admin"),
-              iconSize: 35,
-              color: Colors.grey[600],
-            )
-          ],
-          title: Text(
-            'Palwal,Haryana',
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyText1.color,
+        // appBar: AppBar(
+        //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        //   iconTheme: IconThemeData(color: Colors.grey),
+        //   automaticallyImplyLeading: false,
+        //   actions: <Widget>[
+
+        //   ],
+        //   title:
+        // ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 18.0),
+                      child: Text(
+                        'Palwal,Haryana',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).textTheme.bodyText1.color,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.account_circle),
+                      onPressed: () => Navigator.of(context)
+                          .pushReplacementNamed(AdminProfile.routename,
+                              arguments: "Admin"),
+                      iconSize: 35,
+                      color: Colors.grey[600],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Coloured(),
+                SizedBox(
+                  height: 10,
+                ),
+                Expanded(child: ListOfDepartments()),
+              ],
             ),
           ),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Coloured(),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(child: ListOfDepartments()),
-          ],
         ),
       ),
     );

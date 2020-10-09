@@ -45,6 +45,7 @@ class _FileComplaintState extends State<FileComplaint>
 
   void showModalSheet(BuildContext context) {
     showModalBottomSheet(
+      backgroundColor: Colors.white.withOpacity(0.8),
       context: context,
       builder: (_) {
         return ModalSheet();
@@ -95,13 +96,16 @@ class _FileComplaintState extends State<FileComplaint>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(
-                          'File Complaint',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 35,
-                            color: Color(0xff817f7f),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 25.0),
+                          child: Text(
+                            'File Complaint',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 35,
+                              color: Color(0xff817f7f),
+                            ),
                           ),
                         ),
                         // Text(
@@ -117,7 +121,7 @@ class _FileComplaintState extends State<FileComplaint>
                   ),
                   // TO BE DONE: Render a custom image from backend
                   SizedBox(
-                    height: 10,
+                    height: 12,
                   ),
                   // Text(
                   //   city ?? "empty",
@@ -129,9 +133,9 @@ class _FileComplaintState extends State<FileComplaint>
                   //     color: Colors.blue[300],
                   //   ),
                   // ),
-                  SizedBox(
-                    height: 30,
-                  ),
+                  // SizedBox(
+                  //   height: 30,
+                  // ),
                   Container(
                     margin: EdgeInsets.all(10),
                     width: double.infinity,
@@ -149,7 +153,7 @@ class _FileComplaintState extends State<FileComplaint>
                           EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       child: Form(
                         key: _formKey,
-                          child: Column(
+                        child: Column(
                           children: [
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 10),
@@ -159,8 +163,8 @@ class _FileComplaintState extends State<FileComplaint>
                                   padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                       border: BorderDirectional(
-                                          bottom:
-                                              BorderSide(color: Colors.black54))),
+                                          bottom: BorderSide(
+                                              color: Colors.black54))),
                                   child: Row(
                                     children: [
                                       Text(
@@ -186,6 +190,7 @@ class _FileComplaintState extends State<FileComplaint>
                               controller: _subjectController,
                               keyboardType: TextInputType.text,
                               autocorrect: false,
+                              maxLength: 150,
                               maxLines: null,
                               validator: (value) {
                                 if (value.isEmpty || value.length < 1) {
@@ -196,6 +201,7 @@ class _FileComplaintState extends State<FileComplaint>
                                 return null;
                               },
                               decoration: InputDecoration(
+                                counterText: '',
                                 contentPadding: EdgeInsets.all(5),
                                 hintText: "Subject",
                               ),
@@ -213,6 +219,7 @@ class _FileComplaintState extends State<FileComplaint>
                                 autocorrect: false,
                                 controller: _detailsController,
                                 maxLines: null,
+                                maxLength: 1000,
                                 validator: (value) {
                                   if (value.isEmpty || value.length < 1) {
                                     return 'Please enter details about your issue';
@@ -220,6 +227,7 @@ class _FileComplaintState extends State<FileComplaint>
                                   return null;
                                 },
                                 decoration: InputDecoration(
+                                  counterText: '',
                                   contentPadding: EdgeInsets.all(5),
                                   hintText: "Complaint",
                                   border: InputBorder.none,
@@ -297,7 +305,7 @@ class _FileComplaintState extends State<FileComplaint>
                                                 _image = File(pickedImage.path);
                                                 _images.add(_image);
                                               });
-                                              Navigator.of(context).pop();
+                                              // Navigator.of(context).pop();
                                             },
                                           ),
                                           MaterialButton(
@@ -318,7 +326,7 @@ class _FileComplaintState extends State<FileComplaint>
                                                 _images.add(_image);
                                                 print(_images);
                                               });
-                                              Navigator.of(context).pop();
+                                              // Navigator.of(context).pop();
                                             },
                                           )
                                         ],
@@ -334,10 +342,11 @@ class _FileComplaintState extends State<FileComplaint>
                     ),
                   ),
                   SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   GestureDetector(
                     child: Container(
+                      // padding: const EdgeInsets.only(top: 20),
                       height: 70,
                       alignment: Alignment.center,
                       width: width / 2,
@@ -362,8 +371,7 @@ class _FileComplaintState extends State<FileComplaint>
                         setState(() {
                           loading = true;
                         });
-                        if(_images.length > 4)
-                        {
+                        if (_images.length > 4) {
                           setState(() {
                             loading = false;
                           });
@@ -376,11 +384,9 @@ class _FileComplaintState extends State<FileComplaint>
                               duration: Duration(seconds: 2),
                             ),
                           );
-                        }
-                        else if (_department == null ||
+                        } else if (_department == null ||
                             _detailsController.text == null ||
-                            _subjectController.text == null) 
-                        {
+                            _subjectController.text == null) {
                           setState(() {
                             loading = false;
                           });
@@ -393,8 +399,7 @@ class _FileComplaintState extends State<FileComplaint>
                               duration: Duration(seconds: 2),
                             ),
                           );
-                        } else 
-                        {
+                        } else {
                           bool result = await checkInternet();
                           if (!result) {
                             print('result checked $result');

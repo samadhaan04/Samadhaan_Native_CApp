@@ -25,21 +25,20 @@ class _AdminProfileState extends State<AdminProfile> {
   final _firestore = Firestore.instance;
   final fbm = FirebaseMessaging();
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    
+
     _firestore.document('DepartmentNames/topic').get().then((value) {
       dataTopic = value.data['topic'];
     });
   }
 
-
   @override
-  void didChangeDependencies() async{
+  void didChangeDependencies() async {
     super.didChangeDependencies();
     print('hello');
     user = ModalRoute.of(context).settings.arguments;
-    
+
     final pref = await SharedPreferences.getInstance();
     setState(() {
       user = pref.getString("currentUser");
@@ -51,11 +50,21 @@ class _AdminProfileState extends State<AdminProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        actions: <Widget>[
-          Row(
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //   actions: <Widget>[
+      //     Row(
+      //       mainAxisAlignment: MainAxisAlignment.start,
+      //       children: <Widget>[],
+      //     ),
+      //   ],
+      // ),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(top: 15),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Container(
@@ -69,22 +78,14 @@ class _AdminProfileState extends State<AdminProfile> {
                   icon: Icon(Icons.arrow_back_ios),
                   iconSize: 30,
                   color: Colors.blue,
-                  onPressed: () => user == "Admin" ? Navigator.of(context)
-                      .pushReplacementNamed(InputData.routeName) : Navigator.of(context)
-                      .pushReplacementNamed(ComplaintScreen.routeName,arguments: user),
+                  onPressed: () => user == "Admin"
+                      ? Navigator.of(context)
+                          .pushReplacementNamed(InputData.routeName)
+                      : Navigator.of(context).pushReplacementNamed(
+                          ComplaintScreen.routeName,
+                          arguments: user),
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(top: 30),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
               CircleAvatar(
                 radius: 100.0,
                 backgroundColor: Colors.grey,
@@ -108,7 +109,7 @@ class _AdminProfileState extends State<AdminProfile> {
                   Text(
                     isSwitched ? 'Dark Mode' : 'Light Mode',
                     style: TextStyle(
-                        fontSize: 30.0,
+                        fontSize: 22.0,
                         color: Theme.of(context).textTheme.bodyText1.color,
                         fontWeight: FontWeight.w400),
                   ),
@@ -136,6 +137,21 @@ class _AdminProfileState extends State<AdminProfile> {
                   ),
                 ],
               ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0, left: 22),
+                  child: GestureDetector(
+                    child: Text(
+                      'Change Password',
+                      style: TextStyle(
+                          fontSize: 22.0,
+                          color: Theme.of(context).textTheme.bodyText1.color,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 50,
               ),
@@ -143,12 +159,9 @@ class _AdminProfileState extends State<AdminProfile> {
                 onPressed: () async {
                   final signoutResult = await Auth().signOut();
                   if (signoutResult) {
-                    if(user == "Admin")
-                    {
+                    if (user == "Admin") {
                       topic = 'admin';
-                    }
-                    else
-                    {
+                    } else {
                       topic = dataTopic[user];
                     }
                     fbm.unsubscribeFromTopic(topic);
@@ -158,7 +171,7 @@ class _AdminProfileState extends State<AdminProfile> {
                 child: Text(
                   'Logout',
                   style: TextStyle(
-                      fontSize: 30.0,
+                      fontSize: 22.0,
                       color: Theme.of(context).textTheme.bodyText1.color,
                       fontWeight: FontWeight.w500),
                 ),

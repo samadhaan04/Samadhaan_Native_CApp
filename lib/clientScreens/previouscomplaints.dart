@@ -58,7 +58,7 @@ class PreviousComplaintsState extends State<PreviousComplaints> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(bottom: 10, top: 30),
+                margin: EdgeInsets.only(bottom: 10, top: 45),
                 alignment: Alignment.center,
                 child: RichText(
                   text: TextSpan(
