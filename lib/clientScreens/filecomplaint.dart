@@ -70,11 +70,12 @@ class _FileComplaintState extends State<FileComplaint>
     super.didChangeDependencies();
   }
 
-  var city;
+  var city, state;
   void fetchCity() async {
     pref = await SharedPreferences.getInstance();
     setState(() {
       city = pref.getString('city');
+      state = pref.getString('state');
     });
   }
 
@@ -546,11 +547,11 @@ class _FileComplaintState extends State<FileComplaint>
         'author': uid,
         'complaintText': _detailsController.text,
         'imageURL': _images.length == 0 ? null : urls,
-        'state': "Haryana",
+        'state': state,
         'subject': _subjectController.text,
         'status': 3,
         'name': pref.getString('name'),
-        'city': "Palwal",
+        'city': city,
         'department': _department,
         'deptFeedback': null,
         'userFeedback': null,
@@ -586,9 +587,36 @@ class _FileComplaintState extends State<FileComplaint>
       print(ref.path);
       int length;
       int pending;
+      int totalForCity;
       try {
         await databaseReference
-            .collection("States/Haryana/Palwal")
+            .collection("States/$state/$city")
+            .document('data')
+            .get()
+            .then((value) {
+          totalForCity = value.data['total'];
+        });
+      } catch (e) {
+        await databaseReference
+            .collection("States/$state/$city")
+            .document('data')
+            .setData({
+          "total": 1,
+          "solved": 0,
+        });
+        totalForCity = 0;
+      }
+      if (totalForCity != 0) {
+        await databaseReference
+            .collection("States/$state/$city")
+            .document('data')
+            .updateData({
+          "total": totalForCity + 1,
+        });
+      }
+      try {
+        await databaseReference
+            .collection("States/$state/$city")
             .document(_department)
             .get()
             .then((value) {
@@ -597,7 +625,7 @@ class _FileComplaintState extends State<FileComplaint>
         });
       } catch (e) {
         await databaseReference
-            .collection("States/Haryana/Palwal")
+            .collection("States/$state/$city")
             .document(_department)
             .setData({
           "p": 1,
@@ -608,16 +636,15 @@ class _FileComplaintState extends State<FileComplaint>
       }
       if (length != 0) {
         await databaseReference
-            .collection("States/Haryana/Palwal")
+            .collection("States/$state/$city")
             .document(_department)
-            .setData({
+            .updateData({
           "p": length + 1,
           "pending": pending,
         });
       }
-
       await databaseReference
-          .document('States/Haryana/Palwal/$_department')
+          .document('States/$state/$city/$_department')
           .collection('Complaints')
           .add({
         'ref': ref.path,

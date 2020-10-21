@@ -820,6 +820,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   void markComplete() {
+    var solved;
     logs.add('$previousDepartment : Completed the Complaint');
     _firestore.document(ref).updateData({
       'status': 1,
@@ -828,6 +829,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       _firestore.document(previouspath).updateData({
         'status': 1,
       });
+      _firestore.document('States/Haryana/Palwal/data').get().then((value) {
+        solved = value.data['solved'];
+      });
+      _firestore
+          .document('States/Haryana/Palwal/data')
+          .updateData({'solved': solved + 1});
     }).then((value) {
       Navigator.of(context).pop();
     });

@@ -52,6 +52,8 @@ class _UserInfoScreenState extends State<UserInfoScreen>
   }
 
   bool loading = false;
+  List<String> states = [];
+  List cities = [];
 
   callback(bool value) {
     setState(() {
@@ -69,6 +71,24 @@ class _UserInfoScreenState extends State<UserInfoScreen>
         CurvedAnimation(parent: _animationController, curve: Curves.easeInCirc);
     _animation.addListener(() => this.setState(() {}));
     _animationController.forward();
+    getStates();
+    getcities();
+  }
+
+  void getStates() {
+    databaseReference.document('DepartmentNames/StateInfo').get().then((value) {
+      states = value.data.keys.toList();
+      states.insert(0, 'None');
+      print(states);
+    });
+  }
+
+  void getcities() {
+    databaseReference.document('DepartmentNames/StateInfo').get().then((value) {
+      setState(() {
+        cities = value.data[_state];
+      });
+    });
   }
 
   @override
@@ -376,11 +396,11 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                               _state = null;
                                             } else {
                                               _state = newValue;
+                                              getcities();
                                             }
                                           });
                                         },
-                                        items: getStateList().map((value) {
-                                          print(value);
+                                        items: states.map((value) {
                                           return DropdownMenuItem(
                                             child: Text(value),
                                             value: value,
@@ -434,8 +454,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
                                             }
                                           });
                                         },
-                                        items:
-                                            getcities(_state).map((location) {
+                                        items: cities.map((location) {
                                           return DropdownMenuItem(
                                             child: new Text(location),
                                             value: location,
@@ -721,6 +740,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
         }).then((value) {
           pref.setString('city', _constituency);
           pref.setString("name", _nameController.text);
+          pref.setString("state", _state);
           print("Success");
           return true;
         });

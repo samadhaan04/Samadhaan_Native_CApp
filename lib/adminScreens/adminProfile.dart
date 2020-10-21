@@ -22,12 +22,14 @@ class _AdminProfileState extends State<AdminProfile> {
   var user;
   var topic;
   var dataTopic;
+  var workCity, workState;
+  SharedPreferences pref;
   final _firestore = Firestore.instance;
   final fbm = FirebaseMessaging();
+  bool isOnce = true;
   @override
   void initState() {
     super.initState();
-
     _firestore.document('DepartmentNames/topic').get().then((value) {
       dataTopic = value.data['topic'];
     });
@@ -36,30 +38,23 @@ class _AdminProfileState extends State<AdminProfile> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    print('hello');
-    user = ModalRoute.of(context).settings.arguments;
-
-    final pref = await SharedPreferences.getInstance();
-    setState(() {
-      user = pref.getString("currentUser");
-      print(user);
-    });
+    if (isOnce) {
+      pref = await SharedPreferences.getInstance();
+      user = ModalRoute.of(context).settings.arguments;
+      setState(() {
+        user = pref.getString("currentUser");
+        workCity = pref.getString('workCity');
+        workState = pref.getString('workState');
+        print('work $workCity $workState');
+        isOnce = false;
+      });
+    }
   }
 
   bool isSwitched = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      //   actions: <Widget>[
-      //     Row(
-      //       mainAxisAlignment: MainAxisAlignment.start,
-      //       children: <Widget>[],
-      //     ),
-      //   ],
-      // ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Container(
@@ -137,21 +132,21 @@ class _AdminProfileState extends State<AdminProfile> {
                   ),
                 ],
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20.0, left: 22),
-                  child: GestureDetector(
-                    child: Text(
-                      'Change Password',
-                      style: TextStyle(
-                          fontSize: 22.0,
-                          color: Theme.of(context).textTheme.bodyText1.color,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.centerLeft,
+              //   child: Padding(
+              //     padding: const EdgeInsets.only(top: 20.0, left: 22),
+              //     child: GestureDetector(
+              //       child: Text(
+              //         'Change Password',
+              //         style: TextStyle(
+              //             fontSize: 22.0,
+              //             color: Theme.of(context).textTheme.bodyText1.color,
+              //             fontWeight: FontWeight.w400),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: 50,
               ),
@@ -164,6 +159,8 @@ class _AdminProfileState extends State<AdminProfile> {
                     } else {
                       topic = dataTopic[user];
                     }
+                    topic = workCity + workState + topic;
+                    print('unsubscribing from $topic');
                     fbm.unsubscribeFromTopic(topic);
                     Navigator.of(context).pushReplacementNamed(MyApp.routeName);
                   }

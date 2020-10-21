@@ -46,7 +46,6 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
       loading = true;
     });
     fetchNameAndCity();
-
     fbm.requestNotificationPermissions();
     fbm.configure(
       onLaunch: (message) {
@@ -99,6 +98,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     setState(() {
       loading = false;
     });
+    // Auth().burrah();
   }
 
   Future<bool> _onWillPop() async {
