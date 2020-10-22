@@ -39,10 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   final _formKey = GlobalKey<FormState>();
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    final _scaffoldKey = GlobalKey<ScaffoldState>();
+    
     return Scaffold(
       key: _scaffoldKey,
       body: loading ? Center(child: CircularProgressIndicator(),) :  Container(
@@ -167,11 +167,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                   await _auth
                                       .signIn(email, password)
                                       .then((value) {
-                                    Timer(Duration(milliseconds: 2500), () {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                    Timer(Duration(milliseconds: 3500), () {
                                       result = value;
                                       user = pref.getString('currentUser');
+                                      print(user);
                                       if (result == true) {
                                         print('login $user');
+                                        setState(() {
+                                          loading = false;
+                                        });
                                         Navigator.of(context)
                                             .pushReplacementNamed(
                                                 AdminUi.routeName,

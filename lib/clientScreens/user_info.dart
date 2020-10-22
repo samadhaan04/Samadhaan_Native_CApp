@@ -66,13 +66,14 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     super.initState();
     checkInternet();
     _animationController = new AnimationController(
-        vsync: this, duration: Duration(milliseconds: 600));
+      vsync: this,
+      duration: Duration(milliseconds: 600),
+    );
     _animation =
         CurvedAnimation(parent: _animationController, curve: Curves.easeInCirc);
     _animation.addListener(() => this.setState(() {}));
     _animationController.forward();
     getStates();
-    getcities();
   }
 
   void getStates() {
@@ -80,12 +81,14 @@ class _UserInfoScreenState extends State<UserInfoScreen>
       states = value.data.keys.toList();
       states.insert(0, 'None');
       print(states);
+      getcities();
     });
   }
 
   void getcities() {
     databaseReference.document('DepartmentNames/StateInfo').get().then((value) {
       setState(() {
+        print('state : $_state,  ${value.data[_state]}');
         cities = value.data[_state];
       });
     });
@@ -719,7 +722,6 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     _gender = result['gender'];
     _phoneController.text = (result['phoneNumber']);
     _constituency = result['city'];
-    print(_constituency);
     return true;
   }
 

@@ -25,6 +25,7 @@ class ComplaintScreen extends StatefulWidget {
 final _firestore = Firestore.instance;
 FirebaseUser loggedInUser;
 String email;
+var user, workCity, workState;
 int sort = 0;
 
 class _ComplaintScreenState extends State<ComplaintScreen> {
@@ -36,7 +37,6 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
   String messageText;
   // var uid;
   var ref;
-  var user, workCity, workState;
   bool isOnce = true;
   Map topic;
   final fbm = FirebaseMessaging();
@@ -56,11 +56,13 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
       } else {
         ref = ModalRoute.of(context).settings.arguments;
       }
+      print(ref);
       setState(() {
         user = pref.getString('currentUser');
         workCity = pref.getString('workCity');
         workState = pref.getString('workState');
       });
+      print('user $user, city $workCity, state $workState');
       if (user != 'Admin') {
         fbm.requestNotificationPermissions();
         fbm.configure(
@@ -122,7 +124,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
             padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
             icon: Icon(Icons.account_circle),
             onPressed: () => Navigator.of(context)
-                .pushReplacementNamed(AdminProfile.routename, arguments: user),
+                .pushNamed(AdminProfile.routename, arguments: user),
             iconSize: 35,
             color: Colors.grey[600],
           )
@@ -375,7 +377,7 @@ class _MessagesStream1State extends State<MessagesStream1> {
     // print('uid ${widget.uid}');
     return StreamBuilder(
       stream: _firestore
-          .collection('States/Haryana/Palwal/${widget.department}/Complaints')
+          .collection('States/$workState/$workCity/${widget.department}/Complaints')
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {

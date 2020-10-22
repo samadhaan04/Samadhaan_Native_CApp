@@ -539,7 +539,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   child: Container(
                     width: double.infinity,
                     height:
-                        logs.length * 90.0 < 200.0 ? logs.length * 90.0 : 200,
+                        logs.length * 90.0 < 150.0 ? logs.length * 90.0 : 150,
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: logs.length,
@@ -634,7 +634,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white,
+                  color: Theme.of(context).textTheme.bodyText1.color,
+                  fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
                 ),
               ),
             ),
@@ -651,7 +653,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     },
                     child: Text(
                       "Go back <--",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,),
                     ),
                   )
                 : Container(),
@@ -705,11 +707,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       Center(
                         child: FlatButton(
                             onPressed: () {
-                              sendFeedbackFromDepartment();
+                              if (reqORfeed.text == '') {
+                                showSnackbar("Please Fill Feedback");
+                              } else {
+                                sendFeedbackFromDepartment();
+                              }
                             },
                             child: Text(
                               'Send Feedback',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,),
                             )),
                       )
                     ],
@@ -730,14 +736,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               FlatButton(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 7),
-                                shape: Border.all(color: Colors.white),
+                                shape: Border.all(color: Theme.of(context).textTheme.bodyText1.color,),
                                 child: Text(
                                   department == null
                                       ? "Select Department"
                                       : department,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.white,
+                                    color: Theme.of(context).textTheme.bodyText1.color,
                                   ),
                                   softWrap: true,
                                 ),
@@ -751,12 +757,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               FlatButton(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 7),
-                                shape: Border.all(color: Colors.white),
+                                shape: Border.all(color: Theme.of(context).textTheme.bodyText1.color,),
                                 child: Text(
                                   "Submit Transfer Request",
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Colors.white,
+                                    color: Theme.of(context).textTheme.bodyText1.color,
                                   ),
                                   softWrap: true,
                                 ),
@@ -786,12 +792,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         status != 1 || status != 2
             ? FlatButton(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-                shape: Border.all(color: Colors.white),
+                shape: Border.all(color: Theme.of(context).textTheme.bodyText1.color,),
                 child: Text(
                   "Mark Complete",
                   style: TextStyle(
                     fontSize: 15,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyText1.color,
                   ),
                 ),
                 onPressed: () {
@@ -1150,7 +1156,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.white,
+          color: Theme.of(context).textTheme.bodyText1.color,
         ),
       ),
       child: TextField(
@@ -1158,13 +1164,13 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         decoration: InputDecoration(
           hintText: text,
           hintStyle: TextStyle(
-            color: Colors.white.withOpacity(0.5),
+            color: Theme.of(context).textTheme.bodyText1.color,
           ),
         ),
         maxLines: null,
         style: TextStyle(
           fontSize: 15,
-          color: Colors.white,
+          color: Theme.of(context).textTheme.bodyText1.color,
         ),
         textAlign: TextAlign.center,
       ),
@@ -1174,12 +1180,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   Widget buttonFlat(String childtext, Function pressed) {
     return FlatButton(
       padding: EdgeInsets.all(20),
-      shape: Border.all(color: Colors.white),
+      shape: Border.all(color: Theme.of(context).textTheme.bodyText1.color,),
       child: Text(
         childtext,
         style: TextStyle(
           fontSize: 15,
-          color: Colors.white,
+          color: Theme.of(context).textTheme.bodyText1.color,
+          fontFamily:
+                          Theme.of(context).textTheme.bodyText1.fontFamily,
         ),
       ),
       onPressed: pressed,

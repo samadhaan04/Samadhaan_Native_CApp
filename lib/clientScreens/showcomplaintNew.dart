@@ -98,9 +98,6 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                       child: Column(
                         children: <Widget>[
                           descExpansion(data['complaintText']),
-                          // SizedBox(
-                          //   height: 5,
-                          // ),
                           logs.length != 0 ? logExpansion() : Container(),
                           data['imageURL'] != null
                               ? imgExpansion(data['imageURL'])
@@ -297,9 +294,6 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                     },
                   )
                 ],
-              ),
-              SizedBox(
-                height: 7,
               ),
               SingleChildScrollView(
                 child: Container(

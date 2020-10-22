@@ -52,17 +52,14 @@ class _InputDataState extends State<InputData> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    if(isOnce)
-    {
-    pref = await SharedPreferences.getInstance();
-    workCity = pref.getString('workCity');
-    workState = pref.getString('workState');
-    print('subscribing to $workState$workCity'+'admin');
-    fbm.subscribeToTopic('$workState$workCity'+'admin');
-    isOnce = false;
-    setState(() {
-      
-    });
+    if (isOnce) {
+      pref = await SharedPreferences.getInstance();
+      workCity = pref.getString('workCity');
+      workState = pref.getString('workState');
+      print('subscribing to $workState$workCity' + 'admin');
+      fbm.subscribeToTopic('$workState$workCity' + 'admin');
+      isOnce = false;
+      setState(() {});
     }
   }
 
@@ -114,7 +111,7 @@ class _InputDataState extends State<InputData> {
                     Padding(
                       padding: const EdgeInsets.only(left: 18.0),
                       child: Text(
-                        '$workCity,$workState',
+                        '$workCity, $workState',
                         style: TextStyle(
                           fontSize: 20,
                           color: Theme.of(context).textTheme.bodyText1.color,

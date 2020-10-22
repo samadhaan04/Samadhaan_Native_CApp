@@ -79,6 +79,7 @@ class _FileComplaintState extends State<FileComplaint>
     });
   }
 
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   @override
@@ -220,7 +221,7 @@ class _FileComplaintState extends State<FileComplaint>
                                 autocorrect: false,
                                 controller: _detailsController,
                                 maxLines: null,
-                                maxLength: 1000,
+                                maxLength: 500,
                                 validator: (value) {
                                   if (value.isEmpty || value.length < 1) {
                                     return 'Please enter details about your issue';
@@ -274,9 +275,13 @@ class _FileComplaintState extends State<FileComplaint>
                                   icon: Icon(
                                     Icons.photo_camera,
                                     size: 30,
+                                    color: _images.length >= 4 ? Colors.grey : Colors.black
                                   ),
                                   onPressed: () {
-                                    showDialog(
+                                    if(_images.length >= 4)
+                                    return null;
+                                    else
+                                    return showDialog(
                                       context: context,
                                       child: AlertDialog(
                                         backgroundColor: Colors.white,
@@ -305,8 +310,9 @@ class _FileComplaintState extends State<FileComplaint>
                                               setState(() {
                                                 _image = File(pickedImage.path);
                                                 _images.add(_image);
+                                                Navigator.of(context, rootNavigator: true).pop();
                                               });
-                                              // Navigator.of(context).pop();
+                                              //
                                             },
                                           ),
                                           MaterialButton(
@@ -325,7 +331,7 @@ class _FileComplaintState extends State<FileComplaint>
                                               setState(() {
                                                 _image = File(pickedImage.path);
                                                 _images.add(_image);
-                                                print(_images);
+                                                Navigator.of(context, rootNavigator: true).pop();
                                               });
                                               // Navigator.of(context).pop();
                                             },

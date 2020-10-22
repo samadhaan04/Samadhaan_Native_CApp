@@ -120,47 +120,52 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                       ),
                                       padding: EdgeInsets.symmetric(
                                           vertical: 40, horizontal: 15),
-                                      child: Text(
-                                        // dept[index].department,
-                                        listOfDepartments[index]
-                                            .keys
-                                            .single
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              .color,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              .fontFamily,
-                                          fontSize: 22,
+                                      child: FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          listOfDepartments[index]
+                                              .keys
+                                              .single
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .color,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .fontFamily,
+                                            fontSize: 22,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 40, horizontal: 5),
-                                      child: Text(
-                                        // '1     ',
-                                        listOfDepartments[index]
-                                                .values
-                                                .first[0]
-                                                .toString() +
-                                            "    ",
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              .color,
-                                          // fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          fontFamily: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1
-                                              .fontFamily,
+                                      child: FittedBox(
+                                        fit: BoxFit.fitWidth,
+                                        child: Text(
+                                          // '1     ',
+                                          listOfDepartments[index]
+                                                  .values
+                                                  .first[0]
+                                                  .toString() +
+                                              "    ",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .color,
+                                            // fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            fontFamily: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                .fontFamily,
+                                          ),
                                         ),
                                       ),
                                     ),
