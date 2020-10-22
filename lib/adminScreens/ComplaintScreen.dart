@@ -36,7 +36,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
   String messageText;
   // var uid;
   var ref;
-  var user;
+  var user, workCity, workState;
   bool isOnce = true;
   Map topic;
   final fbm = FirebaseMessaging();
@@ -45,48 +45,54 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
   @override
   void initState() {
     super.initState();
-    fbm.requestNotificationPermissions();
-    fbm.configure(
-      onLaunch: (message) {
-        print('onLaunch');
-        print(message);
-        return;
-      },
-      onMessage: (message) {
-        print('onMessage');
-        print(message);
-        return;
-      },
-      onResume: (message) {
-        print('onBackgroundMessage');
-        print(message);
-        return;
-      },
-    );
-    print('fbm configured');
   }
 
   @override
   void didChangeDependencies() async {
-    if (widget.department != null) {
-      ref = widget.department;
-    } else {
-      ref = ModalRoute.of(context).settings.arguments;
-    }
-    setState(() {
-      SharedPreferences.getInstance().then((value) {
-        user = value.getString('currentUser');
-        print("User is $user");
+    if (isOnce) {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      if (widget.department != null) {
+        ref = widget.department;
+      } else {
+        ref = ModalRoute.of(context).settings.arguments;
+      }
+      setState(() {
+        user = pref.getString('currentUser');
+        workCity = pref.getString('workCity');
+        workState = pref.getString('workState');
       });
-    });
-    if(isOnce && user!='Admin')
-    {
-      _firestore.document('DepartmentNames/topic').get().then((value) {
-      topic = value.data['topic'];
-      fbm.subscribeToTopic(topic[user]);
-      print('subscribed to ${topic[user]}');
-    });
-      
+      if (user != 'Admin') {
+        fbm.requestNotificationPermissions();
+        fbm.configure(
+          onLaunch: (message) {
+            print('onLaunch');
+            print(message);
+            return;
+          },
+          onMessage: (message) {
+            print('onMessage');
+            print(message);
+            return;
+          },
+          onResume: (message) {
+            print('onBackgroundMessage');
+            print(message);
+            return;
+          },
+        );
+        print('fbm configured');
+        _firestore.document('DepartmentNames/topic').get().then((value) {
+          topic = value.data['topic'];
+          var topicForuser = topic[user];
+          var topicName = workState + workCity + topicForuser;
+          print('topic for department $topicName');
+          fbm.subscribeToTopic(topicName);
+          print('subscribed to $topicName');
+        });
+        setState(() {
+          isOnce = false;
+        });
+      }
     }
     super.didChangeDependencies();
   }
@@ -469,7 +475,7 @@ class _MessageBubbleState extends State<MessageBubble> {
       _status = ComplaintStatus.Transfer;
     } else if (widget.status == 3) {
       _status = ComplaintStatus.New;
-    } else  if(widget.status == 1){
+    } else if (widget.status == 1) {
       _status = ComplaintStatus.Done;
     }
     super.initState();

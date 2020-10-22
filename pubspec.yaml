@@ -68,6 +68,8 @@ flutter:
     - assets/images/edit.jpg
     - assets/images/family.jpg
     - assets/images/samadhaan.png
+    - assets/images/google.png
+    - assets/images/phone-image.png
   fonts:
   - family: Lobster
     fonts:

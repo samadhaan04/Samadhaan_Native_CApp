@@ -14,11 +14,9 @@ class Auth {
   final googleSignIn = new GoogleSignIn();
   FirebaseUser user;
   String currentUser;
+  var workCity,workState;
   Map emailList;
   final databaseReference = Firestore.instance;
-
-
-
 
   Future<bool> signInWithGoogle() async {
     try {
@@ -53,8 +51,38 @@ class Auth {
     }
   }
 
+  // void generateId() {
+  //   List ems = [
+  //     'admin@samadhaan.com',
+  //     'animal@samadhaan.com',
+  //     'bdpo@samadhaan.com',
+  //     'civilh@samadhaan.com',
+  //     'dhbvnr@samadhaan.com',
+  //     'dhbvnu@samadhaan.com',
+  //     'dtownPlanner@samadhaan.com',
+  //     'elementaryedu@samadhaan.com',
+  //     'firedepartment@samadhaan.com',
+  //     'higheredu@samadhaan.com',
+  //     'hvpnl@samadhaan.com',
+  //     'irrigation@samadhaan.com',
+  //     'nagarparishad@samadhaan.com',
+  //     'publicwater@samadhaan.com',
+  //     'pwd@samadhaan.com',
+  //     'socialwelfare@samadhaan.com',
+  //     'tehsil@samadhaan.com',
+  //     'publicswge@samadhaan.com',
+  //     'publicrwell@samadhaan.com'
+  //   ];
+  //   ems.forEach((element) {
+  //     _auth.createUserWithEmailAndPassword(
+  //         email: 'pbpat$element', password: '123456');
+  //   });
+  // }
+
   Future<bool> signIn(String email, String password) async {
     try {
+      email = '$email@samadhaan.com';
+      print('checking email $email');
       AuthResult result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       if (result.user == null) {
@@ -70,14 +98,26 @@ class Auth {
     }
   }
 
-  Future<void> checkEmailAndFindUserAndSet(email) async
-  {
+
+  Future<void> checkEmailAndFindUserAndSet(String email) async {
     databaseReference.document('DepartmentNames/emails').get().then((value) {
       emailList = value.data['email'];
     }).whenComplete(() {
-      print('currentUser  ${emailList[email]}');
-      currentUser = emailList[email];
-      setCurrentUser();
+      var c = email.substring(2,5);
+      var s = email.substring(0,2);
+      email = email.substring(5);
+      databaseReference.document('DepartmentNames/StateCode').get().then((value) {
+        print('check State $s ${value.data[s]}');
+        workState = value.data[s];
+      }).then((value) {
+        databaseReference.document('DepartmentNames/CityCode').get().then((value) {
+          print('check city $c ${value.data[c]}');
+          workCity = value.data[c];
+        }).whenComplete(() {
+        currentUser = emailList[email];
+        setCurrentUser();
+      });
+      });
     });
   }
 
@@ -108,8 +148,13 @@ class Auth {
           setCurrentUser();
           return true;
         } else if (i[0] == "password") {
+          print(value.email);
           checkEmailAndFindUserAndSet(value.email);
           return true;
+        }
+        else
+        {
+          return false;
         }
       });
     } else {
@@ -117,13 +162,15 @@ class Auth {
     }
   }
 
-  void setCurrentUser() async
-  {
+  void setCurrentUser() async {
     final pref = await SharedPreferences.getInstance();
     pref.setString('currentUser', currentUser);
+    pref.setString('workCity', workCity);
+    pref.setString('workState', workState);
     print('currentUserSet $currentUser');
+    print('WorkCitySet $workCity');
+    print('WorkStateSet $workState');
   }
-
 
   Future<bool> checkuserInfo() async {
     final pref = await SharedPreferences.getInstance();
@@ -138,11 +185,14 @@ class Auth {
           .then((doc) {
         if (doc.exists) {
           var city = doc['city'];
+          var state = doc['state'];
           pref.setString("city", city);
           pref.setString("token", token);
+          pref.setString("state", state);
           pref.setString("name", doc['name']);
           print('token $token');
           print('city set $city');
+          print('state set $state');
           return true;
         } else {
           return false;

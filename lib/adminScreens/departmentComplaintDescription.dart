@@ -188,7 +188,7 @@ class _ShowComplaintsNew1State extends State<ShowComplaintsNew1> {
                   Text(
                     'Description',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 16,
                       color: Colors.white,
                     ),
                   ),
@@ -233,7 +233,7 @@ class _ShowComplaintsNew1State extends State<ShowComplaintsNew1> {
               Text(
                 'Description',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 16,
                   color: Colors.white,
                 ),
               ),
@@ -262,7 +262,7 @@ class _ShowComplaintsNew1State extends State<ShowComplaintsNew1> {
                   Text(
                     'Images',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 16,
                       color: Colors.white,
                     ),
                   ),
@@ -304,7 +304,7 @@ class _ShowComplaintsNew1State extends State<ShowComplaintsNew1> {
               Text(
                 'Images',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 16,
                   color: Colors.white,
                 ),
               ),
@@ -347,7 +347,7 @@ class _ShowComplaintsNew1State extends State<ShowComplaintsNew1> {
                   Text(
                     'Logs',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 16,
                       color: Colors.white,
                     ),
                   ),
@@ -392,7 +392,7 @@ class _ShowComplaintsNew1State extends State<ShowComplaintsNew1> {
               Text(
                 'Logs',
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 16,
                   color: Colors.white,
                 ),
               ),

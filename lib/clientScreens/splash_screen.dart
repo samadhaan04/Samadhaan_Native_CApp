@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/adminScreens/adminUI.dart';
 import 'package:faridabad/providers/auth.dart';
@@ -18,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   var _auth = Auth();
 
+
   void movetoHome() async {
     final pref = await SharedPreferences.getInstance();
     final result = await _auth.autoLogin();
@@ -25,7 +27,6 @@ class _SplashScreenState extends State<SplashScreen> {
     print('result $result');
     if (result == true) {
       var currentUser = pref.getString('currentUser');
-      print('currentUser $currentUser');
       if (currentUser == 'client') 
       {
         final check = await _auth.checkuserInfo();

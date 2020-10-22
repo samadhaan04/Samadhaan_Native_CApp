@@ -63,18 +63,17 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     dynamic arguments = ModalRoute.of(context).settings.arguments;
     ref = arguments['complaintId'];
     previouspath = arguments['path'];
-    
+
     super.didChangeDependencies();
   }
 
-  void newToOld()
-  {
+  void newToOld() {
     if (isOnce && user != null && user != "Admin") {
       _firestore.document(previouspath).updateData({
         'status': 0,
       });
       _firestore.document(ref).updateData({
-        'status' : 0,
+        'status': 0,
       });
       isOnce = false;
     }
@@ -86,186 +85,214 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        iconTheme: IconThemeData(color: Colors.grey),
-        automaticallyImplyLeading: false,
-        titleSpacing: -12.0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_arrow_left,
-            size: 38,
-            color: Color(0xff0371dd),
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(
-          'Back',
-          style: TextStyle(
-            color: Color(0xff0371dd),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: StreamBuilder<DocumentSnapshot>(
-            stream: _firestore.document(ref).snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                // print(snapshot.data.data);
-                var data = snapshot.data.data;
-                var date =
-                    DateFormat.yMMMEd().format(DateTime.parse(data['date']));
-                requestFromDepartment = data['transferRequest'] == ''
-                    ? null
-                    : data['transferRequest'];
-                previousDepartment = data['department'];
-                transferToDepartment = data['transferToDepartment'] == ''
-                    ? null
-                    : data['transferToDepartment'];
-                logs = data['logs'];
-                status = data['status'];
-                if(status == 3)
-                {
-                  newToOld();
-                }
-                isNew = data['new'];
-                print('status $status');
-                return Column(
-                  children: <Widget>[
-                    ReusableCardComplaint(
-                      colour: Theme.of(context).disabledColor,
-                      cardChild: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      // appBar: AppBar(
+      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      //   iconTheme: IconThemeData(color: Colors.grey),
+      //   automaticallyImplyLeading: false,
+      //   titleSpacing: -12.0,
+      //   leading:
+      //   title:
+      // ),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.keyboard_arrow_left,
+                    size: 40,
+                    color: Color(0xff0371dd),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                Text(
+                  'Back',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xff0371dd),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 6,
+            ),
+            SingleChildScrollView(
+              child: StreamBuilder<DocumentSnapshot>(
+                  stream: _firestore.document(ref).snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      // print(snapshot.data.data);
+                      var data = snapshot.data.data;
+                      var date = DateFormat.yMMMEd()
+                          .format(DateTime.parse(data['date']));
+                      requestFromDepartment = data['transferRequest'] == ''
+                          ? null
+                          : data['transferRequest'];
+                      previousDepartment = data['department'];
+                      transferToDepartment = data['transferToDepartment'] == ''
+                          ? null
+                          : data['transferToDepartment'];
+                      logs = data['logs'];
+                      status = data['status'];
+                      if (status == 3) {
+                        newToOld();
+                      }
+                      isNew = data['new'];
+                      print('status $status');
+                      return Column(
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                // '15 Jul 2020',
-                                date.toString(),
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                  fontFamily: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .fontFamily,
+                          ReusableCardComplaint(
+                            colour: Theme.of(context).disabledColor,
+                            cardChild: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      // '15 Jul 2020',
+                                      date.toString(),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                        fontFamily: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .fontFamily,
+                                      ),
+                                    ),
+                                    CircleAvatar(
+                                      radius: 15,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: status == 0
+                                              ? LinearGradient(
+                                                  colors: [
+                                                    Color(0xfff4b601),
+                                                    Color(0xffffee77),
+                                                  ],
+                                                )
+                                              : status == 1
+                                                  ? LinearGradient(
+                                                      colors: [
+                                                        Color(0xff51b328),
+                                                        Color(0xff85eb29),
+                                                      ],
+                                                      begin:
+                                                          Alignment.centerLeft,
+                                                      end:
+                                                          Alignment.centerRight,
+                                                    )
+                                                  : status == 3
+                                                      ? LinearGradient(
+                                                          colors: [
+                                                            Color(0xff3d84fa),
+                                                            Color(0xff34afff),
+                                                          ],
+                                                          begin: Alignment
+                                                              .centerLeft,
+                                                          end: Alignment
+                                                              .centerRight,
+                                                        )
+                                                      : LinearGradient(
+                                                          colors: [
+                                                            Color.fromRGBO(236,
+                                                                93, 59, 0.8),
+                                                            Color.fromRGBO(238,
+                                                                120, 61, 0.8),
+                                                          ],
+                                                          begin: Alignment
+                                                              .centerLeft,
+                                                          end: Alignment
+                                                              .centerRight,
+                                                        ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              ),
-                              CircleAvatar(
-                                radius: 15,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: status == 0
-                                        ? LinearGradient(
-                                            colors: [
-                                              Color(0xfff4b601),
-                                              Color(0xffffee77),
-                                            ],
-                                          )
-                                        : status == 1
-                                            ? LinearGradient(
-                                                colors: [
-                                                  Color(0xff51b328),
-                                                  Color(0xff85eb29),
-                                                ],
-                                                begin: Alignment.centerLeft,
-                                                end: Alignment.centerRight,
-                                              )
-                                            : status == 3
-                                                ? LinearGradient(
-                                                    colors: [
-                                                      Color(0xff3d84fa),
-                                                      Color(0xff34afff),
-                                                    ],
-                                                    begin: Alignment.centerLeft,
-                                                    end: Alignment.centerRight,
-                                                  )
-                                                : LinearGradient(
-                                                    colors: [
-                                                      Color.fromRGBO(
-                                                          236, 93, 59, 0.8),
-                                                      Color.fromRGBO(
-                                                          238, 120, 61, 0.8),
-                                                    ],
-                                                    begin: Alignment.centerLeft,
-                                                    end: Alignment.centerRight,
-                                                  ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  // 'Sir hmare ghar ke bahr sadak tut gayi hai',
+                                  data['subject'],
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
+                                    fontSize: 16,
+                                    fontFamily: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .fontFamily,
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            // 'Sir hmare ghar ke bahr sadak tut gayi hai',
-                            data['subject'],
-                            style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color,
-                              fontSize: 16,
-                              fontFamily: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  .fontFamily,
+                                GestureDetector(
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                      bottom: 7,
+                                    ),
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      '-${data['name']}',
+                                      // data['name'],
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                          fontFamily: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1
+                                              .fontFamily,
+                                          fontStyle: FontStyle.italic),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.only(
-                              bottom: 7,
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 3),
+                            child: Column(
+                              children: <Widget>[
+                                descExpansion(data['complaintText']),
+                                data['imageURL'] == null
+                                    ? Container()
+                                    : imgExpansion(data['imageURL']),
+                                logs.length != 0 ? logExpansion() : Container(),
+                                user == 'Admin'
+                                    ? requestFromDepartment != null
+                                        ? reqExpansionAdmin()
+                                        : Container()
+                                    : status != 2
+                                        ? status != 1
+                                            ? actionExpansionDepartment()
+                                            : Container()
+                                        : Container(),
+                              ],
                             ),
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '-${data['name']}',
-                              // data['name'],
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                  fontFamily: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .fontFamily,
-                                  fontStyle: FontStyle.italic),
-                            ),
-                          ),
+                          )
                         ],
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 25, vertical: 3),
-                      child: Column(
-                        children: <Widget>[
-                          descExpansion(data['complaintText']),
-                          data['imageURL'] == null
-                              ? Container()
-                              : imgExpansion(data['imageURL']),
-                          logs.length != 0 ? logExpansion() : Container(),
-                          user == 'Admin'
-                              ? requestFromDepartment != null
-                                  ? reqExpansionAdmin()
-                                  : Container()
-                              : status != 2
-                                  ? status != 1
-                                      ? actionExpansionDepartment()
-                                      : Container()
-                                  : Container(),
-                        ],
-                      ),
-                    )
-                  ],
-                );
-              }
-            }),
+                      );
+                    }
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -521,6 +548,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                           margin: EdgeInsets.fromLTRB(0, 6, 0, 0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
                                 decoration: BoxDecoration(
@@ -569,7 +597,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               Text(
                 'Logs',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   color: Theme.of(context).textTheme.bodyText1.color,
                 ),
               ),
@@ -792,6 +820,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   void markComplete() {
+    var solved;
     logs.add('$previousDepartment : Completed the Complaint');
     _firestore.document(ref).updateData({
       'status': 1,
@@ -800,6 +829,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       _firestore.document(previouspath).updateData({
         'status': 1,
       });
+      _firestore.document('States/Haryana/Palwal/data').get().then((value) {
+        solved = value.data['solved'];
+      });
+      _firestore
+          .document('States/Haryana/Palwal/data')
+          .updateData({'solved': solved + 1});
     }).then((value) {
       Navigator.of(context).pop();
     });
@@ -1010,7 +1045,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   Text(
                     'Request',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 16,
                       color: Theme.of(context).textTheme.bodyText1.color,
                     ),
                   ),
@@ -1090,7 +1125,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               Text(
                 'Request',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   color: Theme.of(context).textTheme.bodyText1.color,
                 ),
               ),

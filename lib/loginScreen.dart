@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     child: TextFormField(
                                       validator: (value) {
-                                        if (value.contains('@')) {
+                                        if (value.length > 5) {
                                           email = value;
                                           print(email);
                                           return null;
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       decoration: InputDecoration(
                                         border: null,
                                         enabledBorder: InputBorder.none,
-                                        hintText: 'Email',
+                                        hintText: 'Username',
                                       ),
                                     ),
                                   ),
@@ -167,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   await _auth
                                       .signIn(email, password)
                                       .then((value) {
-                                    Timer(Duration(milliseconds: 1500), () {
+                                    Timer(Duration(milliseconds: 2500), () {
                                       result = value;
                                       user = pref.getString('currentUser');
                                       if (result == true) {

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faridabad/adminScreens/complaintDescriptionCard.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Coloured extends StatefulWidget {
   const Coloured({Key key}) : super(key: key);
@@ -9,86 +11,116 @@ class Coloured extends StatefulWidget {
 }
 
 class _ColouredState extends State<Coloured> {
+  Firestore databaseReference;
+  var workCity;
+  var workState;
+  var loading = true;
+  bool isOnce = true;
+  @override
+  void initState() {
+    databaseReference = Firestore.instance;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    if (isOnce) {
+      final pref = await SharedPreferences.getInstance();
+      setState(() {
+        loading = true;
+      });
+      workCity = pref.getString('workCity');
+      workState = pref.getString('workState');
+      setState(() {
+        isOnce = false;
+        loading = false;
+      });
+    }
+
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      height: MediaQuery.of(context).size.height / 3.5,
-      margin: EdgeInsets.symmetric(
-        vertical: 1,
-        horizontal: 10,
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: ReusableCardComplaint(
-              colour: Theme.of(context).backgroundColor,
-              // colour2: Color(0xff85EB29),
-              cardChild: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // Switch(
-                  //   activeColor: Colors.white,
-                  //   inactiveThumbColor: Colors.black,
-                  //   inactiveTrackColor: Colors.white,
-                  //   activeTrackColor: Colors.black87,
-                  //   value: Provider.of<AppStateNotifier>(context, listen: false)
-                  //       .isDarkMode,
-                  //   onChanged: (boolValue) {
-                  //     setState(() {
-                  //       Provider.of<AppStateNotifier>(context, listen: false)
-                  //           .updateTheme(boolValue);
-                  //     });
-                  //   },
-                  // ),
-                  Block('12/35', 2.0, 25.0,
-                      Theme.of(context).textTheme.bodyText1.color),
-                  Block('Solved', 2.0, 25.0,
-                      Theme.of(context).textTheme.bodyText1.color),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: ReusableCardComplaint(
-                    colour: Theme.of(context).cardColor,
-                    // colour2: Color(0xffFE7325),
-                    cardChild: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Block('2/5', 2.0, 22.0,
-                            Theme.of(context).textTheme.bodyText1.color),
-                        Block('Per Day', 1.5, 17.0,
-                            Theme.of(context).textTheme.bodyText1.color),
-                      ],
-                    ),
+    return loading
+        ? Center(child: CircularProgressIndicator())
+        : StreamBuilder(
+            stream: databaseReference
+                .collection('States/$workState/$workCity')
+                .document('data')
+                .snapshots(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                var solved = snapshot.data['solved'];
+                var total = snapshot.data['total'];
+                return Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  height: MediaQuery.of(context).size.height / 6.5,
+                  margin: EdgeInsets.symmetric(
+                    vertical: 1,
+                    horizontal: 10,
                   ),
-                ),
-                Expanded(
-                  child: ReusableCardComplaint(
-                    colour: Theme.of(context).accentColor,
-                    // colour2: Color(0xff34AFFF),
-                    cardChild: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Block('4.5', 2.0, 20.0,
-                            Theme.of(context).textTheme.bodyText1.color),
-                        Block('User Rating', 2.0, 18.0,
-                            Theme.of(context).textTheme.bodyText1.color),
-                      ],
-                    ),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: ReusableCardComplaint(
+                          colour: Theme.of(context).backgroundColor,
+                          // colour2: Color(0xff85EB29),
+                          cardChild: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Block('$solved/$total', 2.0, 25.0,
+                                  Theme.of(context).textTheme.bodyText1.color),
+                              Block('Solved', 2.0, 25.0,
+                                  Theme.of(context).textTheme.bodyText1.color),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Expanded(
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //     children: <Widget>[
+                      //       Expanded(
+                      //         child: ReusableCardComplaint(
+                      //           colour: Theme.of(context).accentColor,
+                      //           // colour2: Color(0xffFE7325),
+                      //           cardChild: Column(
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             children: <Widget>[
+                      //               Block('2/5', 2.0, 22.0,
+                      //                   Theme.of(context).textTheme.bodyText1.color),
+                      //               Block('Per Day', 1.5, 17.0,
+                      //                   Theme.of(context).textTheme.bodyText1.color),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       ),
+                      //       // Expanded(
+                      //       //   child: ReusableCardComplaint(
+                      //       //     colour: Theme.of(context).accentColor,
+                      //       //     // colour2: Color(0xff34AFFF),
+                      //       //     cardChild: Column(
+                      //       //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       //       children: <Widget>[
+                      //       //         Block('4.5', 2.0, 20.0,
+                      //       //             Theme.of(context).textTheme.bodyText1.color),
+                      //       //         Block('User Rating', 2.0, 18.0,
+                      //       //             Theme.of(context).textTheme.bodyText1.color),
+                      //       //       ],
+                      //       //     ),
+                      //       //   ),
+                      //       // ),
+                      //     ],
+                      //   ),
+                      // ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            });
   }
 }
 
