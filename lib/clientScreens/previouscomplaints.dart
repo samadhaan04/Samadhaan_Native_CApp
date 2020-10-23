@@ -93,7 +93,6 @@ List<Widget> getBubbles(List list) {
               if (!snapshot.hasData) {
                 return Container();
               } else {
-                // print(l.documentID);
                 return MessageBubble(
                   subject: snapshot.data['subject'],
                   department: snapshot.data['department'],

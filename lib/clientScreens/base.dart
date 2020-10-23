@@ -77,6 +77,13 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     );
   }
 
+  String getCapitalizeString({String str}) {
+    if (str.length <= 1) {
+      return str.toUpperCase();
+    }
+    return '${str[0].toUpperCase()}${str.substring(1)}';
+  }
+
   void fetchNameAndCity() async {
     final storage = FirebaseStorage.instance;
     setState(() {
@@ -94,7 +101,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     print('name $dname');
     city = pref.getString('city');
     print('city $city');
-    username = dname;
+    username = getCapitalizeString(str: dname);
     setState(() {
       loading = false;
     });
@@ -170,8 +177,9 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                               await Auth().signOut();
                                           if (signoutResult) {
                                             Navigator.of(context)
-                                                .pushReplacementNamed(
-                                                    HomeScreen.routeName);
+                                                .pushNamedAndRemoveUntil(
+                                                    HomeScreen.routeName,
+                                                    (route) => false);
                                           }
                                         }
                                         if (dropdownValue == 'User Profile') {

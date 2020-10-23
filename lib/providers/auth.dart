@@ -165,8 +165,11 @@ class Auth {
   void setCurrentUser() async {
     final pref = await SharedPreferences.getInstance();
     pref.setString('currentUser', currentUser);
-    pref.setString('workCity', workCity);
-    pref.setString('workState', workState);
+    if(currentUser != 'client')
+    {
+      pref.setString('workCity', workCity);
+      pref.setString('workState', workState);
+    }
     print('currentUserSet $currentUser');
     print('WorkCitySet $workCity');
     print('WorkStateSet $workState');
