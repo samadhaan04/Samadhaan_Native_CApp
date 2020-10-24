@@ -85,6 +85,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     databaseReference.document('DepartmentNames/StateInfo').get().then((value) {
       setState(() {
         states = value.data.keys.toList();
+        cityMap = value.data;
         states.insert(0, 'None');
         print(states);
         getcities();
@@ -96,17 +97,14 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     setState(() {
       loadingcity = true;
     });
-    databaseReference.document('DepartmentNames/StateInfo').get().then((value) {
       setState(() {
-        cityMap = value.data;
-        if (_state != null || _state == 'None')
+        if (_state != null || _state != 'None')
           cities = cityMap[_state];
         else
           cities = ['None'];
         loadingcity = false;
         loading = false;
       });
-    });
   }
 
   @override
