@@ -11,10 +11,10 @@ import 'package:faridabad/clientScreens/previouscomplaints.dart';
 import 'package:faridabad/clientScreens/showcomplaintNew.dart';
 import 'package:faridabad/clientScreens/splash_screen.dart';
 import 'package:faridabad/clientScreens/user_info.dart';
-import 'package:faridabad/providers/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'data/appTheme.dart';
 import './adminScreens/adminProfile.dart';
 
@@ -27,9 +27,6 @@ void main() {
       providers: [
         ChangeNotifierProvider<AppStateNotifier>(
           create: (context) => AppStateNotifier(),
-        ),
-        ChangeNotifierProvider<User>(
-          create: (context) => User(),
         ),
       ],
       child: MyApp(),
@@ -49,7 +46,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
-          themeMode: value.isDarkMode ? ThemeMode.light : ThemeMode.dark,
+          themeMode: value.isDarkMode ? ThemeMode.dark : ThemeMode.light,
           home: SplashScreen(),
           routes: {
             ShowComplaintsNew1.routeName: (ctx) => ShowComplaintsNew1(),
@@ -73,13 +70,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class AppStateNotifier extends ChangeNotifier {
-  //
-  bool isDarkMode = false;
+  
+  var isDarkMode = true;
   var user;
 
   void updateTheme(bool isDarkMode) {
     this.isDarkMode = isDarkMode;
+    print('mode = ${this.isDarkMode}');
     notifyListeners();
   }
 }
+
+  

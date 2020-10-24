@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faridabad/adminScreens/ComplaintScreen.dart';
-import 'package:faridabad/adminScreens/departments.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
@@ -27,6 +24,7 @@ class _AdminProfileState extends State<AdminProfile> {
   SharedPreferences pref;
   final _firestore = Firestore.instance;
   final fbm = FirebaseMessaging();
+  bool isSwitched;
   bool isOnce = true;
   @override
   void initState() {
@@ -41,6 +39,15 @@ class _AdminProfileState extends State<AdminProfile> {
     super.didChangeDependencies();
     if (isOnce) {
       pref = await SharedPreferences.getInstance();
+      var currentTheme = pref.getString('theme');
+      if(currentTheme == 'light')
+      {
+        isSwitched = true;
+      }
+      else
+      {
+        isSwitched = false;
+      }
       user = ModalRoute.of(context).settings.arguments;
       setState(() {
         user = pref.getString("currentUser");
@@ -52,7 +59,7 @@ class _AdminProfileState extends State<AdminProfile> {
     }
   }
 
-  bool isSwitched = false;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +112,7 @@ class _AdminProfileState extends State<AdminProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        isSwitched ? 'Dark Mode' : 'Light Mode',
+                        isSwitched ? 'Light Mode' : 'Dark Mode',
                         style: TextStyle(
                             fontSize: 22.0,
                             color: Theme.of(context).textTheme.bodyText1.color,
@@ -118,8 +125,8 @@ class _AdminProfileState extends State<AdminProfile> {
                         scale: 1.2,
                         child: Switch(
                           activeColor: Colors.white,
-                          inactiveThumbColor: Colors.grey,
-                          inactiveTrackColor: Colors.white,
+                          inactiveThumbColor: Colors.black,
+                          inactiveTrackColor: Colors.grey,
                           activeTrackColor: Colors.black87,
                           value: Provider.of<AppStateNotifier>(context,
                                   listen: false)
@@ -127,9 +134,22 @@ class _AdminProfileState extends State<AdminProfile> {
                           onChanged: (boolValue) {
                             setState(() {
                               isSwitched = !isSwitched;
+                              print('bool $boolValue');
                               Provider.of<AppStateNotifier>(context,
                                       listen: false)
                                   .updateTheme(boolValue);
+
+                              if(boolValue)
+                              {
+                                pref.setString('theme','dark');
+                                print('theme = dark');
+                              }
+                              else
+                              {
+                                pref.setString('theme', 'light');
+                                print('theme = light');
+                              }
+                              
                             });
                           },
                         ),

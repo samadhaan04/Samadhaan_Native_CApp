@@ -42,18 +42,20 @@ class _UserInfoScreenState extends State<UserInfoScreen>
 
   @override
   void dispose() {
+    super.dispose();
     _nameController.dispose();
     _phoneController.dispose();
     _houseController.dispose();
     _streetController.dispose();
     _ageController.dispose();
     _animationController.dispose();
-    super.dispose();
   }
 
   bool loading = false;
   List<String> states = [];
+  Map cityMap;
   List cities = [];
+  var loadingcity = false;
 
   callback(bool value) {
     setState(() {
@@ -77,19 +79,32 @@ class _UserInfoScreenState extends State<UserInfoScreen>
   }
 
   void getStates() {
+    setState(() {
+      loading = true;
+    });
     databaseReference.document('DepartmentNames/StateInfo').get().then((value) {
-      states = value.data.keys.toList();
-      states.insert(0, 'None');
-      print(states);
-      getcities();
+      setState(() {
+        states = value.data.keys.toList();
+        states.insert(0, 'None');
+        print(states);
+        getcities();
+      });
     });
   }
 
   void getcities() {
+    setState(() {
+      loadingcity = true;
+    });
     databaseReference.document('DepartmentNames/StateInfo').get().then((value) {
       setState(() {
-        print('state : $_state,  ${value.data[_state]}');
-        cities = value.data[_state];
+        cityMap = value.data;
+        if (_state != null || _state == 'None')
+          cities = cityMap[_state];
+        else
+          cities = ['None'];
+        loadingcity = false;
+        loading = false;
       });
     });
   }
@@ -117,516 +132,564 @@ class _UserInfoScreenState extends State<UserInfoScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: scaffoldKey,
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Image.asset(
-                    "assets/images/edit.jpg",
-                    width: _animation.value * 350,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  loading
-                      ? CircularProgressIndicator()
-                      : Form(
-                          key: _formkey,
-                          child: Container(
-                            padding: EdgeInsets.all(25),
-                            child: Column(
-                              children: <Widget>[
-                                userInfoText,
-                                SizedBox(
-                                  height: 25,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.text,
-                                    autocorrect: false,
-                                    controller: _nameController,
-                                    maxLines: 1,
-                                    validator: (value) {
-                                      if (value.isEmpty || value.length < 1) {
-                                        return 'Please enter your name';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
-                                        icon: Icon(
-                                          Icons.person,
-                                          size: 40,
-                                          color: Colors.black,
-                                        ),
-                                        enabledBorder: InputBorder.none,
-                                        labelText: 'Name',
-                                        hintText: "Enter your name",
-                                        labelStyle: TextStyle(
-                                            decorationStyle:
-                                                TextDecorationStyle.solid)),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    autocorrect: false,
-                                    controller: _phoneController,
-                                    maxLines: 1,
-                                    validator: (value) {
-                                      if (value.isEmpty ||
-                                          value.length < 1 &&
-                                              value.length > 10 ||
-                                          int.parse(value) < 5555555555) {
-                                        return 'Please enter a valid phone number';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
-                                        icon: Icon(
-                                          Icons.phone,
-                                          size: 40,
-                                          color: Colors.black,
-                                        ),
-                                        enabledBorder: InputBorder.none,
-                                        labelText: 'Phone',
-                                        hintText: "Enter your phone number",
-                                        labelStyle: TextStyle(
-                                            decorationStyle:
-                                                TextDecorationStyle.solid)),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    autocorrect: false,
-                                    controller: _ageController,
-                                    maxLines: 1,
-                                    validator: (value) {
-                                      if (value.isEmpty ||
-                                          int.parse(value) < 10) {
-                                        return 'Age Must Be Greater Than 10';
-                                      }
-                                      return null;
-                                    },
-                                    decoration: InputDecoration(
-                                        icon: Icon(
-                                          Icons.perm_contact_calendar,
-                                          size: 40,
-                                          color: Colors.black,
-                                        ),
-                                        enabledBorder: InputBorder.none,
-                                        labelText: 'Age',
-                                        hintText: "Enter your Age",
-                                        labelStyle: TextStyle(
-                                            decorationStyle:
-                                                TextDecorationStyle.solid)),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.assignment,
-                                        size: 40,
-                                        color: Colors.black,
-                                      ),
-                                      SizedBox(
-                                        width: 18,
-                                      ),
-                                      DropdownButton(
-                                        iconEnabledColor: Colors.black,
-                                        underline: Container(
-                                          color: Colors.transparent,
-                                        ),
-                                        focusColor: Colors.white,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey[600]),
-                                        elevation: 2,
-                                        hint: Text(
-                                          'Gender',
-                                          style: TextStyle(
-                                              decorationStyle:
-                                                  TextDecorationStyle.solid),
-                                        ),
-                                        value: _gender,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            _gender = newValue;
-                                          });
+      key: scaffoldKey,
+      backgroundColor: Colors.white,
+      body:
+          // loadingcity ? Stack(
+          //   children: [
+          //     Center(child: CircularProgressIndicator(),),
+          //     ],
+          //     ) :
+          Stack(
+        children: [
+          Opacity(
+            opacity: loadingcity ? 0.5 : 1.0,
+            child: SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Image.asset(
+                        "assets/images/edit.jpg",
+                        width: _animation.value * 350,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      loading
+                          ? CircularProgressIndicator()
+                          : Form(
+                              key: _formkey,
+                              child: Container(
+                                padding: EdgeInsets.all(25),
+                                child: Column(
+                                  children: <Widget>[
+                                    userInfoText,
+                                    SizedBox(
+                                      height: 25,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        autocorrect: false,
+                                        controller: _nameController,
+                                        maxLines: 1,
+                                        validator: (value) {
+                                          if (value.isEmpty ||
+                                              value.length < 1) {
+                                            return 'Please enter your name';
+                                          }
+                                          return null;
                                         },
-                                        items: gender.map((location) {
-                                          return DropdownMenuItem(
-                                            child: new Text(location),
-                                            value: location,
-                                          );
-                                        }).toList(),
+                                        decoration: InputDecoration(
+                                            icon: Icon(
+                                              Icons.person,
+                                              size: 40,
+                                              color: Colors.black,
+                                            ),
+                                            enabledBorder: InputBorder.none,
+                                            labelText: 'Name',
+                                            hintText: "Enter your name",
+                                            labelStyle: TextStyle(
+                                                decorationStyle:
+                                                    TextDecorationStyle.solid)),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.text,
-                                    autocorrect: false,
-                                    controller: _houseController,
-                                    maxLines: 1,
-                                    decoration: InputDecoration(
-                                        icon: Icon(
-                                          Icons.home,
-                                          size: 40,
-                                          color: Colors.black,
-                                        ),
-                                        enabledBorder: InputBorder.none,
-                                        labelText: 'House No.',
-                                        hintText: "Enter your House Number",
-                                        labelStyle: TextStyle(
-                                            decorationStyle:
-                                                TextDecorationStyle.solid)),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.text,
-                                    autocorrect: false,
-                                    controller: _streetController,
-                                    maxLines: 1,
-                                    decoration: InputDecoration(
-                                        icon: Icon(
-                                          Icons.location_city,
-                                          size: 40,
-                                          color: Colors.black,
-                                        ),
-                                        enabledBorder: InputBorder.none,
-                                        labelText: 'Street',
-                                        hintText: "Enter your Street",
-                                        labelStyle: TextStyle(
-                                            decorationStyle:
-                                                TextDecorationStyle.solid)),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.confirmation_number,
-                                        size: 40,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 18,
-                                      ),
-                                      DropdownButton(
-                                        iconEnabledColor: Colors.white,
-                                        underline: Container(
-                                          color: Colors.transparent,
-                                        ),
-                                        focusColor: Colors.black,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey[600]),
-                                        elevation: 2,
-                                        hint: Text(
-                                          'State',
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        value: _state,
-                                        onChanged: (newValue) {
-                                          _constituency = null;
-                                          setState(() {
-                                            if (newValue == "None") {
-                                              _state = null;
-                                            } else {
-                                              _state = newValue;
-                                              getcities();
-                                            }
-                                          });
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        autocorrect: false,
+                                        controller: _phoneController,
+                                        maxLines: 1,
+                                        validator: (value) {
+                                          if (value.isEmpty ||
+                                              value.length < 1 &&
+                                                  value.length > 10 ||
+                                              int.parse(value) < 5555555555) {
+                                            return 'Please enter a valid phone number';
+                                          }
+                                          return null;
                                         },
-                                        items: states.map((value) {
-                                          return DropdownMenuItem(
-                                            child: Text(value),
-                                            value: value,
-                                          );
-                                        }).toList(),
+                                        decoration: InputDecoration(
+                                            icon: Icon(
+                                              Icons.phone,
+                                              size: 40,
+                                              color: Colors.black,
+                                            ),
+                                            enabledBorder: InputBorder.none,
+                                            labelText: 'Phone',
+                                            hintText: "Enter your phone number",
+                                            labelStyle: TextStyle(
+                                                decorationStyle:
+                                                    TextDecorationStyle.solid)),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.assignment,
-                                        size: 40,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 18,
-                                      ),
-                                      DropdownButton(
-                                        iconEnabledColor: Colors.white,
-                                        underline: Container(
-                                          color: Colors.transparent,
-                                        ),
-                                        focusColor: Colors.black,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey[600]),
-                                        elevation: 2,
-                                        hint: Text(
-                                          'city',
-                                          style: TextStyle(color: Colors.grey),
-                                        ), // Not necessary for Option 1
-                                        value: _constituency,
-                                        onChanged: (newValue) {
-                                          setState(() {
-                                            if (newValue == "None") {
-                                              _constituency = null;
-                                            } else {
-                                              _constituency = newValue;
-                                            }
-                                          });
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        autocorrect: false,
+                                        controller: _ageController,
+                                        maxLines: 1,
+                                        validator: (value) {
+                                          if (value.isEmpty ||
+                                              int.parse(value) < 10) {
+                                            return 'Age Must Be Greater Than 10';
+                                          }
+                                          return null;
                                         },
-                                        items: cities.map((location) {
-                                          return DropdownMenuItem(
-                                            child: new Text(location),
-                                            value: location,
-                                          );
-                                        }).toList(),
+                                        decoration: InputDecoration(
+                                            icon: Icon(
+                                              Icons.perm_contact_calendar,
+                                              size: 40,
+                                              color: Colors.black,
+                                            ),
+                                            enabledBorder: InputBorder.none,
+                                            labelText: 'Age',
+                                            hintText: "Enter your Age",
+                                            labelStyle: TextStyle(
+                                                decorationStyle:
+                                                    TextDecorationStyle.solid)),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                MaterialButton(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 16, horizontal: 38),
-                                  color: Colors.black,
-                                  textColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: loading
-                                      ? Center(
-                                          child: CircularProgressIndicator(
-                                            backgroundColor: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.assignment,
+                                            size: 40,
+                                            color: Colors.black,
                                           ),
-                                        )
-                                      : Text(
-                                          "SUBMIT",
-                                          style: TextStyle(fontSize: 18),
-                                        ),
-                                  onPressed: () async {
-                                    if ((_state == null ||
-                                        _constituency == null)) {
-                                      showDialog(
-                                          context: context,
-                                          child: AlertDialog(
-                                            backgroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            title: Text(
-                                              "TRY AGAIN",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
+                                          SizedBox(
+                                            width: 18,
+                                          ),
+                                          DropdownButton(
+                                            iconEnabledColor: Colors.black,
+                                            underline: Container(
+                                              color: Colors.transparent,
                                             ),
-                                            content: Text(
-                                                "State and city is mandatory"),
-                                            actions: <Widget>[
-                                              MaterialButton(
-                                                child: Text(
-                                                  "RETRY",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              )
-                                            ],
-                                          ));
-                                    } else if (!(_formkey.currentState
-                                        .validate())) {
-                                      showDialog(
-                                          context: context,
-                                          child: AlertDialog(
-                                            backgroundColor: Colors.white,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            title: Text(
-                                              "TRY AGAIN",
+                                            focusColor: Colors.white,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.grey[600]),
+                                            elevation: 2,
+                                            hint: Text(
+                                              'Gender',
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
+                                                  decorationStyle:
+                                                      TextDecorationStyle
+                                                          .solid),
                                             ),
-                                            content: Text(
-                                                "Please Check Your Detials"),
-                                            actions: <Widget>[
-                                              MaterialButton(
-                                                child: Text(
-                                                  "RETRY",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              )
-                                            ],
-                                          ));
-                                    } else {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      // responeTimer();
-                                      bool result = await checkInternet();
-                                      if (!result) {
-                                        print('result checked $result');
-                                        setState(() {
-                                          loading = false;
-                                        });
-
-                                        showDialog(
-                                            context: context,
-                                            child: AlertDialog(
-                                              backgroundColor: Colors.white,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                              title: Text(
-                                                "TRY AGAIN",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                            value: _gender,
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                _gender = newValue;
+                                              });
+                                            },
+                                            items: gender.map((location) {
+                                              return DropdownMenuItem(
+                                                child: new Text(location),
+                                                value: location,
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        autocorrect: false,
+                                        controller: _houseController,
+                                        maxLines: 1,
+                                        decoration: InputDecoration(
+                                            icon: Icon(
+                                              Icons.home,
+                                              size: 40,
+                                              color: Colors.black,
+                                            ),
+                                            enabledBorder: InputBorder.none,
+                                            labelText: 'House No.',
+                                            hintText: "Enter your House Number",
+                                            labelStyle: TextStyle(
+                                                decorationStyle:
+                                                    TextDecorationStyle.solid)),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        autocorrect: false,
+                                        controller: _streetController,
+                                        maxLines: 1,
+                                        decoration: InputDecoration(
+                                            icon: Icon(
+                                              Icons.location_city,
+                                              size: 40,
+                                              color: Colors.black,
+                                            ),
+                                            enabledBorder: InputBorder.none,
+                                            labelText: 'Street',
+                                            hintText: "Enter your Street",
+                                            labelStyle: TextStyle(
+                                                decorationStyle:
+                                                    TextDecorationStyle.solid)),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.confirmation_number,
+                                            size: 40,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            width: 18,
+                                          ),
+                                          DropdownButton(
+                                            iconEnabledColor: Colors.white,
+                                            underline: Container(
+                                              color: Colors.transparent,
+                                            ),
+                                            focusColor: Colors.black,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.grey[600]),
+                                            elevation: 2,
+                                            hint: Text(
+                                              'State',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            value: _state ?? null,
+                                            onChanged: (newValue) {
+                                              _constituency = null;
+                                              setState(() {
+                                                if (newValue == "None") {
+                                                  _state = null;
+                                                } else {
+                                                  _state = newValue;
+                                                }
+                                                getcities();
+                                              });
+                                            },
+                                            items: states.map((value) {
+                                              return DropdownMenuItem(
+                                                child: Text(value),
+                                                value: value,
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.assignment,
+                                            size: 40,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            width: 18,
+                                          ),
+                                          DropdownButton(
+                                            iconEnabledColor: Colors.white,
+                                            underline: Container(
+                                              color: Colors.transparent,
+                                            ),
+                                            focusColor: Colors.black,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.grey[600]),
+                                            elevation: 2,
+                                            hint: Text(
+                                              'city',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ), // Not necessary for Option 1
+                                            value: _constituency ?? null,
+                                            onChanged: loadingcity
+                                                ? null
+                                                : (newValue) {
+                                                    setState(() {
+                                                      if (newValue == "None") {
+                                                        _constituency = null;
+                                                      } else {
+                                                        _constituency =
+                                                            newValue;
+                                                      }
+                                                    });
+                                                  },
+                                            items: cities.map((location) {
+                                              return DropdownMenuItem(
+                                                child: new Text(location),
+                                                value: location,
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    MaterialButton(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 16, horizontal: 38),
+                                      color: Colors.black,
+                                      textColor: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: loading
+                                          ? Center(
+                                              child: CircularProgressIndicator(
+                                                backgroundColor: Colors.white,
                                               ),
-                                              content: Text(
-                                                  "Please Check Your Internet Connection"),
-                                              actions: <Widget>[
-                                                MaterialButton(
-                                                  child: Text(
-                                                    "RETRY",
+                                            )
+                                          : Text(
+                                              "SUBMIT",
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                      onPressed: () async {
+                                        if ((_state == null ||
+                                            _constituency == null)) {
+                                          showDialog(
+                                              context:
+                                                  scaffoldKey.currentContext,
+                                              child: AlertDialog(
+                                                backgroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                title: Text(
+                                                  "TRY AGAIN",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                content: Text(
+                                                    "State and city is mandatory"),
+                                                actions: <Widget>[
+                                                  MaterialButton(
+                                                    child: Text(
+                                                      "RETRY",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  )
+                                                ],
+                                              ));
+                                        } else if (!(_formkey.currentState
+                                            .validate())) {
+                                          showDialog(
+                                              context: context,
+                                              child: AlertDialog(
+                                                backgroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                title: Text(
+                                                  "TRY AGAIN",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                content: Text(
+                                                    "Please Check Your Detials"),
+                                                actions: <Widget>[
+                                                  MaterialButton(
+                                                    child: Text(
+                                                      "RETRY",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  )
+                                                ],
+                                              ));
+                                        } else {
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          // responeTimer();
+                                          bool result = await checkInternet();
+                                          if (!result) {
+                                            print('result checked $result');
+                                            setState(() {
+                                              loading = false;
+                                            });
+
+                                            showDialog(
+                                                context: context,
+                                                child: AlertDialog(
+                                                  backgroundColor: Colors.white,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20)),
+                                                  title: Text(
+                                                    "TRY AGAIN",
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                )
-                                              ],
-                                            ));
-                                      } else {
-                                        final userinforesult =
-                                            await sendData(isupdate);
-                                        print(userinforesult);
-                                        if (userinforesult) {
+                                                  content: Text(
+                                                      "Please Check Your Internet Connection"),
+                                                  actions: <Widget>[
+                                                    MaterialButton(
+                                                      child: Text(
+                                                        "RETRY",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    )
+                                                  ],
+                                                ));
+                                          } else {
+                                            final userinforesult =
+                                                await sendData(isupdate);
+                                            print(userinforesult);
+                                            if (userinforesult) {
+                                              setState(() {
+                                                _nameController.clear();
+                                                _phoneController.clear();
+                                                _houseController.clear();
+                                                _ageController.clear();
+                                                _streetController.clear();
+                                                _constituency = null;
+                                                _gender = null;
+                                                _state = null;
+                                              });
+                                              Navigator.of(context)
+                                                  .pushReplacementNamed(
+                                                      Base.routeName);
+                                            } else {
+                                              print('not done');
+                                            }
+                                          }
                                           setState(() {
-                                            _nameController.clear();
-                                            _phoneController.clear();
-                                            _houseController.clear();
-                                            _ageController.clear();
-                                            _streetController.clear();
-                                            _constituency = null;
-                                            _gender = null;
-                                            _state = null;
+                                            loading = false;
                                           });
-                                          Navigator.of(context)
-                                              .pushReplacementNamed(
-                                                  Base.routeName);
-                                        } else {
-                                          print('not done');
                                         }
-                                      }
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    }
-                                  },
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                ],
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ));
+          Opacity(
+            opacity: loadingcity ? 1.0 : 0,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void showModal(context, List<dynamic> options) {
