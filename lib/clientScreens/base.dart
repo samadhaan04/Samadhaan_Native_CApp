@@ -20,8 +20,6 @@ class Base extends StatefulWidget {
 }
 
 class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation<double> _animation;
   var username;
   var city;
   Widget imageWidget;
@@ -31,16 +29,15 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   var _items = ['User Profile', 'Logout'];
 
   var image, loading;
+  
+  
   @override
   void dispose() {
-    // TODO: implement dispose
-    _animationController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       loading = true;
@@ -129,11 +126,14 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
         false;
   }
 
+  GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: loading
             ? Center(
@@ -141,13 +141,10 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
               )
             : SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
                       Expanded(
                         flex: 30,
                         child: SingleChildScrollView(

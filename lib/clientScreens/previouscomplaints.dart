@@ -93,13 +93,16 @@ List<Widget> getBubbles(List list) {
               if (!snapshot.hasData) {
                 return Container();
               } else {
-                return MessageBubble(
-                  subject: snapshot.data['subject'],
-                  department: snapshot.data['department'],
-                  status: snapshot.data['status'].toString(),
-                  complaintId: snapshot.data.documentID,
-                  index: list.indexOf(l),
-                );
+                if (snapshot.data.data == null) {
+                  return Center();
+                } else
+                  return MessageBubble(
+                    subject: snapshot.data['subject'],
+                    department: snapshot.data['department'],
+                    status: snapshot.data['status'].toString(),
+                    complaintId: snapshot.data.documentID,
+                    index: list.indexOf(l),
+                  );
               }
             },
           ),

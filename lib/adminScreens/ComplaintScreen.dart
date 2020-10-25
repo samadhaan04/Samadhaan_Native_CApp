@@ -56,7 +56,6 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
       } else {
         ref = ModalRoute.of(context).settings.arguments;
       }
-      print(ref);
       setState(() {
         user = pref.getString('currentUser');
         workCity = pref.getString('workCity');
@@ -91,10 +90,10 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
           fbm.subscribeToTopic(topicName);
           print('subscribed to $topicName');
         });
-        setState(() {
-          isOnce = false;
-        });
       }
+      setState(() {
+        isOnce = false;
+      });
     }
     super.didChangeDependencies();
   }
@@ -377,7 +376,8 @@ class _MessagesStream1State extends State<MessagesStream1> {
     // print('uid ${widget.uid}');
     return StreamBuilder(
       stream: _firestore
-          .collection('States/$workState/$workCity/${widget.department}/Complaints')
+          .collection(
+              'States/$workState/$workCity/${widget.department}/Complaints')
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -424,7 +424,6 @@ class _MessagesStream1State extends State<MessagesStream1> {
                   key: GlobalKey(),
                   itemCount: list.length,
                   itemBuilder: (context, index) {
-                    print(list[index].reference.path);
                     return MessageBubble(
                       complaint: list[index]['subject'],
                       department: widget.department,
@@ -485,7 +484,7 @@ class _MessageBubbleState extends State<MessageBubble> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.status);
+    print('status ${widget.status}');
     var date = DateFormat.yMMMEd().format(DateTime.parse(widget.date));
     return Container(
       padding: EdgeInsets.symmetric(vertical: 5),
@@ -495,11 +494,13 @@ class _MessageBubbleState extends State<MessageBubble> {
           GestureDetector(
             child: ListTile(
               onTap: () {
-                Navigator.of(context)
-                    .pushNamed(ComplaintDetails.routeName, arguments: {
-                  'complaintId': widget.complaintId,
-                  'path': widget.path,
-                });
+                Navigator.of(context).pushNamed(
+                  ComplaintDetails.routeName,
+                  arguments: {
+                    'complaintId': widget.complaintId,
+                    'path': widget.path,
+                  },
+                );
               },
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 6, horizontal: 23),

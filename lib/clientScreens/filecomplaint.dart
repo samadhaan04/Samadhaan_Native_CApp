@@ -25,6 +25,7 @@ class _FileComplaintState extends State<FileComplaint>
   double width, height;
   bool loading = false;
   SharedPreferences pref;
+
   callback(bool value) {
     setState(() {
       loading = value;
@@ -58,6 +59,9 @@ class _FileComplaintState extends State<FileComplaint>
     super.initState();
     databaseReference.document('DepartmentNames/Names').get().then((value) {
       listOfDepartments = value.data['names'].toList();
+    }).whenComplete(() {
+      setState(() {
+      });
     });
     fetchCity();
   }
@@ -79,291 +83,317 @@ class _FileComplaintState extends State<FileComplaint>
     });
   }
 
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: Container(
-        color: Colors.white,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(15),
-              child: Column(
+      body: Stack(
+        children: [
+          Opacity(
+            opacity: loading ? 0.5 : 1,
+            child: Container(
+              color: Colors.white,
+              child: ListView(
                 children: <Widget>[
                   Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    padding: EdgeInsets.all(15),
+                    child: Column(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 25.0),
-                          child: Text(
-                            'File Complaint',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 35,
-                              color: Color(0xff817f7f),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25.0),
+                                child: Text(
+                                  'File Complaint',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 35,
+                                    color: Color(0xff817f7f),
+                                  ),
+                                ),
+                              ),
+                              // Text(
+                              //   'Complaint',
+                              //   textAlign: TextAlign.center,
+                              //   style: TextStyle(
+                              //       fontWeight: FontWeight.bold,
+                              //       fontSize: 30,
+                              //       color: Colors.teal[200]),
+                              // ),
+                            ],
+                          ),
+                        ),
+                        // TO BE DONE: Render a custom image from backend
+                        SizedBox(
+                          height: 12,
+                        ),
+                        // Text(
+                        //   city ?? "empty",
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //     fontWeight: FontWeight.bold,
+                        //     fontSize: 25,
+                        //     letterSpacing: 1,
+                        //     color: Colors.blue[300],
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 30,
+                        // ),
+                        Container(
+                          margin: EdgeInsets.all(10),
+                          width: double.infinity,
+                          height: height / 1.6,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.grey,
+                              style: BorderStyle.solid,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    width: double.infinity,
+                                    child: GestureDetector(
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            border: BorderDirectional(
+                                                bottom: BorderSide(
+                                                    color: Colors.black54))),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              _department == null
+                                                  ? "Select Department"
+                                                  : _department,
+                                              style: TextStyle(
+                                                fontSize: 21,
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.arrow_drop_down,
+                                              color: listOfDepartments == null
+                                                  ? Colors.grey
+                                                  : Colors.black,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap: () => listOfDepartments == null
+                                          ? null
+                                          : showModal(context),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  TextFormField(
+                                    controller: _subjectController,
+                                    keyboardType: TextInputType.text,
+                                    autocorrect: false,
+                                    maxLength: 150,
+                                    maxLines: null,
+                                    validator: (value) {
+                                      if (value == '') {
+                                        return 'Please enter Subject';
+                                      } else if (value.length > 150) {
+                                        return "Subject should Be less than 150 Words";
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                      counterText: '',
+                                      contentPadding: EdgeInsets.all(5),
+                                      hintText: "Subject",
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.text,
+                                      autocorrect: false,
+                                      controller: _detailsController,
+                                      maxLines: null,
+                                      maxLength: 500,
+                                      validator: (value) {
+                                        if (value == '') {
+                                          return 'Please enter details about your issue';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        counterText: '',
+                                        contentPadding: EdgeInsets.all(5),
+                                        hintText: "Complaint",
+                                        border: InputBorder.none,
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: 21,
+                                        color: Colors.black,
+                                      ),
+                                      minLines: 1,
+                                      // maxLines: 100,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    children: [
+                                      (_images.length == 0)
+                                          ? Expanded(
+                                              child: Container(),
+                                            )
+                                          : Expanded(
+                                              child: SizedBox(
+                                                height: 60,
+                                                child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  key: GlobalKey(),
+                                                  itemCount: _images.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Row(
+                                                      children: [
+                                                        preview(_images[index]),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                      IconButton(
+                                        icon: Icon(Icons.photo_camera,
+                                            size: 30,
+                                            color: _images.length >= 4
+                                                ? Colors.grey
+                                                : Colors.black),
+                                        onPressed: () {
+                                          if (_images.length >= 4)
+                                            return null;
+                                          else
+                                            return showDialog(
+                                              context: context,
+                                              child: AlertDialog(
+                                                backgroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                title: Text(
+                                                  "Choose an Option",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                actions: <Widget>[
+                                                  MaterialButton(
+                                                    child: Text(
+                                                      "Gallery",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onPressed: () async {
+                                                      final picker =
+                                                          ImagePicker();
+                                                      final pickedImage =
+                                                          await picker.getImage(
+                                                        source:
+                                                            ImageSource.gallery,
+                                                        imageQuality: 50,
+                                                      );
+                                                      setState(() {
+                                                        _image = File(
+                                                            pickedImage.path);
+                                                        _images.add(_image);
+                                                        Navigator.of(context,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
+                                                      });
+                                                      //
+                                                    },
+                                                  ),
+                                                  MaterialButton(
+                                                    child: Text(
+                                                      "Camera",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onPressed: () async {
+                                                      final picker =
+                                                          ImagePicker();
+                                                      final pickedImage =
+                                                          await picker.getImage(
+                                                        source:
+                                                            ImageSource.camera,
+                                                        imageQuality: 50,
+                                                      );
+                                                      setState(() {
+                                                        _image = File(
+                                                            pickedImage.path);
+                                                        _images.add(_image);
+                                                        Navigator.of(context,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
+                                                      });
+                                                      // Navigator.of(context).pop();
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                        // Text(
-                        //   'Complaint',
-                        //   textAlign: TextAlign.center,
-                        //   style: TextStyle(
-                        //       fontWeight: FontWeight.bold,
-                        //       fontSize: 30,
-                        //       color: Colors.teal[200]),
-                        // ),
-                      ],
-                    ),
-                  ),
-                  // TO BE DONE: Render a custom image from backend
-                  SizedBox(
-                    height: 12,
-                  ),
-                  // Text(
-                  //   city ?? "empty",
-                  //   textAlign: TextAlign.center,
-                  //   style: TextStyle(
-                  //     fontWeight: FontWeight.bold,
-                  //     fontSize: 25,
-                  //     letterSpacing: 1,
-                  //     color: Colors.blue[300],
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: 30,
-                  // ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    width: double.infinity,
-                    height: height / 1.6,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                        style: BorderStyle.solid,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              width: double.infinity,
-                              child: GestureDetector(
-                                child: Container(
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      border: BorderDirectional(
-                                          bottom: BorderSide(
-                                              color: Colors.black54))),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        _department == null
-                                            ? "Select Department"
-                                            : _department,
-                                        style: TextStyle(
-                                          fontSize: 21,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                      Icon(Icons.arrow_drop_down),
-                                    ],
-                                  ),
-                                ),
-                                onTap: () => showModal(context),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            TextFormField(
-                              controller: _subjectController,
-                              keyboardType: TextInputType.text,
-                              autocorrect: false,
-                              maxLength: 150,
-                              maxLines: null,
-                              validator: (value) {
-                                if (value.isEmpty || value.length < 1) {
-                                  return 'Please enter Subject';
-                                } else if (value.length > 150) {
-                                  return "Subject should Be less than 150 Words";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                counterText: '',
-                                contentPadding: EdgeInsets.all(5),
-                                hintText: "Subject",
-                              ),
-                              style: TextStyle(
-                                fontSize: 21,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Expanded(
-                              child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                autocorrect: false,
-                                controller: _detailsController,
-                                maxLines: null,
-                                maxLength: 500,
-                                validator: (value) {
-                                  if (value.isEmpty || value.length < 1) {
-                                    return 'Please enter details about your issue';
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  counterText: '',
-                                  contentPadding: EdgeInsets.all(5),
-                                  hintText: "Complaint",
-                                  border: InputBorder.none,
-                                ),
-                                style: TextStyle(
-                                  fontSize: 21,
-                                  color: Colors.black,
-                                ),
-                                minLines: 1,
-                                // maxLines: 100,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              children: [
-                                (_images.length == 0)
-                                    ? Expanded(
-                                        child: Container(),
-                                      )
-                                    : Expanded(
-                                        child: SizedBox(
-                                          height: 60,
-                                          child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            key: GlobalKey(),
-                                            itemCount: _images.length,
-                                            itemBuilder: (context, index) {
-                                              return Row(
-                                                children: [
-                                                  preview(_images[index]),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.photo_camera,
-                                    size: 30,
-                                    color: _images.length >= 4 ? Colors.grey : Colors.black
-                                  ),
-                                  onPressed: () {
-                                    if(_images.length >= 4)
-                                    return null;
-                                    else
-                                    return showDialog(
-                                      context: context,
-                                      child: AlertDialog(
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        title: Text(
-                                          "Choose an Option",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        actions: <Widget>[
-                                          MaterialButton(
-                                            child: Text(
-                                              "Gallery",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            onPressed: () async {
-                                              final picker = ImagePicker();
-                                              final pickedImage =
-                                                  await picker.getImage(
-                                                source: ImageSource.gallery,
-                                                imageQuality: 50,
-                                              );
-                                              setState(() {
-                                                _image = File(pickedImage.path);
-                                                _images.add(_image);
-                                                Navigator.of(context, rootNavigator: true).pop();
-                                              });
-                                              //
-                                            },
-                                          ),
-                                          MaterialButton(
-                                            child: Text(
-                                              "Camera",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            onPressed: () async {
-                                              final picker = ImagePicker();
-                                              final pickedImage =
-                                                  await picker.getImage(
-                                                source: ImageSource.camera,
-                                                imageQuality: 50,
-                                              );
-                                              setState(() {
-                                                _image = File(pickedImage.path);
-                                                _images.add(_image);
-                                                Navigator.of(context, rootNavigator: true).pop();
-                                              });
-                                              // Navigator.of(context).pop();
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  GestureDetector(
-                    child: Container(
-                      // padding: const EdgeInsets.only(top: 20),
-                      height: 70,
-                      alignment: Alignment.center,
-                      width: width / 2,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: loading
-                          ? CircularProgressIndicator()
-                          : Text(
+                        GestureDetector(
+                          child: Container(
+                            // padding: const EdgeInsets.only(top: 20),
+                            height: 70,
+                            alignment: Alignment.center,
+                            width: width / 2,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey, width: 2),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
                               "Submit",
                               style: TextStyle(
                                 color: Colors.grey,
@@ -371,94 +401,106 @@ class _FileComplaintState extends State<FileComplaint>
                               ),
                               textAlign: TextAlign.center,
                             ),
-                    ),
-                    onTap: () async {
-                      {
-                        _formKey.currentState.validate();
-                        setState(() {
-                          loading = true;
-                        });
-                        if (_images.length > 4) {
-                          setState(() {
-                            loading = false;
-                          });
-                          _scaffoldKey.currentState.showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(
-                                'Maximum 4 Images Can Be  Uploaded',
-                              ),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        } else if (_department == null ||
-                            _detailsController.text == null ||
-                            _subjectController.text == null) {
-                          setState(() {
-                            loading = false;
-                          });
-                          _scaffoldKey.currentState.showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(
-                                'Please Enter Your Details',
-                              ),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        } else {
-                          bool result = await checkInternet();
-                          if (!result) {
-                            print('result checked $result');
-                            setState(() {
-                              loading = false;
-                            });
-                            showDialog(
-                                context: context,
-                                child: AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  title: Text(
-                                    "TRY AGAIN",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () async {
+                            {
+                              _formKey.currentState.validate();
+                              setState(() {
+                                loading = true;
+                              });
+                              if (_images.length > 4) {
+                                setState(() {
+                                  loading = false;
+                                });
+                                _scaffoldKey.currentState.showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text(
+                                      'Maximum 4 Images Can Be  Uploaded',
+                                    ),
+                                    duration: Duration(seconds: 2),
                                   ),
-                                  content: Text(
-                                      "Please Check Your Internet Connection"),
-                                  actions: <Widget>[
-                                    MaterialButton(
-                                      child: Text(
-                                        "RETRY",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    )
-                                  ],
-                                ));
-                          } else {
-                            final result = await sendData();
-                            if (result == true) {
-                              print("work done!!");
-                              Navigator.of(context).pop();
+                                );
+                              } else if (_department == null ||
+                                  _detailsController.text == null ||
+                                  _subjectController.text == null) {
+                                setState(() {
+                                  loading = false;
+                                });
+                                _scaffoldKey.currentState.showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text(
+                                      'Please Enter Your Details',
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              } else {
+                                bool result = await checkInternet();
+                                if (!result) {
+                                  print('result checked $result');
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  showDialog(
+                                      context: context,
+                                      child: AlertDialog(
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        title: Text(
+                                          "TRY AGAIN",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        content: Text(
+                                            "Please Check Your Internet Connection"),
+                                        actions: <Widget>[
+                                          MaterialButton(
+                                            child: Text(
+                                              "RETRY",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          )
+                                        ],
+                                      ));
+                                } else {
+                                  final result = await sendData();
+                                  if (result == true) {
+                                    print("work done!!");
+                                    Navigator.of(context).pop();
+                                  }
+                                }
+                                setState(() {
+                                  loading = false;
+                                });
+                                showModalSheet(context);
+                              }
                             }
-                          }
-                          setState(() {
-                            loading = false;
-                          });
-                          showModalSheet(context);
-                        }
-                      }
-                    },
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          Opacity(
+            opacity: loading ? 1 : 0,
+            child: Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.blue,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -594,6 +636,7 @@ class _FileComplaintState extends State<FileComplaint>
       int length;
       int pending;
       int totalForCity;
+      var justSet  = false;
       try {
         await databaseReference
             .collection("States/$state/$city")
@@ -630,6 +673,7 @@ class _FileComplaintState extends State<FileComplaint>
           pending = value.data['pending'];
         });
       } catch (e) {
+        print('formation');
         await databaseReference
             .collection("States/$state/$city")
             .document(_department)
@@ -637,10 +681,9 @@ class _FileComplaintState extends State<FileComplaint>
           "p": 1,
           "pending": 0,
         });
-        length = 0;
-        pending = 0;
+        justSet = true;
       }
-      if (length != 0) {
+      if (!justSet) {
         await databaseReference
             .collection("States/$state/$city")
             .document(_department)

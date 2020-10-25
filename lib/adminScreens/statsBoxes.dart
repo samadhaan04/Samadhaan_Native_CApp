@@ -51,75 +51,94 @@ class _ColouredState extends State<Coloured> {
                 .snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                var solved = snapshot.data['solved'];
-                var total = snapshot.data['total'];
-                return Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  height: MediaQuery.of(context).size.height / 6.5,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 1,
-                    horizontal: 10,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: ReusableCardComplaint(
-                          colour: Theme.of(context).backgroundColor,
-                          // colour2: Color(0xff85EB29),
-                          cardChild: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Block('$solved/$total', 2.0, 25.0,
-                                  Theme.of(context).textTheme.bodyText1.color),
-                              Block('Solved', 2.0, 25.0,
-                                  Theme.of(context).textTheme.bodyText1.color),
-                            ],
+                print(snapshot.data.data);
+                if (snapshot.data.data==  null) {
+                  return Center(
+                    child: Container(),
+                  );
+                } else {
+                  var solved = snapshot.data['solved'];
+                  var total = snapshot.data['total'];
+                  return Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    height: MediaQuery.of(context).size.height / 6.5,
+                    margin: EdgeInsets.symmetric(
+                      vertical: 1,
+                      horizontal: 10,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: ReusableCardComplaint(
+                            colour: Theme.of(context).backgroundColor,
+                            // colour2: Color(0xff85EB29),
+                            cardChild: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Block(
+                                    '$solved/$total',
+                                    // 'yo',
+                                    2.0,
+                                    25.0,
+                                    Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color),
+                                Block(
+                                    'Solved',
+                                    2.0,
+                                    25.0,
+                                    Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // Expanded(
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.stretch,
-                      //     children: <Widget>[
-                      //       Expanded(
-                      //         child: ReusableCardComplaint(
-                      //           colour: Theme.of(context).accentColor,
-                      //           // colour2: Color(0xffFE7325),
-                      //           cardChild: Column(
-                      //             mainAxisAlignment: MainAxisAlignment.center,
-                      //             children: <Widget>[
-                      //               Block('2/5', 2.0, 22.0,
-                      //                   Theme.of(context).textTheme.bodyText1.color),
-                      //               Block('Per Day', 1.5, 17.0,
-                      //                   Theme.of(context).textTheme.bodyText1.color),
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       ),
-                      //       // Expanded(
-                      //       //   child: ReusableCardComplaint(
-                      //       //     colour: Theme.of(context).accentColor,
-                      //       //     // colour2: Color(0xff34AFFF),
-                      //       //     cardChild: Column(
-                      //       //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       //       children: <Widget>[
-                      //       //         Block('4.5', 2.0, 20.0,
-                      //       //             Theme.of(context).textTheme.bodyText1.color),
-                      //       //         Block('User Rating', 2.0, 18.0,
-                      //       //             Theme.of(context).textTheme.bodyText1.color),
-                      //       //       ],
-                      //       //     ),
-                      //       //   ),
-                      //       // ),
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                );
-              } else {
-                return CircularProgressIndicator();
-              }
+                        // Expanded(
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.stretch,
+                        //     children: <Widget>[
+                        //       Expanded(
+                        //         child: ReusableCardComplaint(
+                        //           colour: Theme.of(context).accentColor,
+                        //           // colour2: Color(0xffFE7325),
+                        //           cardChild: Column(
+                        //             mainAxisAlignment: MainAxisAlignment.center,
+                        //             children: <Widget>[
+                        //               Block('2/5', 2.0, 22.0,
+                        //                   Theme.of(context).textTheme.bodyText1.color),
+                        //               Block('Per Day', 1.5, 17.0,
+                        //                   Theme.of(context).textTheme.bodyText1.color),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       // Expanded(
+                        //       //   child: ReusableCardComplaint(
+                        //       //     colour: Theme.of(context).accentColor,
+                        //       //     // colour2: Color(0xff34AFFF),
+                        //       //     cardChild: Column(
+                        //       //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       //       children: <Widget>[
+                        //       //         Block('4.5', 2.0, 20.0,
+                        //       //             Theme.of(context).textTheme.bodyText1.color),
+                        //       //         Block('User Rating', 2.0, 18.0,
+                        //       //             Theme.of(context).textTheme.bodyText1.color),
+                        //       //       ],
+                        //       //     ),
+                        //       //   ),
+                        //       // ),
+                        //     ],
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  );
+                }
+              } 
+              return Center(child: Container(),);
             });
   }
 }

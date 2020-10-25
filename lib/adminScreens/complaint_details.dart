@@ -15,12 +15,14 @@ class ComplaintDetails extends StatefulWidget {
 }
 
 class _ComplaintDetailsState extends State<ComplaintDetails> {
+  var subject, dateReal;
   bool expandedDesc = true;
   bool expandedImg = true;
   bool expandedLog = true;
   bool expandedReq = true;
   bool request = true;
   bool pressed = true;
+  var workCity, workState;
   bool feedback = true;
   var department;
   var requestText = "Enter Request";
@@ -29,7 +31,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   var previouspath;
   int selectitem = 1;
   var user;
-  // TextEditingController requestFromDepartment = TextEditingController();
   String requestFromDepartment;
   List logs;
   var status;
@@ -51,10 +52,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     var pref = await SharedPreferences.getInstance();
     setState(() {
       user = pref.getString('currentUser');
+      workCity = pref.getString('workCity');
+      workState = pref.getString('workState');
       _firestore.document('DepartmentNames/Names').get().then((value) {
         depts = value.data['names'].toList();
       });
-      print(' requestfromDepartment $requestFromDepartment');
     });
   }
 
@@ -94,7 +96,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       //   title:
       // ),
       body: SafeArea(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -129,8 +131,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      // print(snapshot.data.data);
                       var data = snapshot.data.data;
+                      subject = data['subject'];
+                      dateReal = data['date'];
                       var date = DateFormat.yMMMEd()
                           .format(DateTime.parse(data['date']));
                       requestFromDepartment = data['transferRequest'] == ''
@@ -146,7 +149,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                         newToOld();
                       }
                       isNew = data['new'];
-                      print('status $status');
+                      // print('status $status');
                       return Column(
                         children: <Widget>[
                           ReusableCardComplaint(
@@ -451,7 +454,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   Widget imageBox(var imageUrl) {
-    // print(imageUrl);
     return Container(
       margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(10),
@@ -635,8 +637,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 style: TextStyle(
                   fontSize: 20,
                   color: Theme.of(context).textTheme.bodyText1.color,
-                  fontFamily:
-                          Theme.of(context).textTheme.bodyText1.fontFamily,
+                  fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
                 ),
               ),
             ),
@@ -653,7 +654,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     },
                     child: Text(
                       "Go back <--",
-                      style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,),
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.bodyText1.color,
+                      ),
                     ),
                   )
                 : Container(),
@@ -715,7 +718,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                             },
                             child: Text(
                               'Send Feedback',
-                              style: TextStyle(color: Theme.of(context).textTheme.bodyText1.color,),
+                              style: TextStyle(
+                                color:
+                                    Theme.of(context).textTheme.bodyText1.color,
+                              ),
                             )),
                       )
                     ],
@@ -736,14 +742,22 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               FlatButton(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 7),
-                                shape: Border.all(color: Theme.of(context).textTheme.bodyText1.color,),
+                                shape: Border.all(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color,
+                                ),
                                 child: Text(
                                   department == null
                                       ? "Select Department"
                                       : department,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Theme.of(context).textTheme.bodyText1.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
                                   ),
                                   softWrap: true,
                                 ),
@@ -757,12 +771,20 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               FlatButton(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 7),
-                                shape: Border.all(color: Theme.of(context).textTheme.bodyText1.color,),
+                                shape: Border.all(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color,
+                                ),
                                 child: Text(
-                                  "Submit Transfer Request",
+                                  "Submit  Request",
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Theme.of(context).textTheme.bodyText1.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .color,
                                   ),
                                   softWrap: true,
                                 ),
@@ -792,7 +814,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         status != 1 || status != 2
             ? FlatButton(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-                shape: Border.all(color: Theme.of(context).textTheme.bodyText1.color,),
+                shape: Border.all(
+                  color: Theme.of(context).textTheme.bodyText1.color,
+                ),
                 child: Text(
                   "Mark Complete",
                   style: TextStyle(
@@ -835,11 +859,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       _firestore.document(previouspath).updateData({
         'status': 1,
       });
-      _firestore.document('States/Haryana/Palwal/data').get().then((value) {
+      _firestore
+          .document('States/$workState/$workCity/data')
+          .get()
+          .then((value) {
         solved = value.data['solved'];
       });
       _firestore
-          .document('States/Haryana/Palwal/data')
+          .document('States/$workState/$workCity/data')
           .updateData({'solved': solved + 1});
     }).then((value) {
       Navigator.of(context).pop();
@@ -864,7 +891,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       }).then((value) {
         _firestore.document(referenceParentPath).get().then((value) {
           pending = value.data['pending'];
-          print(pending);
+          // print(pending);
         }).whenComplete(() {
           _firestore.document(referenceParentPath).updateData({
             "pending": pending + 1,
@@ -896,20 +923,26 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     transferComplaintToanotherDepartmentInReference();
     logs.add('Transfer Request Approved');
     var p, pending;
+    print('ppath $previouspath');
     _firestore.document(previouspath).delete();
     var referenceParentPath =
         _firestore.document(previouspath).parent().parent().path;
-    print('path $referenceParentPath');
+    // print('path $referenceParentPath');
     _firestore.document(referenceParentPath).get().then((value) {
       p = value.data['p'];
       pending = value.data['pending'];
     }).whenComplete(() {
-      _firestore
+      if(p == 1)
+      {
+        _firestore
+          .document(referenceParentPath).delete();
+      }
+      else _firestore
           .document(referenceParentPath)
           .updateData({'p': p - 1, 'pending': pending - 1});
     }).whenComplete(() {
       _firestore.document(ref).updateData({
-        'status': 0,
+        'status': 3,
         'department': transferToDepartment,
         'transferRequest': null,
         'transferToDepartment': null,
@@ -921,49 +954,46 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     });
   }
 
-  void transferComplaintToanotherDepartmentInReference() {
-    var subject, date;
-    _firestore.document(ref).get().then((value) {
-      subject = value.data['subject'];
-      date = value.data['date'];
-    }).whenComplete(() async {
-      int length;
-
+  void transferComplaintToanotherDepartmentInReference() async {
+    int length;
+    var justSet = false;
+    print(transferToDepartment);
+    try {
       await _firestore
-          .collection("States/Haryana/Palwal")
+          .collection("States/$workState/$workCity")
           .document(transferToDepartment)
           .get()
           .then((value) {
-        if (value.data != null) {
-          length = value.data['p'];
-        }
-      }).catchError((e) {
-        _firestore
-            .collection("States/Haryana/Palwal")
-            .document(transferToDepartment)
-            .setData({"p": 1, "pending": 0});
-        length = 0;
+        print('value.data ${value.data}');
+        length = value.data['p'];
       });
-
-      if (length != 0) {
-        _firestore
-            .collection("States/Haryana/Palwal")
-            .document(transferToDepartment)
-            .updateData({"p": length + 1});
-      }
-
+    } catch (e) {
+      print('formation');
       _firestore
-          .document('States/Haryana/Palwal/$transferToDepartment')
-          .collection('Complaints')
-          .add({
-        'ref': ref,
-        'subject': subject,
-        'status': 0,
-        'date': date,
-      }).then((value) {
-        print("Success");
-        return true;
-      });
+          .collection("States/$workState/$workCity")
+          .document(transferToDepartment)
+          .setData({"p": 1, "pending": 0});
+      justSet = true;
+    }
+
+    if (!justSet) {
+      _firestore
+          .collection("States/$workState/$workCity")
+          .document(transferToDepartment)
+          .updateData({"p": length + 1});
+    }
+
+    _firestore
+        .document('States/$workState/$workCity/$transferToDepartment')
+        .collection('Complaints')
+        .add({
+      'ref': ref,
+      'subject': subject,
+      'status': 3,
+      'date': dateReal,
+    }).then((value) {
+      print("Success");
+      return true;
     });
   }
 
@@ -1031,7 +1061,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       setState(() {
                         selectitem = index;
                         department = items[selectitem];
-                        print('department $department');
+                        // print('department $department');
                       });
                     },
                   ),
@@ -1180,14 +1210,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   Widget buttonFlat(String childtext, Function pressed) {
     return FlatButton(
       padding: EdgeInsets.all(20),
-      shape: Border.all(color: Theme.of(context).textTheme.bodyText1.color,),
+      shape: Border.all(
+        color: Theme.of(context).textTheme.bodyText1.color,
+      ),
       child: Text(
         childtext,
         style: TextStyle(
           fontSize: 15,
           color: Theme.of(context).textTheme.bodyText1.color,
-          fontFamily:
-                          Theme.of(context).textTheme.bodyText1.fontFamily,
+          fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
         ),
       ),
       onPressed: pressed,
