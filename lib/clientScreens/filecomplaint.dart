@@ -206,15 +206,17 @@ class _FileComplaintState extends State<FileComplaint>
                                     controller: _subjectController,
                                     keyboardType: TextInputType.text,
                                     autocorrect: false,
-                                    maxLength: 150,
                                     maxLines: null,
+                                    autovalidateMode: AutovalidateMode.onUserInteraction,
                                     validator: (value) {
                                       if (value == '') {
                                         return 'Please enter Subject';
-                                      } else if (value.length > 150) {
+                                      } else if (value.length >= 150) {
                                         return "Subject should Be less than 150 Words";
                                       }
-                                      return null;
+                                      else{
+                                        return null;
+                                      }
                                     },
                                     decoration: InputDecoration(
                                       counterText: '',
@@ -235,12 +237,19 @@ class _FileComplaintState extends State<FileComplaint>
                                       autocorrect: false,
                                       controller: _detailsController,
                                       maxLines: null,
-                                      maxLength: 500,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                       validator: (value) {
                                         if (value == '') {
                                           return 'Please enter details about your issue';
                                         }
-                                        return null;
+                                        else if(value.length >=500)
+                                        {
+                                          return 'Complaint should Be less than 500 Words';
+                                        }
+                                        else
+                                        {
+                                          return null;
+                                        }
                                       },
                                       decoration: InputDecoration(
                                         counterText: '',
@@ -404,8 +413,10 @@ class _FileComplaintState extends State<FileComplaint>
                           ),
                           onTap: () async {
                             {
-                              _formKey.currentState.validate();
-                              setState(() {
+                              var result = _formKey.currentState.validate();
+                              if(result)
+                              {
+                                setState(() {
                                 loading = true;
                               });
                               if (_images.length > 4) {
@@ -481,6 +492,18 @@ class _FileComplaintState extends State<FileComplaint>
                                   loading = false;
                                 });
                                 showModalSheet(context);
+                              }
+                              }
+                              else{
+                                _scaffoldKey.currentState.showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text(
+                                      'Please Enter Your Details Correctly',
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
                               }
                             }
                           },

@@ -29,6 +29,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   TextEditingController reqORfeed = TextEditingController();
   var ref;
   var previouspath;
+  var loading = false;
   int selectitem = 1;
   var user;
   String requestFromDepartment;
@@ -40,6 +41,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   var depts;
   var previousDepartment;
   var transferToDepartment;
+  var name, phone, address;
 
   @override
   void initState() {
@@ -65,8 +67,21 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     dynamic arguments = ModalRoute.of(context).settings.arguments;
     ref = arguments['complaintId'];
     previouspath = arguments['path'];
-
+    _firestore.document('DepartmentNames/StateCode').get().then((value) {
+      print('check State  ${value.data}');
+      value.data.forEach((key, value) {
+        print('$key == $value');
+      });
+    });
     super.didChangeDependencies();
+  }
+
+  void findData(var data) {
+    _firestore.document('Users/${data['author']}').get().then((value) {
+      name = value['name'];
+      phone = value['phoneNumber'];
+      address = '${value['houseNumber']}, ${value['street']}';
+    });
   }
 
   void newToOld() {
@@ -87,14 +102,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      // appBar: AppBar(
-      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      //   iconTheme: IconThemeData(color: Colors.grey),
-      //   automaticallyImplyLeading: false,
-      //   titleSpacing: -12.0,
-      //   leading:
-      //   title:
-      // ),
       body: SafeArea(
         child: ListView(
           children: <Widget>[
@@ -132,6 +139,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       );
                     } else {
                       var data = snapshot.data.data;
+                      findData(data);
                       subject = data['subject'];
                       dateReal = data['date'];
                       var date = DateFormat.yMMMEd()
@@ -262,6 +270,90 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                           fontStyle: FontStyle.italic),
                                     ),
                                   ),
+                                  onTap: () {
+                                    return showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          backgroundColor: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          title: Text(
+                                            'User Information!!',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1
+                                                    .color),
+                                          ),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              // Row(
+                                              //   mainAxisSize: MainAxisSize.min,
+                                              //   children: [
+                                              //     // FractionallySizedBox(widthFactor: 1,child: Text('Name :'),),
+                                              //     Text('Name'),
+                                              //     SizedBox(width: 7,),
+                                              //     Text('Rishi Chhabra'),
+                                              //   ],
+                                              // ),
+                                              Text(
+                                                'Name : ${name}',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        .color),
+                                              ),
+                                              Text(
+                                                'Phone Number : ${phone}',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        .color),
+                                              ),
+                                              Text(
+                                                'Address : $address',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1
+                                                        .color),
+                                              ),
+                                            ],
+                                          ),
+                                          actions: [
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.of(context,
+                                                        rootNavigator: true)
+                                                    .pop();
+                                              },
+                                              child: Text(
+                                                'OKAY',
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              ),
+                                            )
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -539,7 +631,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     25,
                   ),
                   child: Container(
-                    width: double.infinity,
                     height:
                         logs.length * 90.0 < 150.0 ? logs.length * 90.0 : 150,
                     child: ListView.builder(
@@ -547,48 +638,52 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       itemCount: logs.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          margin: EdgeInsets.fromLTRB(0, 6, 0, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .color,
-                                ),
-                                height: 20,
-                                width: 5,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Container(
-                                width: 300,
-                                child: Text(
-                                  logs[index],
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .color,
-                                    fontFamily: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .fontFamily,
-                                    fontSize: 14,
+                            margin: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                            child: FractionallySizedBox(
+                              alignment: Alignment.centerLeft,
+                              widthFactor: 1,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .color,
+                                    ),
+                                    height: 20,
+                                    width: 5,
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                        );
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Container(
+                                    constraints:
+                                        BoxConstraints.tightFor(width: 350),
+                                    child: Text(
+                                      logs[index],
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .color,
+                                        fontFamily: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .fontFamily,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ));
                       },
                     ),
                   ))
@@ -668,11 +763,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         pressed
             ? SingleChildScrollView(
                 child: Container(
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
-                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(
+                      vertical: MediaQuery.of(context).size.width * 0.01),
+                  width: MediaQuery.of(context).size.width * 0.75,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       buttonFlat(
                         "Feedback",
@@ -812,22 +907,24 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           height: 15,
         ),
         status != 1 || status != 2
-            ? FlatButton(
-                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 20),
-                shape: Border.all(
-                  color: Theme.of(context).textTheme.bodyText1.color,
-                ),
-                child: Text(
-                  "Mark Complete",
-                  style: TextStyle(
-                    fontSize: 15,
+            ? Container(
+                width: MediaQuery.of(context).size.width * 0.75,
+                child: FlatButton(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  shape: Border.all(
                     color: Theme.of(context).textTheme.bodyText1.color,
                   ),
-                ),
-                onPressed: () {
-                  markComplete();
-                },
-              )
+                  child: Text(
+                    "Mark Complete",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Theme.of(context).textTheme.bodyText1.color,
+                    ),
+                  ),
+                  onPressed: () {
+                    markComplete();
+                  },
+                ))
             : Container(),
         SizedBox(
           height: 20,
@@ -904,6 +1001,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   void dismissRequest() {
+    var pending;
+    var referenceParentPath =
+        _firestore.document(previouspath).parent().parent().path;
     logs.add('Transfer Request Disapproved');
     _firestore.document(ref).updateData({
       'status': 0,
@@ -913,8 +1013,19 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     }).then((value) {
       _firestore.document(previouspath).updateData({
         'status': 0,
-      }).then((value) {
-        Navigator.of(context).pop();
+      });
+    }).then((value) {
+      _firestore.document(referenceParentPath).get().then((value) {
+        pending = value.data['pending'];
+        // print(pending);
+      }).whenComplete(() {
+        if (pending >= 1) {
+          _firestore.document(referenceParentPath).updateData({
+            "pending": pending - 1,
+          }).then((value) {
+            Navigator.of(context).pop();
+          });
+        }
       });
     });
   }
@@ -932,14 +1043,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       p = value.data['p'];
       pending = value.data['pending'];
     }).whenComplete(() {
-      if(p == 1)
-      {
+      if (p == 1) {
+        _firestore.document(referenceParentPath).delete();
+      } else
         _firestore
-          .document(referenceParentPath).delete();
-      }
-      else _firestore
-          .document(referenceParentPath)
-          .updateData({'p': p - 1, 'pending': pending - 1});
+            .document(referenceParentPath)
+            .updateData({'p': p - 1, 'pending': pending - 1});
     }).whenComplete(() {
       _firestore.document(ref).updateData({
         'status': 3,

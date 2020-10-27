@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/clientScreens/filecomplaint.dart';
-import 'package:faridabad/loginScreen.dart';
+import 'package:faridabad/login.dart';
 import 'package:faridabad/clientScreens/previouscomplaints.dart';
 import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -175,7 +175,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                           if (signoutResult) {
                                             Navigator.of(context)
                                                 .pushNamedAndRemoveUntil(
-                                                    HomeScreen.routeName,
+                                                    Login.routeName,
                                                     (route) => false);
                                           }
                                         }
@@ -207,17 +207,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 // ),
                                 imageWidget,
                                 brandText,
-                                // SizedBox(
-                                //   height: 5,
-                                // ),
-                                Text(
-                                  city ?? "empty",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 38,
-                                      letterSpacing: 1,
-                                      color: Colors.blue[300]),
-                                ),
+                                cityText(city),
                                 SizedBox(
                                   height: 50,
                                 ),

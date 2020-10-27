@@ -105,9 +105,11 @@ class Auth {
       var c = email.substring(2,5);
       var s = email.substring(0,2);
       email = email.substring(5);
+      Map g;
       databaseReference.document('DepartmentNames/StateCode').get().then((value) {
         print('check State $s ${value.data[s]}');
         workState = value.data[s];
+        
       }).then((value) {
         databaseReference.document('DepartmentNames/CityCode').get().then((value) {
           print('check city $c ${value.data[c]}');
