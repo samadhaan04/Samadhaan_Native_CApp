@@ -295,44 +295,83 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              // Row(
-                                              //   mainAxisSize: MainAxisSize.min,
-                                              //   children: [
-                                              //     // FractionallySizedBox(widthFactor: 1,child: Text('Name :'),),
-                                              //     Text('Name'),
-                                              //     SizedBox(width: 7,),
-                                              //     Text('Rishi Chhabra'),
-                                              //   ],
-                                              // ),
-                                              Text(
-                                                'Name : ${name}',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.face,
                                                     color: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
-                                                        .color),
+                                                        .color,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    '$name',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            .color),
+                                                  ),
+                                                ],
                                               ),
-                                              Text(
-                                                'Phone Number : ${phone}',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.call,
                                                     color: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
-                                                        .color),
+                                                        .color,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    '${phone}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            .color),
+                                                  ),
+                                                ],
                                               ),
-                                              Text(
-                                                'Address : $address',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.home,
                                                     color: Theme.of(context)
                                                         .textTheme
                                                         .bodyText1
-                                                        .color),
+                                                        .color,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    '$address',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1
+                                                            .color),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
