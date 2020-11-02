@@ -666,7 +666,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   padding: EdgeInsets.fromLTRB(
                     MediaQuery.of(context).size.width * 0.05,
                     25,
-                    MediaQuery.of(context).size.width * 0.03,
+                    0,
+                    // MediaQuery.of(context).size.width * 0.03,
                     25,
                   ),
                   child: Container(
@@ -701,7 +702,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                   ),
                                   Container(
                                     constraints:
-                                        BoxConstraints.tightFor(width: 350),
+                                        BoxConstraints.tightFor(width: 275),
                                     child: Text(
                                       logs[index],
                                       maxLines: 3,
@@ -804,7 +805,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 child: Container(
                   padding: EdgeInsets.symmetric(
                       vertical: MediaQuery.of(context).size.width * 0.01),
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -819,7 +820,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                         },
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 2,
                       ),
                       buttonFlat(
                         "Request Transfer",
@@ -1357,7 +1358,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
 
   Widget buttonFlat(String childtext, Function pressed) {
     return FlatButton(
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(14),
       shape: Border.all(
         color: Theme.of(context).textTheme.bodyText1.color,
       ),

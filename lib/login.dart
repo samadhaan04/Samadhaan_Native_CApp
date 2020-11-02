@@ -53,7 +53,7 @@ class _LoginState extends State<Login> {
                     child: AnimatedContainer(
                       duration: Duration(seconds: 3),
                       curve: Curves.easeInOut,
-                      height: MediaQuery.of(context).size.height * 0.4,
+                      height: MediaQuery.of(context).size.height * 0.48,
                       width: MediaQuery.of(context).size.width * 0.95,
                       child: Hero(
                         tag: 'logo',
@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: 100,
+                          height: 50,
                         ),
                         Text(
                           'Samadhaan',
@@ -165,7 +165,7 @@ class _LoginState extends State<Login> {
                                     },
                                   ),
                                   SizedBox(
-                                    height: 60,
+                                    height: 30,
                                   ),
                                   FlatButton(
                                     child: Text(
