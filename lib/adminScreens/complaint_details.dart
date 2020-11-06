@@ -668,7 +668,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   padding: EdgeInsets.fromLTRB(
                     MediaQuery.of(context).size.width * 0.05,
                     25,
-                    MediaQuery.of(context).size.width * 0.03,
+                    0,
+                    // MediaQuery.of(context).size.width * 0.03,
                     25,
                   ),
                   child: Container(
@@ -703,7 +704,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                   ),
                                   Container(
                                     constraints:
-                                        BoxConstraints.tightFor(width: 350),
+                                        BoxConstraints.tightFor(width: 275),
                                     child: Text(
                                       logs[index],
                                       maxLines: 3,
@@ -806,7 +807,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 child: Container(
                   padding: EdgeInsets.symmetric(
                       vertical: MediaQuery.of(context).size.width * 0.01),
-                  width: MediaQuery.of(context).size.width * 0.75,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -821,7 +822,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                         },
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 2,
                       ),
                       buttonFlat(
                         "Request Transfer",
@@ -878,12 +879,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               FlatButton(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 7),
-                                shape: Border.all(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .color,
-                                ),
                                 child: Text(
                                   department == null
                                       ? "Select Department"
@@ -907,12 +902,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               FlatButton(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 12, horizontal: 7),
-                                shape: Border.all(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .color,
-                                ),
                                 child: Text(
                                   "Submit  Request",
                                   style: TextStyle(
@@ -949,12 +938,17 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         ),
         status != 1 || status != 2
             ? Container(
-                width: MediaQuery.of(context).size.width * 0.75,
-                child: FlatButton(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  shape: Border.all(
+                decoration: BoxDecoration(
+                  border: Border.all(
                     color: Theme.of(context).textTheme.bodyText1.color,
                   ),
+                  borderRadius: BorderRadius.circular(
+                    40,
+                  ),
+                ),
+                width: MediaQuery.of(context).size.width * 0.80,
+                child: FlatButton(
+                  padding: EdgeInsets.symmetric(vertical: 20),
                   child: Text(
                     "Mark Complete",
                     style: TextStyle(
@@ -1338,6 +1332,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         border: Border.all(
           color: Theme.of(context).textTheme.bodyText1.color,
         ),
+        borderRadius: BorderRadius.circular(40),
       ),
       child: TextField(
         controller: reqORfeed,
@@ -1358,20 +1353,25 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   Widget buttonFlat(String childtext, Function pressed) {
-    return FlatButton(
-      padding: EdgeInsets.all(20),
-      shape: Border.all(
-        color: Theme.of(context).textTheme.bodyText1.color,
-      ),
-      child: Text(
-        childtext,
-        style: TextStyle(
-          fontSize: 15,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
           color: Theme.of(context).textTheme.bodyText1.color,
-          fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
         ),
+        borderRadius: BorderRadius.circular(25),
       ),
-      onPressed: pressed,
+      child: FlatButton(
+        padding: EdgeInsets.all(14),
+        child: Text(
+          childtext,
+          style: TextStyle(
+            fontSize: 15,
+            color: Theme.of(context).textTheme.bodyText1.color,
+            fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
+          ),
+        ),
+        onPressed: pressed,
+      ),
     );
   }
 }
