@@ -56,8 +56,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       user = pref.getString('currentUser');
       workCity = pref.getString('workCity');
       workState = pref.getString('workState');
-      _firestore.document('DepartmentNames/Names').get().then((value) {
-        depts = value.data['names'].toList();
+      print('$workCity $workState');
+      _firestore.document('States/$workState/$workCity/data/DepartmentNames/names').get().then((value) {
+        depts = value.data['Names'].toList();
+        print(depts);
       });
     });
   }

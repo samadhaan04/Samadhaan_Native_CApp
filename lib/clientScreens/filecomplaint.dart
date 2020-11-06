@@ -57,29 +57,33 @@ class _FileComplaintState extends State<FileComplaint>
   @override
   void initState() {
     super.initState();
-    databaseReference.document('DepartmentNames/Names').get().then((value) {
-      listOfDepartments = value.data['names'].toList();
-    }).whenComplete(() {
-      setState(() {
-      });
-    });
-    fetchCity();
+    fetchCityAndFindDepartmentList(); 
+    
+
   }
 
   @override
   void didChangeDependencies() {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    fetchCity();
     super.didChangeDependencies();
   }
 
   var city, state;
-  void fetchCity() async {
+  void fetchCityAndFindDepartmentList() async {
     pref = await SharedPreferences.getInstance();
     setState(() {
       city = pref.getString('city');
       state = pref.getString('state');
+    });
+    databaseReference.document('States/$state/$city/data/DepartmentNames/names').get().then((value) {
+      listOfDepartments = value.data['Names'].toList();
+    }).whenComplete(() {
+      setState(() {
+      });
+    });
+    setState(() {
+     
     });
   }
 
@@ -519,7 +523,6 @@ class _FileComplaintState extends State<FileComplaint>
             opacity: loading ? 1 : 0,
             child: Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.blue,
               ),
             ),
           ),

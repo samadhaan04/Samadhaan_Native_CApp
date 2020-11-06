@@ -22,6 +22,7 @@ class Base extends StatefulWidget {
 class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   var username;
   var city;
+  var state;
   Widget imageWidget;
   var countNotifications;
   String dropdownValue = '';
@@ -29,8 +30,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   var _items = ['User Profile', 'Logout'];
 
   var image, loading;
-  
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -82,23 +82,31 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   }
 
   void fetchNameAndCity() async {
-    final storage = FirebaseStorage.instance;
-    setState(() {
-      loading = true;
-    });
-    await storage.ref().child('family.jpg').getDownloadURL().then((image) {
-      imageWidget = Image.network(
-        image,
-        width: double.infinity,
-        height: 450,
-      );
-    });
     final pref = await SharedPreferences.getInstance();
     final dname = pref.getString('name');
     print('name $dname');
     city = pref.getString('city');
+    state = pref.getString('state');
     print('city $city');
     username = getCapitalizeString(str: dname);
+
+    final storage = FirebaseStorage.instance;
+    setState(() {
+      loading = true;
+    });
+    await storage
+        .ref()
+        .child('$state/$city.jpg')
+        .getDownloadURL()
+        .then((image) {
+      imageWidget = Container(
+        height: MediaQuery.of(context).size.height*0.5,
+        child: Image.network(
+          image,
+          width: MediaQuery.of(context).size.width * 0.85,
+        ),
+      );
+    });
     setState(() {
       loading = false;
     });

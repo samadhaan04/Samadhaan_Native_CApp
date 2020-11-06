@@ -379,7 +379,7 @@ class _MessagesStream1State extends State<MessagesStream1> {
     return StreamBuilder(
       stream: _firestore
           .collection(
-              'States/$workState/$workCity/${widget.department}/Complaints')
+              'States/$workState/$workCity/${widget.department}/Complaints').orderBy('date',descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
