@@ -79,31 +79,31 @@ class Auth {
   // }
 
   
-  void generateDepartmentNames() {
-    List<String> departmentNames = [
-    "Animal Husbandry",
-    "BDPO",
-    "Civil Hospital",
-    "DHBVN(Urban)",
-    "DHBVN(Rural)",
-    "Distt. Town planner",
-    "Education(Elementary)",
-    "Education(Higher)",
-    "Fire Department",
-    "HVPNL",
-    "Irrigation",
-    "Nagar Parishad",
-    "PWD",
-    "PUBLIC HEALTH(Water)",
-    "Public health(Sewage)",
-    "Public health (Reny Well)",
-    "Social Welfare",
-    "Tehsil",
-  ];
-    departmentNames.forEach((element) {
-      databaseReference.document('States/Punjab/Patiala/data/DepartmentNames/names').setData({'Names':departmentNames});
-    });
-  }
+  // void generateDepartmentNames() {
+  //   List<String> departmentNames = [
+  //   "Animal Husbandry",
+  //   "BDPO",
+  //   "Civil Hospital",
+  //   "DHBVN(Urban)",
+  //   "DHBVN(Rural)",
+  //   "Distt. Town planner",
+  //   "Education(Elementary)",
+  //   "Education(Higher)",
+  //   "Fire Department",
+  //   "HVPNL",
+  //   "Irrigation",
+  //   "Nagar Parishad",
+  //   "PWD",
+  //   "PUBLIC HEALTH(Water)",
+  //   "Public health(Sewage)",
+  //   "Public health (Reny Well)",
+  //   "Social Welfare",
+  //   "Tehsil",
+  // ];
+  //   departmentNames.forEach((element) {
+  //     databaseReference.document('States/Punjab/Patiala/data/DepartmentNames/names').setData({'Names':departmentNames});
+  //   });
+  // }
 
   Future<bool> signIn(String email, String password) async {
     try {
@@ -171,7 +171,7 @@ class Auth {
   }
 
   Future<bool> autoLogin() async {
-    generateDepartmentNames();
+    // generateDepartmentNames();
     if (await _auth.currentUser() != null) {
       return _auth.currentUser().then((value) async {
         var i = await _auth.fetchSignInMethodsForEmail(email: value.email);
