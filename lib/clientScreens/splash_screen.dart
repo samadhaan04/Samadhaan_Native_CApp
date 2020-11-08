@@ -3,6 +3,7 @@ import 'package:faridabad/adminScreens/adminUI.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/clientScreens/base.dart';
 import 'package:faridabad/loginScreen.dart';
+import 'package:faridabad/login.dart';
 import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
             .pushReplacementNamed(AdminUi.routeName, arguments: currentUser);
       }
     } else {
-      Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+      Navigator.of(context).pushReplacementNamed(Login.routeName);
     }
   }
 

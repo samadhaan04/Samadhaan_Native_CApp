@@ -136,211 +136,213 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 30, 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 15, left: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        width: 2,
-                        color: Color(0xf3f3f3f3),
-                      ),
-                    ),
-                    child:
-                        // Text('hello', style: TextStyle(color: Colors.white),),
-                        RollingSwitch(
-                      textOff: 'Transfer',
-                      textOn: 'Transfer',
-                      onChanged: (v) {},
-                      onTap: () {
-                        transferValue = !transferValue;
-                        doneValue = false;
-                        ongoingValue = false;
-                        setState(() {});
-                      },
-                      value: transferValue,
-                      colorOff: Colors.transparent,
-                      colorOn: Color(0xffFE7325),
-                      myGradient: darkMode()
-                          ? LinearGradient(
-                              colors: [
-                                Color.fromRGBO(236, 93, 59, 0.8),
-                                Color.fromRGBO(238, 120, 61, 0.8),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            )
-                          : LinearGradient(
-                              colors: [
-                                Color(0xffff4A2B),
-                                Color(0xffFE7325),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                      pad: 0,
+            // Padding(
+            // padding: const EdgeInsets.fromLTRB(0, 10, 30, 2),
+            // child:
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // Padding(
+                //   padding: const EdgeInsets.all(15),
+                // ),
+                Container(
+                  // margin: const EdgeInsets.only(right: 15, left: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      width: 2,
+                      color: Color(0xf3f3f3f3),
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.001,
+                  child:
+                      // Text('hello', style: TextStyle(color: Colors.white),),
+                      RollingSwitch(
+                    textOff: 'Transfer',
+                    textOn: 'Transfer',
+                    onChanged: (v) {},
+                    onTap: () {
+                      transferValue = !transferValue;
+                      doneValue = false;
+                      ongoingValue = false;
+                      setState(() {});
+                    },
+                    value: transferValue,
+                    colorOff: Colors.transparent,
+                    colorOn: Color(0xffFE7325),
+                    myGradient: darkMode()
+                        ? LinearGradient(
+                            colors: [
+                              Color.fromRGBO(236, 93, 59, 0.8),
+                              Color.fromRGBO(238, 120, 61, 0.8),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          )
+                        : LinearGradient(
+                            colors: [
+                              Color(0xffff4A2B),
+                              Color(0xffFE7325),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                    pad: 0,
                   ),
-                  //Expanded(
-                  Container(
-                    margin: const EdgeInsets.only(left: 10, right: 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        width: 2,
-                        color: Color(0xf3f3f3f3),
-                      ),
-                    ),
-                    child: RollingSwitch(
-                      value: ongoingValue,
-                      textOff: 'Ongoing',
-                      textOn: 'Ongoing',
-                      onChanged: (v) {},
-                      onTap: () {
-                        transferValue = false;
-                        doneValue = false;
-                        ongoingValue = !ongoingValue;
-                        setState(() {});
-                      },
-                      colorOff: Colors.transparent,
-                      colorOn: Color(0xfff4b601),
-                      myGradient: darkMode()
-                          ? LinearGradient(
-                              colors: [
-                                Color(0xfff4b601),
-                                Color(0xffffee77),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            )
-                          : LinearGradient(
-                              colors: [
-                                Color(0xfff4b601),
-                                Color(0xffffee77),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                      pad: 0,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.05,
+                ),
+                //Expanded(
+                Container(
+                  // margin: const EdgeInsets.only(left: 10, right: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      width: 2,
+                      color: Color(0xf3f3f3f3),
                     ),
                   ),
-                ],
-              ),
+                  child: RollingSwitch(
+                    value: ongoingValue,
+                    textOff: 'Ongoing',
+                    textOn: 'Ongoing',
+                    onChanged: (v) {},
+                    onTap: () {
+                      transferValue = false;
+                      doneValue = false;
+                      ongoingValue = !ongoingValue;
+                      setState(() {});
+                    },
+                    colorOff: Colors.transparent,
+                    colorOn: Color(0xfff4b601),
+                    myGradient: darkMode()
+                        ? LinearGradient(
+                            colors: [
+                              Color(0xfff4b601),
+                              Color(0xffffee77),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          )
+                        : LinearGradient(
+                            colors: [
+                              Color(0xfff4b601),
+                              Color(0xffffee77),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                    pad: 0,
+                  ),
+                ),
+              ],
             ),
+            // ),
             SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 2, 30, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(15),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 15, left: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        width: 2,
-                        color: Color(0xf3f3f3f3),
-                      ),
-                    ),
-                    child: RollingSwitch(
-                      textOff: 'New',
-                      textOn: 'New',
-                      onChanged: (v) {},
-                      onTap: () {
-                        transferValue = false;
-                        newValue = !newValue;
-                        doneValue = false;
-                        ongoingValue = false;
-                        setState(() {});
-                      },
-                      value: newValue,
-                      colorOff: Colors.transparent,
-                      colorOn: Color.fromRGBO(77, 136, 242, 1),
-                      myGradient: darkMode()
-                          ? LinearGradient(
-                              colors: [
-                                Color.fromRGBO(80, 141, 243, 1),
-                                Color.fromRGBO(88, 170, 247, 1),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            )
-                          : LinearGradient(
-                              colors: [
-                                Color.fromRGBO(77, 137, 241, 0.8),
-                                Color.fromRGBO(85, 167, 245, 0.8),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                      pad: 10,
+            // Padding(
+            // padding: const EdgeInsets.fromLTRB(0, 2, 30, 10),
+            // child:
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // Padding(
+                //   padding: const EdgeInsets.all(15),
+                // ),
+                Container(
+                  // margin: const EdgeInsets.only(right: 15, left: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      width: 2,
+                      color: Color(0xf3f3f3f3),
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.001,
+                  child: RollingSwitch(
+                    textOff: 'New',
+                    textOn: 'New',
+                    onChanged: (v) {},
+                    onTap: () {
+                      transferValue = false;
+                      newValue = !newValue;
+                      doneValue = false;
+                      ongoingValue = false;
+                      setState(() {});
+                    },
+                    value: newValue,
+                    colorOff: Colors.transparent,
+                    colorOn: Color.fromRGBO(77, 136, 242, 1),
+                    myGradient: darkMode()
+                        ? LinearGradient(
+                            colors: [
+                              Color.fromRGBO(80, 141, 243, 1),
+                              Color.fromRGBO(88, 170, 247, 1),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          )
+                        : LinearGradient(
+                            colors: [
+                              Color.fromRGBO(77, 137, 241, 0.8),
+                              Color.fromRGBO(85, 167, 245, 0.8),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                    pad: 10,
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 10, right: 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        width: 2,
-                        color: Color(0xf3f3f3f3),
-                      ),
-                    ),
-                    child: RollingSwitch(
-                      textOff: 'Done',
-                      textOn: 'Done',
-                      onChanged: (v) {},
-                      onTap: () {
-                        transferValue = false;
-                        doneValue = !doneValue;
-                        ongoingValue = false;
-                        setState(() {});
-                      },
-                      value: doneValue,
-                      colorOff: Colors.transparent,
-                      colorOn: Color(0xff85eb29),
-                      myGradient: darkMode()
-                          ? LinearGradient(
-                              colors: [
-                                Color(0xff51b328),
-                                Color(0xff85eb29),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            )
-                          : LinearGradient(
-                              colors: [
-                                Color.fromRGBO(113, 182, 67, 0.8),
-                                Color.fromRGBO(153, 224, 80, 0.8),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                      pad: 10,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.05,
+                ),
+                Container(
+                  // margin: const EdgeInsets.only(left: 10, right: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      width: 2,
+                      color: Color(0xf3f3f3f3),
                     ),
                   ),
-                ],
-              ),
+                  child: RollingSwitch(
+                    textOff: 'Done',
+                    textOn: 'Done',
+                    onChanged: (v) {},
+                    onTap: () {
+                      transferValue = false;
+                      doneValue = !doneValue;
+                      ongoingValue = false;
+                      setState(() {});
+                    },
+                    value: doneValue,
+                    colorOff: Colors.transparent,
+                    colorOn: Color(0xff85eb29),
+                    myGradient: darkMode()
+                        ? LinearGradient(
+                            colors: [
+                              Color(0xff51b328),
+                              Color(0xff85eb29),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          )
+                        : LinearGradient(
+                            colors: [
+                              Color.fromRGBO(113, 182, 67, 0.8),
+                              Color.fromRGBO(153, 224, 80, 0.8),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                    pad: 10,
+                  ),
+                ),
+              ],
             ),
+            // ),
             SizedBox(
               height: 10,
             ),
@@ -377,7 +379,7 @@ class _MessagesStream1State extends State<MessagesStream1> {
     return StreamBuilder(
       stream: _firestore
           .collection(
-              'States/$workState/$workCity/${widget.department}/Complaints')
+              'States/$workState/$workCity/${widget.department}/Complaints').orderBy('date',descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {

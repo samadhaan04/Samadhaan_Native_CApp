@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 List<String> getStateList() {
   List<String> wards = [];
   wards.add("None");
@@ -25,6 +23,26 @@ List<String> getStateList() {
 //     return constituencies;
 //   }
 // }
+
+Widget cityText(String city) => RichText(
+      text: TextSpan(
+        text: city.substring(0, (city.length ~/ 2)),
+        style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 44,
+            letterSpacing: 1,
+            color: Colors.black),
+        children: <TextSpan>[
+          TextSpan(
+              text: city.substring((city.length ~/ 2)),
+              style: TextStyle(
+                  letterSpacing: 1,
+                  fontSize: 44,
+                  color: Colors.grey[500],
+                  fontFamily: "Sans Serif"))
+        ],
+      ),
+    );
 
 var brandText = RichText(
   text: TextSpan(
@@ -65,21 +83,22 @@ var complaintText = RichText(
 
 var userInfoText = RichText(
   text: TextSpan(
-      text: "User",
-      style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 40,
-          letterSpacing: 1,
-          color: Colors.black),
-      children: <TextSpan>[
-        TextSpan(
-            text: "Information",
-            style: TextStyle(
-                letterSpacing: 1,
-                fontSize: 40,
-                color: Colors.grey[500],
-                fontFamily: "Sans Serif"))
-      ]),
+    text: "User Profile",
+    style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 40,
+        letterSpacing: 1,
+        color: Colors.black),
+    // children: <TextSpan>[
+    //   TextSpan(
+    //       text: "Information",
+    //       style: TextStyle(
+    //           letterSpacing: 1,
+    //           fontSize: 40,
+    //           color: Colors.grey[500],
+    //           fontFamily: "Sans Serif"))
+    // ]),
+  ),
 );
 
 var trackText = RichText(

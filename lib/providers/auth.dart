@@ -13,7 +13,7 @@ class Auth {
   final googleSignIn = new GoogleSignIn();
   FirebaseUser user;
   String currentUser;
-  var workCity,workState;
+  var workCity, workState;
   Map emailList;
   final databaseReference = Firestore.instance;
 
@@ -78,6 +78,33 @@ class Auth {
   //   });
   // }
 
+  
+  // void generateDepartmentNames() {
+  //   List<String> departmentNames = [
+  //   "Animal Husbandry",
+  //   "BDPO",
+  //   "Civil Hospital",
+  //   "DHBVN(Urban)",
+  //   "DHBVN(Rural)",
+  //   "Distt. Town planner",
+  //   "Education(Elementary)",
+  //   "Education(Higher)",
+  //   "Fire Department",
+  //   "HVPNL",
+  //   "Irrigation",
+  //   "Nagar Parishad",
+  //   "PWD",
+  //   "PUBLIC HEALTH(Water)",
+  //   "Public health(Sewage)",
+  //   "Public health (Reny Well)",
+  //   "Social Welfare",
+  //   "Tehsil",
+  // ];
+  //   departmentNames.forEach((element) {
+  //     databaseReference.document('States/Punjab/Patiala/data/DepartmentNames/names').setData({'Names':departmentNames});
+  //   });
+  // }
+
   Future<bool> signIn(String email, String password) async {
     try {
       email = '$email@samadhaan.com';
@@ -97,25 +124,31 @@ class Auth {
     }
   }
 
-
   Future<void> checkEmailAndFindUserAndSet(String email) async {
     databaseReference.document('DepartmentNames/emails').get().then((value) {
       emailList = value.data['email'];
     }).whenComplete(() {
-      var c = email.substring(2,5);
-      var s = email.substring(0,2);
+      var c = email.substring(2, 5);
+      var s = email.substring(0, 2);
       email = email.substring(5);
-      databaseReference.document('DepartmentNames/StateCode').get().then((value) {
+      Map g;
+      databaseReference
+          .document('DepartmentNames/StateCode')
+          .get()
+          .then((value) {
         print('check State $s ${value.data[s]}');
         workState = value.data[s];
       }).then((value) {
-        databaseReference.document('DepartmentNames/CityCode').get().then((value) {
+        databaseReference
+            .document('DepartmentNames/CityCode')
+            .get()
+            .then((value) {
           print('check city $c ${value.data[c]}');
           workCity = value.data[c];
         }).whenComplete(() {
-        currentUser = emailList[email];
-        setCurrentUser();
-      });
+          currentUser = emailList[email];
+          setCurrentUser();
+        });
       });
     });
   }
@@ -138,6 +171,7 @@ class Auth {
   }
 
   Future<bool> autoLogin() async {
+    // generateDepartmentNames();
     if (await _auth.currentUser() != null) {
       return _auth.currentUser().then((value) async {
         var i = await _auth.fetchSignInMethodsForEmail(email: value.email);
@@ -150,9 +184,7 @@ class Auth {
           print(value.email);
           checkEmailAndFindUserAndSet(value.email);
           return true;
-        }
-        else
-        {
+        } else {
           return false;
         }
       });
@@ -164,8 +196,7 @@ class Auth {
   void setCurrentUser() async {
     final pref = await SharedPreferences.getInstance();
     pref.setString('currentUser', currentUser);
-    if(currentUser != 'client')
-    {
+    if (currentUser != 'client') {
       pref.setString('workCity', workCity);
       pref.setString('workState', workState);
     }

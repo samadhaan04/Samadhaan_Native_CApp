@@ -86,6 +86,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
       setState(() {
         states = value.data.keys.toList();
         cityMap = value.data;
+        print(cityMap);
         states.insert(0, 'None');
         print(states);
         getcities();
@@ -98,10 +99,12 @@ class _UserInfoScreenState extends State<UserInfoScreen>
       loadingcity = true;
     });
       setState(() {
-        if (_state != null || _state != 'None')
+        print('state $_state');
+        if (_state != null)
           cities = cityMap[_state];
         else
           cities = ['None'];
+        print(cities);
         loadingcity = false;
         loading = false;
       });
@@ -783,6 +786,7 @@ class _UserInfoScreenState extends State<UserInfoScreen>
     _gender = result['gender'];
     _phoneController.text = (result['phoneNumber']);
     _constituency = result['city'];
+    getcities();
     return true;
   }
 

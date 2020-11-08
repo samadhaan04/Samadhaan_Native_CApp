@@ -112,7 +112,7 @@ class _AdminProfileState extends State<AdminProfile> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        isSwitched ? 'Light Mode' : 'Dark Mode',
+                        isSwitched ? 'Dark Mode' : 'Light Mode',
                         style: TextStyle(
                             fontSize: 22.0,
                             color: Theme.of(context).textTheme.bodyText1.color,

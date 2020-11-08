@@ -57,29 +57,33 @@ class _FileComplaintState extends State<FileComplaint>
   @override
   void initState() {
     super.initState();
-    databaseReference.document('DepartmentNames/Names').get().then((value) {
-      listOfDepartments = value.data['names'].toList();
-    }).whenComplete(() {
-      setState(() {
-      });
-    });
-    fetchCity();
+    fetchCityAndFindDepartmentList(); 
+    
+
   }
 
   @override
   void didChangeDependencies() {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    fetchCity();
     super.didChangeDependencies();
   }
 
   var city, state;
-  void fetchCity() async {
+  void fetchCityAndFindDepartmentList() async {
     pref = await SharedPreferences.getInstance();
     setState(() {
       city = pref.getString('city');
       state = pref.getString('state');
+    });
+    databaseReference.document('States/$state/$city/data/DepartmentNames/names').get().then((value) {
+      listOfDepartments = value.data['Names'].toList();
+    }).whenComplete(() {
+      setState(() {
+      });
+    });
+    setState(() {
+     
     });
   }
 
@@ -206,15 +210,17 @@ class _FileComplaintState extends State<FileComplaint>
                                     controller: _subjectController,
                                     keyboardType: TextInputType.text,
                                     autocorrect: false,
-                                    maxLength: 150,
                                     maxLines: null,
+                                    autovalidateMode: AutovalidateMode.onUserInteraction,
                                     validator: (value) {
                                       if (value == '') {
                                         return 'Please enter Subject';
-                                      } else if (value.length > 150) {
+                                      } else if (value.length >= 150) {
                                         return "Subject should Be less than 150 Words";
                                       }
-                                      return null;
+                                      else{
+                                        return null;
+                                      }
                                     },
                                     decoration: InputDecoration(
                                       counterText: '',
@@ -235,12 +241,19 @@ class _FileComplaintState extends State<FileComplaint>
                                       autocorrect: false,
                                       controller: _detailsController,
                                       maxLines: null,
-                                      maxLength: 500,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                       validator: (value) {
                                         if (value == '') {
                                           return 'Please enter details about your issue';
                                         }
-                                        return null;
+                                        else if(value.length >=500)
+                                        {
+                                          return 'Complaint should Be less than 500 Words';
+                                        }
+                                        else
+                                        {
+                                          return null;
+                                        }
                                       },
                                       decoration: InputDecoration(
                                         counterText: '',
@@ -404,8 +417,10 @@ class _FileComplaintState extends State<FileComplaint>
                           ),
                           onTap: () async {
                             {
-                              _formKey.currentState.validate();
-                              setState(() {
+                              var result = _formKey.currentState.validate();
+                              if(result)
+                              {
+                                setState(() {
                                 loading = true;
                               });
                               if (_images.length > 4) {
@@ -482,6 +497,18 @@ class _FileComplaintState extends State<FileComplaint>
                                 });
                                 showModalSheet(context);
                               }
+                              }
+                              else{
+                                _scaffoldKey.currentState.showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text(
+                                      'Please Enter Your Details Correctly',
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              }
                             }
                           },
                         ),
@@ -496,7 +523,6 @@ class _FileComplaintState extends State<FileComplaint>
             opacity: loading ? 1 : 0,
             child: Center(
               child: CircularProgressIndicator(
-                backgroundColor: Colors.blue,
               ),
             ),
           ),

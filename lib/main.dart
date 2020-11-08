@@ -6,6 +6,7 @@ import 'package:faridabad/clientScreens/base.dart';
 import 'package:faridabad/adminScreens/complaint_details.dart';
 import 'package:faridabad/clientScreens/filecomplaint.dart';
 import 'package:faridabad/loginScreen.dart';
+import 'package:faridabad/login.dart';
 import 'package:faridabad/adminScreens/departments.dart';
 import 'package:faridabad/clientScreens/previouscomplaints.dart';
 import 'package:faridabad/clientScreens/showcomplaintNew.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
             MyApp.routeName: (ctx) => MyApp(),
             InputData.routeName: (ctx) => InputData(),
             AdminProfile.routename: (ctx) => AdminProfile(),
+            Login.routeName : (ctx) => Login(),
           },
         );
       },

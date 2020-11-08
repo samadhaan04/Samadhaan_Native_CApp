@@ -22,8 +22,10 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
   String complaintId;
   Firestore _firestore;
   List logs;
+  var height, width;
   String logsText;
   var name;
+  bool isOnce = true;
 
   TextEditingController feedback = TextEditingController();
 
@@ -41,16 +43,23 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
 
   @override
   void didChangeDependencies() {
-    complaintId = ModalRoute.of(context).settings.arguments;
+    if (isOnce) {
+      complaintId = ModalRoute.of(context).settings.arguments;
+      height = MediaQuery.of(context).size.height;
+      width = MediaQuery.of(context).size.width;
+    }
+
     super.didChangeDependencies();
   }
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 20),
         child: StreamBuilder<DocumentSnapshot>(
             stream: Firestore.instance
                 .collection('Complaints')
@@ -65,19 +74,19 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                 var data = snapshot.data.data;
                 logs = data['logs'];
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     SingleChildScrollView(
                       child: Container(
-                        height: MediaQuery.of(context).size.height * 0.12,
-                        width: MediaQuery.of(context).size.width,
+                        height: height * 0.12,
+                        width: width,
                         color: Color(0xf5f5f5f5),
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                         child: SingleChildScrollView(
                           child: Container(
                             padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height * 0.03,
+                              top: height * 0.03,
+                              left: 5,
                             ),
                             child: Text(
                               data['subject'],
@@ -96,8 +105,10 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 15, vertical: 4),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           descExpansion(data['complaintText']),
+                          // Text('hello',textAlign: TextAlign.left,),
                           logs.length != 0 ? logExpansion() : Container(),
                           data['imageURL'] != null
                               ? imgExpansion(data['imageURL'])
@@ -131,6 +142,19 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
         feedback.text = '';
       });
     });
+    showSnackbar('Feedback Sent Successfully!!');
+  }
+
+  void showSnackbar(String message) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.blue,
+        content: Text(
+          message,
+        ),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   Widget actionExpansion() {
@@ -185,7 +209,11 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
             ),
           ),
           onPressed: () {
-            sendFeedback();
+            if (feedback.text == '') {
+              showSnackbar("Please Fill Feedback");
+            } else {
+              sendFeedback();
+            }
           },
         )
       ],
@@ -193,10 +221,53 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
   }
 
   Widget descExpansion(String complaint) {
-    return expandedDesc
-        ? Wrap(
-            children: <Widget>[
-              Row(
+    return Container(
+        child: expandedDesc
+            ? Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Description',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(0xff817F7F),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.expand_less,
+                          size: 40,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            expandedDesc = !expandedDesc;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                  Container(
+                    width: double.infinity,
+                    constraints: BoxConstraints.loose(
+                        Size(double.infinity, height * 0.1)),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: SingleChildScrollView(
+                      child: Text(
+                        complaint,
+                        textAlign: TextAlign.left,
+                        softWrap: true,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Row(
                 children: <Widget>[
                   Text(
                     'Description',
@@ -208,7 +279,7 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                   ),
                   IconButton(
                     icon: Icon(
-                      Icons.expand_less,
+                      Icons.expand_more,
                       size: 40,
                       color: Colors.black.withOpacity(0.5),
                     ),
@@ -219,52 +290,7 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                     },
                   )
                 ],
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              SingleChildScrollView(
-                child: Container(
-                  // decoration: BoxDecoration(
-                  //     color: Colors.black.withOpacity(0.08),
-                  //     shape: BoxShape.rectangle,
-                  //     borderRadius: BorderRadius.circular(15)),
-                  // padding: EdgeInsets.fromLTRB(25, 20, 25, 40),
-                  child: Text(
-                    complaint,
-                    softWrap: true,
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          )
-        : Row(
-            children: <Widget>[
-              Text(
-                'Description',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  color: Color(0xff817F7F),
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.expand_more,
-                  size: 40,
-                  color: Colors.black.withOpacity(0.5),
-                ),
-                onPressed: () {
-                  setState(() {
-                    expandedDesc = !expandedDesc;
-                  });
-                },
-              )
-            ],
-          );
+              ));
   }
 
   Widget imgExpansion(var images) {
@@ -387,10 +413,76 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
   }
 
   Widget logExpansion() {
-    return expandedLog
-        ? Wrap(
-            children: <Widget>[
-              Row(
+    return Container(
+        child: expandedLog
+            ? Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'Logs',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          color: Color(0xff817F7F),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.expand_less,
+                          size: 40,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            expandedLog = !expandedLog;
+                          });
+                        },
+                      )
+                    ],
+                  ),
+                  Container(
+                    height:
+                        logs.length * 90.0 < 150.0 ? logs.length * 90.0 : 150,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      shrinkWrap: true,
+                      itemCount: logs.length,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.black,
+                              ),
+                              height: 20,
+                              width: 5,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                              width: width - 70,
+                              child: Text(
+                                logs[index],
+                                softWrap: true,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : Row(
                 children: <Widget>[
                   Text(
                     'Logs',
@@ -402,7 +494,7 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                   ),
                   IconButton(
                     icon: Icon(
-                      Icons.expand_less,
+                      Icons.expand_more,
                       size: 40,
                       color: Colors.black.withOpacity(0.5),
                     ),
@@ -413,101 +505,6 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                     },
                   )
                 ],
-              ),
-              Container(
-                width: double.infinity,
-                height: logs.length * 20.0 < 150.0 ? logs.length * 20.0 : 150,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(0),
-                  shrinkWrap: true,
-                  itemCount: logs.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.black,
-                          ),
-                          height: 20,
-                          width: 5,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                          width: 300,
-                          child: Text(
-                            logs[index],
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                ),
-              ),
-              // Container(
-              //   height: logs.length * 20.0 < 150.0 ? logs.length * 20.0 : 150,
-              //   child: ListView.builder(
-              //     padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-              //     shrinkWrap: true,
-              //     itemCount: logs.length,
-              //     itemBuilder: (context, index) {
-              //       return Row(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           Container(
-              //             decoration: BoxDecoration(
-              //               shape: BoxShape.circle,
-              //               color: Colors.black,
-              //             ),
-              //             height: 5,
-              //             width: 20,
-              //           ),
-              //           SizedBox(
-              //             width: 10,
-              //           ),
-              //           Text(
-              //             logs[index],
-              //             style: TextStyle(color: Colors.black),
-              //           )
-              //         ],
-              //       );
-              //     },
-              //   ),
-              // )
-            ],
-          )
-        : Row(
-            children: <Widget>[
-              Text(
-                'Logs',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  color: Color(0xff817F7F),
-                ),
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.expand_more,
-                  size: 40,
-                  color: Colors.black.withOpacity(0.5),
-                ),
-                onPressed: () {
-                  setState(() {
-                    expandedLog = !expandedLog;
-                  });
-                },
-              )
-            ],
-          );
+              ));
   }
 }

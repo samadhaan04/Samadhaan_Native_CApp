@@ -112,32 +112,37 @@ class _ListOfDepartmentsState extends State<ListOfDepartments> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).disabledColor,
-                                        // color: Colors.green,
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 40, horizontal: 15),
-                                      child: FittedBox(
-                                        fit: BoxFit.fitWidth,
-                                        child: Text(
-                                          listOfDepartments[index]
-                                              .keys
-                                              .single
-                                              .toString(),
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                .color,
-                                            // fontWeight: FontWeight.bold,
-                                            fontFamily: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                .fontFamily,
-                                            fontSize: 22,
+                                    Flexible(
+                                      fit: FlexFit.loose,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:
+                                              Theme.of(context).disabledColor,
+                                          // color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 40, horizontal: 15),
+                                        child: FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Text(
+                                            listOfDepartments[index]
+                                                .keys
+                                                .single
+                                                .toString(),
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  .color,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  .fontFamily,
+                                              fontSize: 22,
+                                            ),
                                           ),
                                         ),
                                       ),

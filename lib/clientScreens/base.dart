@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/clientScreens/filecomplaint.dart';
-import 'package:faridabad/loginScreen.dart';
+import 'package:faridabad/login.dart';
 import 'package:faridabad/clientScreens/previouscomplaints.dart';
 import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,6 +22,7 @@ class Base extends StatefulWidget {
 class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   var username;
   var city;
+  var state;
   Widget imageWidget;
   var countNotifications;
   String dropdownValue = '';
@@ -29,8 +30,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   var _items = ['User Profile', 'Logout'];
 
   var image, loading;
-  
-  
+
   @override
   void dispose() {
     super.dispose();
@@ -82,23 +82,31 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
   }
 
   void fetchNameAndCity() async {
-    final storage = FirebaseStorage.instance;
-    setState(() {
-      loading = true;
-    });
-    await storage.ref().child('family.jpg').getDownloadURL().then((image) {
-      imageWidget = Image.network(
-        image,
-        width: double.infinity,
-        height: 450,
-      );
-    });
     final pref = await SharedPreferences.getInstance();
     final dname = pref.getString('name');
     print('name $dname');
     city = pref.getString('city');
+    state = pref.getString('state');
     print('city $city');
     username = getCapitalizeString(str: dname);
+
+    final storage = FirebaseStorage.instance;
+    setState(() {
+      loading = true;
+    });
+    await storage
+        .ref()
+        .child('$state/$city.jpg')
+        .getDownloadURL()
+        .then((image) {
+      imageWidget = Container(
+        height: MediaQuery.of(context).size.height*0.5,
+        child: Image.network(
+          image,
+          width: MediaQuery.of(context).size.width * 0.85,
+        ),
+      );
+    });
     setState(() {
       loading = false;
     });
@@ -175,7 +183,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                           if (signoutResult) {
                                             Navigator.of(context)
                                                 .pushNamedAndRemoveUntil(
-                                                    HomeScreen.routeName,
+                                                    Login.routeName,
                                                     (route) => false);
                                           }
                                         }
@@ -207,17 +215,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
                                 // ),
                                 imageWidget,
                                 brandText,
-                                // SizedBox(
-                                //   height: 5,
-                                // ),
-                                Text(
-                                  city ?? "empty",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 38,
-                                      letterSpacing: 1,
-                                      color: Colors.blue[300]),
-                                ),
+                                cityText(city),
                                 SizedBox(
                                   height: 50,
                                 ),

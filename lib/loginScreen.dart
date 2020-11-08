@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'package:faridabad/adminScreens/ComplaintScreen.dart';
 import 'package:faridabad/adminScreens/adminUI.dart';
 import 'package:faridabad/providers/auth.dart';
 import 'package:faridabad/clientScreens/base.dart';
 import 'package:faridabad/data/constants.dart';
-import 'package:faridabad/adminScreens/departments.dart';
 import 'package:faridabad/clientScreens/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
