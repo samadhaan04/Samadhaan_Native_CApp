@@ -442,42 +442,65 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                     ],
                   ),
                   Container(
-                    height:
-                        logs.length * 90.0 < 150.0 ? logs.length * 90.0 : 150,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      shrinkWrap: true,
-                      itemCount: logs.length,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black,
-                              ),
-                              height: 20,
-                              width: 5,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              width: width - 70,
-                              child: Text(
-                                logs[index],
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: Colors.black,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Color(0xf5f5f5f5),
+                        shape: BoxShape.rectangle,
+                        borderRadius: BorderRadius.circular(15)),
+                    padding: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.width * 0.05,
+                      0,
+                      0,
+                      0,
+                    ),
+                    child: Container(
+                      height:
+                          logs.length * 90.0 < 150.0 ? logs.length * 90.0 : 150,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: logs.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.fromLTRB(0, 6, 0, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.black,
+                                  ),
+                                  height: 20,
+                                  width: 5,
                                 ),
-                              ),
-                            )
-                          ],
-                        );
-                      },
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Container(
+                                  constraints: BoxConstraints.tightFor(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.68),
+                                  child: Text(
+                                    logs[index],
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .fontFamily,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],

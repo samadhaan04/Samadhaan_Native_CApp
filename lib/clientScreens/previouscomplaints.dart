@@ -124,7 +124,7 @@ class MessagesStream extends StatelessWidget {
     // print('uid $uid');
     return StreamBuilder(
         stream:
-            _firestore.collection('Users/$uid/previousComplaints').snapshots(),
+            _firestore.collection('Users/$uid/previousComplaints').orderBy('date',descending: true).snapshots(),
         builder: (context, value) {
           if (!value.hasData) {
             return Expanded(

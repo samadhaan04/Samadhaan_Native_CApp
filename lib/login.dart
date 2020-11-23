@@ -146,6 +146,9 @@ class _LoginState extends State<Login> {
                                       height: 60,
                                     ),
                                     onTap: () async {
+                                      setState(() {
+                                      loading = true;  
+                                      });
                                       final result =
                                           await Auth().signInWithGoogle();
                                       if (result) {
@@ -161,6 +164,9 @@ class _LoginState extends State<Login> {
                                               .pushReplacementNamed(
                                                   UserInfoScreen.routeName);
                                         }
+                                        setState(() {
+                                          loading = false;
+                                        });
                                       }
                                     },
                                   ),

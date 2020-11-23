@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -73,6 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Image.asset(
                 'assets/images/samadhaan.png',
                 width: MediaQuery.of(context).size.width * .5,
+
               ),
             ),
           ),
@@ -81,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Lobster',
-              color: Colors.white,
+              color: Color(0xff404543),
               fontSize: 60.0,
               fontWeight: FontWeight.bold,
             ),

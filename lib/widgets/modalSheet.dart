@@ -4,9 +4,6 @@ class ModalSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-        // Card(
-        //   color: Colors.white,
-        //   child:
         Container(
       decoration: BoxDecoration(
           border: Border.all(
@@ -14,16 +11,17 @@ class ModalSheet extends StatelessWidget {
         width: 3,
       )),
       height: MediaQuery.of(context).size.height / 3,
-      padding: EdgeInsets.all(5),
+      padding: EdgeInsets.all(5), 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.close),
+            icon: Icon(Icons.close,size: 40,),
             onPressed: () {
               Navigator.of(context).pop();
             },
-            padding: EdgeInsets.all(5),
             alignment: Alignment.topRight,
           ),
           Container(
