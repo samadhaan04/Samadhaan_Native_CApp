@@ -398,13 +398,17 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                 tag: 'image',
                 child: Image.network(imageUrl),
               ),
-              actions: [
-                FlatButton(
-                  padding: EdgeInsets.all(10),
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text("Okay!"),
-                )
-              ],
+              // actions: [
+              //   FlatButton(
+              //     onPressed: () {
+              //       Navigator.of(context, rootNavigator: true).pop();
+              //     },
+              //     child: Text(
+              //       'OKAY',
+              //       style: TextStyle(color: Colors.blue),
+              //     ),
+              //   )
+              // ],
             ),
           );
         },

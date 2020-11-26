@@ -382,20 +382,20 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                               ),
                                             ],
                                           ),
-                                          actions: [
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context,
-                                                        rootNavigator: true)
-                                                    .pop();
-                                              },
-                                              child: Text(
-                                                'OKAY',
-                                                style: TextStyle(
-                                                    color: Colors.blue),
-                                              ),
-                                            )
-                                          ],
+                                          // actions: [
+                                          //   FlatButton(
+                                          //     onPressed: () {
+                                          //       Navigator.of(context,
+                                          //               rootNavigator: true)
+                                          //           .pop();
+                                          //     },
+                                          //     child: Text(
+                                          //       'OKAY',
+                                          //       style: TextStyle(
+                                          //           color: Colors.blue),
+                                          //     ),
+                                          //   )
+                                          // ],
                                         );
                                       },
                                     );

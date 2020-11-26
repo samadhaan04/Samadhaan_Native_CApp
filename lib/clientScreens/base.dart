@@ -94,9 +94,27 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
     setState(() {
       loading = true;
     });
+    try
+    {
     await storage
         .ref()
         .child('$state/$city.jpg')
+        .getDownloadURL()
+        .then((image) {
+          print('image $state $image');
+      imageWidget = Container(
+        height: MediaQuery.of(context).size.height*0.5,
+        child: Image.network(
+          image,
+          width: MediaQuery.of(context).size.width * 0.85,
+        ),
+      );
+    });
+    }
+    catch(e){
+      await storage
+        .ref()
+        .child('family.jpg')
         .getDownloadURL()
         .then((image) {
       imageWidget = Container(
@@ -107,6 +125,7 @@ class _BaseState extends State<Base> with SingleTickerProviderStateMixin {
         ),
       );
     });
+    }
     setState(() {
       loading = false;
     });

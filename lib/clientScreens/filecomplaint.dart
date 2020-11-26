@@ -185,6 +185,7 @@ class _FileComplaintState extends State<FileComplaint>
                                               _department == null
                                                   ? "Select Department"
                                                   : _department,
+                                                  overflow: TextOverflow.fade,
                                               style: TextStyle(
                                                 fontSize: 21,
                                                 color: Colors.black54,

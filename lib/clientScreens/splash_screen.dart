@@ -17,7 +17,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   var _auth = Auth();
-
   Future<void> getTheme() async {
     final pref = await SharedPreferences.getInstance();
     var theme = pref.getString('theme');
