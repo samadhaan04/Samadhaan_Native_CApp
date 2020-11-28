@@ -50,60 +50,90 @@ class Auth {
     }
   }
 
-  // void generateId() {
-  //   List ems = [
-  //     'admin@samadhaan.com',
-  //     'animal@samadhaan.com',
-  //     'bdpo@samadhaan.com',
-  //     'civilh@samadhaan.com',
-  //     'dhbvnr@samadhaan.com',
-  //     'dhbvnu@samadhaan.com',
-  //     'dtownPlanner@samadhaan.com',
-  //     'elementaryedu@samadhaan.com',
-  //     'firedepartment@samadhaan.com',
-  //     'higheredu@samadhaan.com',
-  //     'hvpnl@samadhaan.com',
-  //     'irrigation@samadhaan.com',
-  //     'nagarparishad@samadhaan.com',
-  //     'publicwater@samadhaan.com',
-  //     'pwd@samadhaan.com',
-  //     'socialwelfare@samadhaan.com',
-  //     'tehsil@samadhaan.com',
-  //     'publicswge@samadhaan.com',
-  //     'publicrwell@samadhaan.com'
-  //   ];
-  //   ems.forEach((element) {
-  //     _auth.createUserWithEmailAndPassword(
-  //         email: 'pbpat$element', password: '123456');
-  //   });
-  // }
+  void generateCity(var stateName,var cityName,var stateC,var cityC) async
+  {
+    databaseReference.document('DepartmentNames/StateInfo').get().then((value) {
+      print('value is ${value.data}');
+      var map = value.data;
+      var s = map[stateName];
+      if(s == null)
+      {
+        map[stateName] = [cityName];
+      }
+      else
+      {
+      s.add(cityName);
+      print('s $s');
+      map[stateName] = s;
+      }
+      print('new Value is $map');
+      databaseReference.document('DepartmentNames/StateInfo').updateData(map);
+      databaseReference.document('DepartmentNames/StateCode').updateData({'$stateC':'$stateName'});
+      databaseReference.document('DepartmentNames/CityCode').updateData({'$cityC':'$cityName'});
+      generateId(stateC,cityC);
+      generateDepartmentNames(stateName, cityName);
+    });
+
+    // databaseReference.document('DepartmentNames/StateCode').get().then((value) {
+      
+    // });
+    // 
+  }
+
+  void generateId(var stateC,var cityC) {
+    List ems = [
+      'admin@samadhaan.com',
+      'animal@samadhaan.com',
+      'bdpo@samadhaan.com',
+      'civilh@samadhaan.com',
+      'dhbvnr@samadhaan.com',
+      'dhbvnu@samadhaan.com',
+      'dtownPlanner@samadhaan.com',
+      'elementaryedu@samadhaan.com',
+      'firedepartment@samadhaan.com',
+      'higheredu@samadhaan.com',
+      'hvpnl@samadhaan.com',
+      'irrigation@samadhaan.com',
+      'nagarparishad@samadhaan.com',
+      'publicwater@samadhaan.com',
+      'pwd@samadhaan.com',
+      'socialwelfare@samadhaan.com',
+      'tehsil@samadhaan.com',
+      'publicswge@samadhaan.com',
+      'publicrwell@samadhaan.com'
+    ];
+    ems.forEach((element) {
+      _auth.createUserWithEmailAndPassword(
+          email: '$stateC$cityC$element', password: '123456');
+    });
+  }
 
   
-  // void generateDepartmentNames() {
-  //   List<String> departmentNames = [
-  //   "Animal Husbandry",
-  //   "BDPO",
-  //   "Civil Hospital",
-  //   "DHBVN(Urban)",
-  //   "DHBVN(Rural)",
-  //   "Distt. Town planner",
-  //   "Education(Elementary)",
-  //   "Education(Higher)",
-  //   "Fire Department",
-  //   "HVPNL",
-  //   "Irrigation",
-  //   "Nagar Parishad",
-  //   "PWD",
-  //   "PUBLIC HEALTH(Water)",
-  //   "Public health(Sewage)",
-  //   "Public health (Reny Well)",
-  //   "Social Welfare",
-  //   "Tehsil",
-  // ];
-  //   departmentNames.forEach((element) {
-  //     databaseReference.document('States/Punjab/Patiala/data/DepartmentNames/names').setData({'Names':departmentNames});
-  //   });
-  // }
+  void generateDepartmentNames(var stateName,var cityName) {
+    List<String> departmentNames = [
+    "Animal Husbandry",
+    "BDPO",
+    "Civil Hospital",
+    "DHBVN(Urban)",
+    "DHBVN(Rural)",
+    "Distt. Town planner",
+    "Education(Elementary)",
+    "Education(Higher)",
+    "Fire Department",
+    "HVPNL",
+    "Irrigation",
+    "Nagar Parishad",
+    "PWD",
+    "PUBLIC HEALTH(Water)",
+    "Public health(Sewage)",
+    "Public health (Reny Well)",
+    "Social Welfare",
+    "Tehsil",
+  ];
+    departmentNames.forEach((element) {
+      databaseReference.document('States/$stateName/$cityName/data/DepartmentNames/names').setData({'Names':departmentNames});
+    });
+  }
 
   Future<bool> signIn(String email, String password) async {
     try {
@@ -171,7 +201,8 @@ class Auth {
   }
 
   Future<bool> autoLogin() async {
-    // generateDepartmentNames();
+    // generateCity('UttarPradesh', 'Greater Noida','up','grn');
+    // _auth.signOut(); 
     if (await _auth.currentUser() != null) {
       return _auth.currentUser().then((value) async {
         var i = await _auth.fetchSignInMethodsForEmail(email: value.email);

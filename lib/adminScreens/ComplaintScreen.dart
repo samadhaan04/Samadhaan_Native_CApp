@@ -165,6 +165,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                       transferValue = !transferValue;
                       doneValue = false;
                       ongoingValue = false;
+                      newValue = false;
                       setState(() {});
                     },
                     value: transferValue,
@@ -211,6 +212,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                     onTap: () {
                       transferValue = false;
                       doneValue = false;
+                      newValue = false;
                       ongoingValue = !ongoingValue;
                       setState(() {});
                     },
@@ -315,6 +317,7 @@ class _ComplaintScreenState extends State<ComplaintScreen> {
                       transferValue = false;
                       doneValue = !doneValue;
                       ongoingValue = false;
+                      newValue = false;
                       setState(() {});
                     },
                     value: doneValue,

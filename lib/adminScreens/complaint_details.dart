@@ -57,7 +57,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
       workCity = pref.getString('workCity');
       workState = pref.getString('workState');
       print('$workCity $workState');
-      _firestore.document('States/$workState/$workCity/data/DepartmentNames/names').get().then((value) {
+      _firestore
+          .document('States/$workState/$workCity/data/DepartmentNames/names')
+          .get()
+          .then((value) {
         depts = value.data['Names'].toList();
         print(depts);
       });
@@ -114,7 +117,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 IconButton(
                   icon: Icon(
                     Icons.keyboard_arrow_left,
-                    size: 40,
+                    size: 30,
                     color: Color(0xff0371dd),
                   ),
                   onPressed: () => Navigator.of(context).pop(),
@@ -155,6 +158,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                           : data['transferToDepartment'];
                       logs = data['logs'];
                       status = data['status'];
+                      print('user $user');
+                      print('requestFromDepartment $requestFromDepartment');
                       if (status == 3) {
                         newToOld();
                       }
@@ -377,20 +382,20 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                               ),
                                             ],
                                           ),
-                                          actions: [
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context,
-                                                        rootNavigator: true)
-                                                    .pop();
-                                              },
-                                              child: Text(
-                                                'OKAY',
-                                                style: TextStyle(
-                                                    color: Colors.blue),
-                                              ),
-                                            )
-                                          ],
+                                          // actions: [
+                                          //   FlatButton(
+                                          //     onPressed: () {
+                                          //       Navigator.of(context,
+                                          //               rootNavigator: true)
+                                          //           .pop();
+                                          //     },
+                                          //     child: Text(
+                                          //       'OKAY',
+                                          //       style: TextStyle(
+                                          //           color: Colors.blue),
+                                          //     ),
+                                          //   )
+                                          // ],
                                         );
                                       },
                                     );
@@ -411,7 +416,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                     : imgExpansion(data['imageURL']),
                                 logs.length != 0 ? logExpansion() : Container(),
                                 user == 'Admin'
-                                    ? requestFromDepartment != null
+                                    ? transferToDepartment != null
                                         ? reqExpansionAdmin()
                                         : Container()
                                     : status != 2
@@ -703,8 +708,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                     width: 5,
                                   ),
                                   Container(
-                                    constraints:
-                                        BoxConstraints.tightFor(width: 275),
+                                    constraints: BoxConstraints.tightFor(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.68),
                                     child: Text(
                                       logs[index],
                                       maxLines: 3,
@@ -765,6 +772,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               alignment: Alignment.centerLeft,
@@ -807,7 +815,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 child: Container(
                   padding: EdgeInsets.symmetric(
                       vertical: MediaQuery.of(context).size.width * 0.01),
-                  width: MediaQuery.of(context).size.width * 0.80,
+                  width: MediaQuery.of(context).size.width * 0.75,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -915,13 +923,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 ),
                                 onPressed: () async {
                                   if ((department == null ||
-                                          department == "None") &&
-                                      reqORfeed.text.isEmpty) {
-                                    showSnackbar("Please Fill Information");
-                                  } else if (department == null) {
+                                      department == "None")) {
                                     showSnackbar("Please Select Department");
-                                  } else if (reqORfeed.text.isEmpty) {
-                                    showSnackbar('Please Enter Request');
                                   } else {
                                     submitTransferRequest();
                                   }
@@ -946,7 +949,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     40,
                   ),
                 ),
-                width: MediaQuery.of(context).size.width * 0.80,
+                width: MediaQuery.of(context).size.width * 0.75,
                 child: FlatButton(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: Text(

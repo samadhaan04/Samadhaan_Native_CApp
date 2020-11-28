@@ -23,6 +23,7 @@ class _FileComplaintState extends State<FileComplaint>
   List<dynamic> listOfDepartments;
   bool isupdate = false;
   double width, height;
+  String exactDateTime;
   bool loading = false;
   SharedPreferences pref;
 
@@ -184,6 +185,7 @@ class _FileComplaintState extends State<FileComplaint>
                                               _department == null
                                                   ? "Select Department"
                                                   : _department,
+                                                  overflow: TextOverflow.fade,
                                               style: TextStyle(
                                                 fontSize: 21,
                                                 color: Colors.black54,
@@ -486,6 +488,7 @@ class _FileComplaintState extends State<FileComplaint>
                                         ],
                                       ));
                                 } else {
+                                  exactDateTime =  DateTime.now().toIso8601String();
                                   final result = await sendData();
                                   if (result == true) {
                                     print("work done!!");
@@ -633,7 +636,7 @@ class _FileComplaintState extends State<FileComplaint>
         'adminRemark': null,
         'star': null,
         'new': true,
-        'date': DateTime.now().toIso8601String(),
+        'date': exactDateTime,
         'token': pref.getString('token'),
         'transferToDepartment': null,
         'transferRequest': null,
@@ -657,7 +660,7 @@ class _FileComplaintState extends State<FileComplaint>
       print("start check");
       await databaseReference
           .collection("Users/$uid/previousComplaints")
-          .add({"ref": ref.path});
+          .add({"ref": ref.path,'date':exactDateTime});
       print(ref.path);
       int length;
       int pending;
@@ -725,7 +728,7 @@ class _FileComplaintState extends State<FileComplaint>
         'ref': ref.path,
         'subject': _subjectController.text,
         'status': 3,
-        'date': DateTime.now().toIso8601String(),
+        'date': exactDateTime,
       }).then((value) {
         print("Success");
         return true;
