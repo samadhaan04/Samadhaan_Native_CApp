@@ -832,7 +832,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       SizedBox(
                         width: 2,
                       ),
-                      buttonFlat(
+                      buttonFlat2(
                         "Request Transfer",
                         () {
                           setState(() {
@@ -892,7 +892,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                       ? "Select Department"
                                       : department,
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     color: Theme.of(context)
                                         .textTheme
                                         .bodyText1
@@ -913,7 +913,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 child: Text(
                                   "Submit  Request",
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     color: Theme.of(context)
                                         .textTheme
                                         .bodyText1
@@ -1369,6 +1369,29 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           childtext,
           style: TextStyle(
             fontSize: 15,
+            color: Theme.of(context).textTheme.bodyText1.color,
+            fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
+          ),
+        ),
+        onPressed: pressed,
+      ),
+    );
+  }
+
+  Widget buttonFlat2(String childtext, Function pressed) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).textTheme.bodyText1.color,
+        ),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: FlatButton(
+        padding: EdgeInsets.all(14),
+        child: Text(
+          childtext,
+          style: TextStyle(
+            fontSize: 12,
             color: Theme.of(context).textTheme.bodyText1.color,
             fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily,
           ),
