@@ -1387,7 +1387,7 @@ class UtilButton extends StatelessWidget {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 8),
-      color: Colors.white.withOpacity(0.12),
+      color:  Theme.of(context).disabledColor,
       child: Text(
         childtext,
         style: TextStyle(
