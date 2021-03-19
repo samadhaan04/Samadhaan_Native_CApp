@@ -117,17 +117,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 IconButton(
                   icon: Icon(
                     Icons.keyboard_arrow_left,
-                    size: 30,
+                    size: 40,
                     color: Color(0xff0371dd),
                   ),
                   onPressed: () => Navigator.of(context).pop(),
-                ),
-                Text(
-                  'Back',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xff0371dd),
-                  ),
                 ),
               ],
             ),
@@ -407,7 +400,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 8),
                             padding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 3),
+                                horizontal: MediaQuery.of(context).size.width * 0.02, vertical: 3),
                             child: Column(
                               children: <Widget>[
                                 descExpansion(data['complaintText']),
@@ -1251,24 +1244,29 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               ),
               Column(
                 children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.08),
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(15)),
-                    padding: EdgeInsets.symmetric(vertical: 25, horizontal: 30),
-                    child: TextFormField(
-                      readOnly: true,
-                      maxLines: 4,
-                      initialValue: requestFromDepartment,
-                      // controller: request,
-                      minLines: 1,
-                      decoration: InputDecoration(border: InputBorder.none),
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1.color,
-                      ),
-                    ),
-                  ),
+                  requestFromDepartment == null
+                      ? Container()
+                      : Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.08),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(15)),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 25, horizontal: 30),
+                          child: TextFormField(
+                            readOnly: true,
+                            maxLines: 4,
+                            initialValue: requestFromDepartment,
+                            // controller: request,
+                            minLines: 1,
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1.color,
+                            ),
+                          ),
+                        ),
                   SizedBox(
                     height: 10,
                   ),
@@ -1277,28 +1275,23 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     height: 10,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      UtilButton(
-                        childtext: 'Dismiss Request',
-                        onpress: () {
-                          dismissRequest();
-                        },
-                      ),
-                      SizedBox(
-                        width: 25,
-                      ),
-                      UtilButton(
-                        childtext: 'Confirm Action',
-                        onpress: () {
-                          confirmAction();
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        UtilButton(
+                          childtext: 'Dismiss Request',
+                          onpress: () {
+                            dismissRequest();
+                          },
+                        ),
+                        UtilButton(
+                          childtext: 'Confirm Action',
+                          onpress: () {
+                            confirmAction();
+                          },
+                        ),
+                      ],
+                    ),
                 ],
               )
             ],
@@ -1415,13 +1408,15 @@ class UtilButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 4),
-      color: Colors.white.withOpacity(0.08),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 8),
+      color:  Theme.of(context).disabledColor,
       child: Text(
         childtext,
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 15,
           color: Theme.of(context).textTheme.bodyText1.color,
+          fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily
         ),
       ),
       onPressed: onpress,

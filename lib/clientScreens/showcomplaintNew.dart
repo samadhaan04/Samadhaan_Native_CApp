@@ -101,9 +101,10 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 2),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: MediaQuery.of(context).size.width * 0.02,
+                          vertical: 3),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -113,7 +114,6 @@ class _ShowComplaintsNewState extends State<ShowComplaintsNew> {
                           data['imageURL'] != null
                               ? imgExpansion(data['imageURL'])
                               : Container(),
-                          // reqExpansion(),
                           SizedBox(
                             height: 12,
                           ),
