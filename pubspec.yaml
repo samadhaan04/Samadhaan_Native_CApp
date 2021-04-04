@@ -42,6 +42,10 @@ dependencies:
   day_night_switch: ^0.0.2+1
   fluttertoast: ^7.0.2
   provider: ^4.3.2+2
+  video_player:
+  chewie:
+  flutter_document_picker: ^4.0.1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3

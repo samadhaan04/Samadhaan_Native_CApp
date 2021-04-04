@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:faridabad/data/constants.dart';
 import 'package:faridabad/widgets/modalSheet.dart';
+import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,6 +44,10 @@ class _FileComplaintState extends State<FileComplaint>
   String _department;
   List _images = [];
   File _image;
+  List _videos = [];
+  File _video;
+  List _files = [];
+  File _file;
 
   void showModalSheet(BuildContext context) {
     showModalBottomSheet(
@@ -58,9 +62,7 @@ class _FileComplaintState extends State<FileComplaint>
   @override
   void initState() {
     super.initState();
-    fetchCityAndFindDepartmentList(); 
-    
-
+    fetchCityAndFindDepartmentList();
   }
 
   @override
@@ -77,15 +79,15 @@ class _FileComplaintState extends State<FileComplaint>
       city = pref.getString('city');
       state = pref.getString('state');
     });
-    databaseReference.document('States/$state/$city/data/DepartmentNames/names').get().then((value) {
+    databaseReference
+        .document('States/$state/$city/data/DepartmentNames/names')
+        .get()
+        .then((value) {
       listOfDepartments = value.data['Names'].toList();
     }).whenComplete(() {
-      setState(() {
-      });
+      setState(() {});
     });
-    setState(() {
-     
-    });
+    setState(() {});
   }
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -185,7 +187,7 @@ class _FileComplaintState extends State<FileComplaint>
                                               _department == null
                                                   ? "Select Department"
                                                   : _department,
-                                                  overflow: TextOverflow.fade,
+                                              overflow: TextOverflow.fade,
                                               style: TextStyle(
                                                 fontSize: 21,
                                                 color: Colors.black54,
@@ -213,14 +215,14 @@ class _FileComplaintState extends State<FileComplaint>
                                     keyboardType: TextInputType.text,
                                     autocorrect: false,
                                     maxLines: null,
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
                                     validator: (value) {
                                       if (value == '') {
                                         return 'Please enter Subject';
                                       } else if (value.length >= 150) {
                                         return "Subject should Be less than 150 Words";
-                                      }
-                                      else{
+                                      } else {
                                         return null;
                                       }
                                     },
@@ -243,17 +245,14 @@ class _FileComplaintState extends State<FileComplaint>
                                       autocorrect: false,
                                       controller: _detailsController,
                                       maxLines: null,
-                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
                                       validator: (value) {
                                         if (value == '') {
                                           return 'Please enter details about your issue';
-                                        }
-                                        else if(value.length >=500)
-                                        {
+                                        } else if (value.length >= 500) {
                                           return 'Complaint should Be less than 500 Words';
-                                        }
-                                        else
-                                        {
+                                        } else {
                                           return null;
                                         }
                                       },
@@ -388,6 +387,113 @@ class _FileComplaintState extends State<FileComplaint>
                                             );
                                         },
                                       ),
+                                      IconButton(
+                                        icon: Icon(Icons.videocam,
+                                            size: 30,
+                                            color: _images.length >= 4
+                                                ? Colors.grey
+                                                : Colors.black),
+                                        onPressed: () {
+                                          if (_images.length >= 4)
+                                            return null;
+                                          else
+                                            return showDialog(
+                                              context: context,
+                                              child: AlertDialog(
+                                                backgroundColor: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                title: Text(
+                                                  "Choose an Option",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                actions: <Widget>[
+                                                  MaterialButton(
+                                                    child: Text(
+                                                      "Gallery",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onPressed: () async {
+                                                      final picker =
+                                                          ImagePicker();
+                                                      final pickedVideo =
+                                                          await picker.getVideo(
+                                                        source:
+                                                            ImageSource.gallery,
+                                                        maxDuration:
+                                                            const Duration(
+                                                                seconds: 20),
+                                                      );
+                                                      setState(() {
+                                                        _video = File(
+                                                            pickedVideo.path);
+                                                        _videos.add(_video);
+                                                        Navigator.of(context,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
+                                                      });
+                                                      //
+                                                    },
+                                                  ),
+                                                  MaterialButton(
+                                                    child: Text(
+                                                      "Camera",
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    onPressed: () async {
+                                                      final picker =
+                                                          ImagePicker();
+                                                      final pickedVideo =
+                                                          await picker.getVideo(
+                                                        source:
+                                                            ImageSource.camera,
+                                                        maxDuration:
+                                                            const Duration(
+                                                                seconds: 20),
+                                                      );
+                                                      setState(() {
+                                                        _video = File(
+                                                            pickedVideo.path);
+                                                        _videos.add(_video);
+                                                        Navigator.of(context,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
+                                                      });
+                                                      // Navigator.of(context).pop();
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                        },
+                                      ),
+                                      // IconButton(
+                                      //   icon: Icon(Icons.insert_drive_file,
+                                      //       size: 30,
+                                      //       color: _images.length >= 4
+                                      //           ? Colors.grey
+                                      //           : Colors.black),
+                                      //   onPressed: () async {
+                                      //     if (_images.length >= 4)
+                                      //       return null;
+                                      //     else {
+                                      //       final result =
+                                      //           await FlutterDocumentPicker
+                                      //               .openDocument();
+                                      //       setState(() {});
+                                      //     }
+                                      //   },
+                                      // ),
                                     ],
                                   ),
                                 ],
@@ -420,88 +526,88 @@ class _FileComplaintState extends State<FileComplaint>
                           onTap: () async {
                             {
                               var result = _formKey.currentState.validate();
-                              if(result)
-                              {
+                              if (result) {
                                 setState(() {
-                                loading = true;
-                              });
-                              if (_images.length > 4) {
-                                setState(() {
-                                  loading = false;
+                                  loading = true;
                                 });
-                                _scaffoldKey.currentState.showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: Colors.red,
-                                    content: Text(
-                                      'Maximum 4 Images Can Be  Uploaded',
-                                    ),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              } else if (_department == null ||
-                                  _detailsController.text == null ||
-                                  _subjectController.text == null) {
-                                setState(() {
-                                  loading = false;
-                                });
-                                _scaffoldKey.currentState.showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: Colors.red,
-                                    content: Text(
-                                      'Please Enter Your Details',
-                                    ),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              } else {
-                                bool result = await checkInternet();
-                                if (!result) {
-                                  print('result checked $result');
+                                if (_images.length > 4) {
                                   setState(() {
                                     loading = false;
                                   });
-                                  showDialog(
-                                      context: context,
-                                      child: AlertDialog(
-                                        backgroundColor: Colors.white,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        title: Text(
-                                          "TRY AGAIN",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        content: Text(
-                                            "Please Check Your Internet Connection"),
-                                        actions: <Widget>[
-                                          MaterialButton(
-                                            child: Text(
-                                              "RETRY",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          )
-                                        ],
-                                      ));
+                                  _scaffoldKey.currentState.showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        'Maximum 4 Images Can Be  Uploaded',
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                } else if (_department == null ||
+                                    _detailsController.text == null ||
+                                    _subjectController.text == null) {
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  _scaffoldKey.currentState.showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        'Please Enter Your Details',
+                                      ),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
                                 } else {
-                                  exactDateTime =  DateTime.now().toIso8601String();
-                                  final result = await sendData();
-                                  if (result == true) {
-                                    print("work done!!");
-                                    Navigator.of(context).pop();
+                                  bool result = await checkInternet();
+                                  if (!result) {
+                                    print('result checked $result');
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    showDialog(
+                                        context: context,
+                                        child: AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          title: Text(
+                                            "TRY AGAIN",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          content: Text(
+                                              "Please Check Your Internet Connection"),
+                                          actions: <Widget>[
+                                            MaterialButton(
+                                              child: Text(
+                                                "RETRY",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            )
+                                          ],
+                                        ));
+                                  } else {
+                                    exactDateTime =
+                                        DateTime.now().toIso8601String();
+                                    final result = await sendData();
+                                    if (result == true) {
+                                      print("work done!!");
+                                      Navigator.of(context).pop();
+                                    }
                                   }
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  showModalSheet(context);
                                 }
-                                setState(() {
-                                  loading = false;
-                                });
-                                showModalSheet(context);
-                              }
-                              }
-                              else{
+                              } else {
                                 _scaffoldKey.currentState.showSnackBar(
                                   SnackBar(
                                     backgroundColor: Colors.red,
@@ -525,8 +631,7 @@ class _FileComplaintState extends State<FileComplaint>
           Opacity(
             opacity: loading ? 1 : 0,
             child: Center(
-              child: CircularProgressIndicator(
-              ),
+              child: CircularProgressIndicator(),
             ),
           ),
         ],
@@ -617,6 +722,7 @@ class _FileComplaintState extends State<FileComplaint>
 
   Future<bool> sendData() async {
     var urls = [];
+    var urls1 = [];
     try {
       final uid = await _auth.currentUser().then((value) => value.uid);
       DocumentReference ref =
@@ -656,16 +762,33 @@ class _FileComplaintState extends State<FileComplaint>
           });
         });
       }
-
+      if (_videos.length != 0) {
+        _videos.forEach((element) async {
+          final ref2 = FirebaseStorage.instance
+              .ref()
+              .child('complaintVideos')
+              .child(uid + DateTime.now().toIso8601String() + '.mp4');
+          await ref2
+              .putFile(element, StorageMetadata(contentType: 'video/mp4'))
+              .onComplete;
+          await ref2.getDownloadURL().then((value) {
+            urls1.add(value);
+          }).then((value) {
+            databaseReference
+                .document(ref.path)
+                .updateData({'videoURL': urls1});
+          });
+        });
+      }
       print("start check");
       await databaseReference
           .collection("Users/$uid/previousComplaints")
-          .add({"ref": ref.path,'date':exactDateTime});
+          .add({"ref": ref.path, 'date': exactDateTime});
       print(ref.path);
       int length;
       int pending;
       int totalForCity;
-      var justSet  = false;
+      var justSet = false;
       try {
         await databaseReference
             .collection("States/$state/$city")

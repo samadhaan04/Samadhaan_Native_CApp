@@ -400,7 +400,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 8),
                             padding: EdgeInsets.symmetric(
-                                horizontal: MediaQuery.of(context).size.width * 0.02, vertical: 3),
+                                horizontal:
+                                    MediaQuery.of(context).size.width * 0.02,
+                                vertical: 3),
                             child: Column(
                               children: <Widget>[
                                 descExpansion(data['complaintText']),
@@ -419,7 +421,39 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                         : Container(),
                               ],
                             ),
-                          )
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          user == 'Admin'
+                              ? Column(
+                                  children: <Widget>[
+                                    textField(
+                                      'Enter Feedback',
+                                    ),
+                                    Center(
+                                      child: FlatButton(
+                                          onPressed: () {
+                                            if (reqORfeed.text == '') {
+                                              showSnackbar(
+                                                  "Please Fill Feedback");
+                                            } else {
+                                              sendFeedbackFromAdmin();
+                                            }
+                                          },
+                                          child: Text(
+                                            'Send Feedback',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1
+                                                  .color,
+                                            ),
+                                          )),
+                                    )
+                                  ],
+                                )
+                              : Container(),
                         ],
                       );
                     }
@@ -977,6 +1011,18 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     showSnackbar('Feedback Sent Successfully!!');
   }
 
+  void sendFeedbackFromAdmin() {
+    logs.add('Admin : ${reqORfeed.text}');
+    _firestore.document(ref).updateData({
+      'logs': logs,
+    }).then((value) {
+      setState(() {
+        reqORfeed.text = '';
+      });
+    });
+    showSnackbar('Feedback Sent Successfully!!');
+  }
+
   void markComplete() {
     var solved;
     logs.add('$previousDepartment : Completed the Complaint');
@@ -1275,23 +1321,23 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     height: 10,
                   ),
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        UtilButton(
-                          childtext: 'Dismiss Request',
-                          onpress: () {
-                            dismissRequest();
-                          },
-                        ),
-                        UtilButton(
-                          childtext: 'Confirm Action',
-                          onpress: () {
-                            confirmAction();
-                          },
-                        ),
-                      ],
-                    ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    // mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      UtilButton(
+                        childtext: 'Dismiss Request',
+                        onpress: () {
+                          dismissRequest();
+                        },
+                      ),
+                      UtilButton(
+                        childtext: 'Confirm Action',
+                        onpress: () {
+                          confirmAction();
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               )
             ],
@@ -1410,14 +1456,13 @@ class UtilButton extends StatelessWidget {
     return RaisedButton(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 8),
-      color:  Theme.of(context).disabledColor,
+      color: Theme.of(context).disabledColor,
       child: Text(
         childtext,
         style: TextStyle(
-          fontSize: 15,
-          color: Theme.of(context).textTheme.bodyText1.color,
-          fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily
-        ),
+            fontSize: 15,
+            color: Theme.of(context).textTheme.bodyText1.color,
+            fontFamily: Theme.of(context).textTheme.bodyText1.fontFamily),
       ),
       onPressed: onpress,
     );
